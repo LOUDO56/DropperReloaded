@@ -1,0 +1,16 @@
+name: DropperReloaded
+description: Dropper plugin
+version: '1.0.0'
+main: fr.loudo.dropperReloaded.DropperReloaded
+api-version: '1.8.8'
+authors: [ LOUDO ]
+website: https://lucasll.xyz
+softdepend: [Citizens]
+commands:
+  dropperadmin:
+    description: DropperReloaded admin command.
+    permission: dropperreloaded.admin
+    aliases: dropadm
+  dropper:
+    description: DropperReloaded player command.
+    aliases: drop
