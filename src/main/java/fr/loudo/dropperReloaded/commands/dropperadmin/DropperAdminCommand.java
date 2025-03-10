@@ -24,6 +24,7 @@ public class DropperAdminCommand implements TabExecutor {
             String section = "";
             String action = "";
             String value = "";
+            String value2 = "";
 
             switch (args.length) {
                 case 0:
@@ -41,11 +42,17 @@ public class DropperAdminCommand implements TabExecutor {
                     action = args[1];
                     value = args[2];
                     break;
+                case 4:
+                    section = args[0];
+                    action = args[1];
+                    value = args[2];
+                    value2 = args[3];
+                    break;
             }
 
             switch (section.toLowerCase()) {
                 case "map":
-                    CommandMapActions.execute(action, value, player);
+                    CommandMapActions.execute(action, value, value2, player);
                     break;
                 default:
                     player.sendMessage(CommandHelpAdmin.send());

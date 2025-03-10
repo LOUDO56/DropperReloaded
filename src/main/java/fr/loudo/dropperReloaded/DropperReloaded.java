@@ -31,6 +31,9 @@ public final class DropperReloaded extends JavaPlugin {
         gamesManager = new GamesManager(instance);
         mapsManager = new MapsManager();
 
+        //Configutation
+        saveDefaultConfig();
+
     }
 
     public static DropperReloaded getInstance() {

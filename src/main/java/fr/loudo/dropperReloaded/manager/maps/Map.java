@@ -14,6 +14,13 @@ public class Map {
     public Map(String name) {
         this.name = name;
         this.spawns = new ArrayList<>();
+        this.difficulty = MapDifficulty.EASY;
+    }
+
+    public Map(String name, List<Location> spawns, MapDifficulty difficulty) {
+        this.name = name;
+        this.spawns = spawns;
+        this.difficulty = difficulty;
     }
 
     public boolean addSpawn(Location location) {
@@ -44,5 +51,18 @@ public class Map {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Location> getSpawns() {
+        return spawns;
+    }
+
+    @Override
+    public String toString() {
+        return "Map{" +
+                "name='" + name + '\'' +
+                ", spawns=" + spawns +
+                ", difficulty=" + difficulty +
+                '}';
     }
 }
