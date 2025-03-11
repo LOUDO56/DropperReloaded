@@ -14,7 +14,7 @@ import java.util.List;
 public class DropperAdminCommand implements TabExecutor {
 
     private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard");
-    private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "enable", "disable", "list");
+    private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "list");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

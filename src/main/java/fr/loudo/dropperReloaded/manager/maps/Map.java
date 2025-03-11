@@ -10,17 +10,20 @@ public class Map {
     private String name;
     private List<Location> spawns;
     private MapDifficulty difficulty;
+    private boolean isEnabled;
 
     public Map(String name) {
         this.name = name;
         this.spawns = new ArrayList<>();
         this.difficulty = MapDifficulty.EASY;
+        this.isEnabled = false;
     }
 
-    public Map(String name, List<Location> spawns, MapDifficulty difficulty) {
+    public Map(String name, List<Location> spawns, MapDifficulty difficulty, boolean isEnabled) {
         this.name = name;
         this.spawns = spawns;
         this.difficulty = difficulty;
+        this.isEnabled = isEnabled;
     }
 
     public boolean addSpawn(Location location) {
@@ -55,6 +58,14 @@ public class Map {
 
     public List<Location> getSpawns() {
         return spawns;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     @Override

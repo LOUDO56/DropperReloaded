@@ -32,7 +32,6 @@ public class MapsManager {
         if(mapList.contains(map) || mapExists(map.getName())) return false;
 
         mapList.add(map);
-        serialize();
         return true;
     }
 
@@ -40,7 +39,6 @@ public class MapsManager {
         if(!mapList.contains(map)) return false;
 
         mapList.remove(map);
-        serialize();
         return true;
     }
 
@@ -48,7 +46,6 @@ public class MapsManager {
         for(Map map : mapList) {
             if(map.getName().equalsIgnoreCase(mapName)) {
                 mapList.remove(map);
-                serialize();
                 return true;
             }
         }
