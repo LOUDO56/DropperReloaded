@@ -17,6 +17,9 @@ public final class DropperReloaded extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        //Configutation
+        saveDefaultConfig();
+
         isCitizenPluginEnabled = Bukkit.getPluginManager().isPluginEnabled("Citizen");
         if(!isCitizenPluginEnabled) {
             getLogger().info("Citizens isn't on the server, npc feature disabled.");
@@ -30,9 +33,6 @@ public final class DropperReloaded extends JavaPlugin {
         //Manager
         gamesManager = new GamesManager(instance);
         mapsManager = new MapsManager();
-
-        //Configutation
-        saveDefaultConfig();
 
     }
 

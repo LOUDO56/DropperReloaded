@@ -44,6 +44,17 @@ public class MapsManager {
         return true;
     }
 
+    public boolean removeMap(String mapName) {
+        for(Map map : mapList) {
+            if(map.getName().equalsIgnoreCase(mapName)) {
+                mapList.remove(map);
+                serialize();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean mapExists(String mapName) {
         for(Map map : mapList) {
             if(map.getName().equalsIgnoreCase(mapName)) {
@@ -62,16 +73,6 @@ public class MapsManager {
         return null;
     }
 
-    public boolean removeMap(String mapName) {
-        for(Map map : mapList) {
-            if(map.getName().equalsIgnoreCase(mapName)) {
-                mapList.remove(map);
-                return true;
-            }
-        }
-        serialize();
-        return false;
-    }
 
     public void serialize() {
         fileInit();
@@ -100,8 +101,6 @@ public class MapsManager {
             if (maps != null) {
                 this.mapList.addAll(maps);
             }
-            System.out.println(mapList.toString());
-
         }
     }
 

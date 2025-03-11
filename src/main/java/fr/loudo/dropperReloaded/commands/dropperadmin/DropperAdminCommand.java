@@ -29,7 +29,7 @@ public class DropperAdminCommand implements TabExecutor {
             switch (args.length) {
                 case 0:
                     player.sendMessage(CommandHelpAdmin.send());
-                    break;
+                    return true;
                 case 1:
                     section = args[0];
                     break;
