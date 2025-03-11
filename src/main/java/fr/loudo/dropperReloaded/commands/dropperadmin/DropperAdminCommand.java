@@ -1,7 +1,7 @@
 package fr.loudo.dropperReloaded.commands.dropperadmin;
 
+import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMapActions;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -73,6 +73,14 @@ public class DropperAdminCommand implements TabExecutor {
                 default:
                     return SECTIONS;
             }
+        }
+
+        if(args.length == 3 && !args[1].equalsIgnoreCase("create")) {
+            return DropperReloaded.getMapsManager().getListMapName();
+        }
+
+        if(args.length == 4 && args[1].equalsIgnoreCase("setdifficulty")) {
+            return Arrays.asList("easy", "medium", "hard");
         }
 
         return Collections.emptyList();

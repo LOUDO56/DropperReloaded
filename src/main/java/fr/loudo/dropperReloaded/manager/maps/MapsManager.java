@@ -73,6 +73,14 @@ public class MapsManager {
         return null;
     }
 
+    public List<String> getListMapName() {
+        List<String> mapsName = new ArrayList<>();
+        for(Map map : mapList) {
+            mapsName.add(map.getName());
+        }
+        return mapsName;
+    }
+
 
     public void serialize() {
         fileInit();
