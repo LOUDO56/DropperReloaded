@@ -5,17 +5,19 @@ games:
   add_y_cord_on_spawns: true
 
 wait_lobby:
-  min_player: 4
+  min_player: 2
   max_player: 10
   map_vote_count: 3
+  time_format: mm:SS
+  timer_start_seconds: 30
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
-  time_format: MM:SS
+  timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
   scoreboard:
     title: §a§lDropper
     game_state:
       waiting: Waiting...
-      stating: Starting in §a%timer%
+      starting: Starting in §a%timer%
     slots:
       - "§7%date%"
       - "{space}"

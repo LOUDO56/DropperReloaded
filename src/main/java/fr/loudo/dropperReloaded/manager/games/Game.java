@@ -75,6 +75,10 @@ public class Game {
         return gameStatus;
     }
 
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
     public WaitLobby getWaitLobby() {
         return waitLobby;
     }
