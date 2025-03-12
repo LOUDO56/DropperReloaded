@@ -4,3 +4,9 @@ games:
 wait_lobby:
   min_player: 4
   max_player: 10
+  join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
+  left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
+
+player:
+  left_game: §cYou left the game.
+  not_in_a_game: §cYou are not in a game!

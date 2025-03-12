@@ -94,7 +94,7 @@ public class CommandMapActions {
 
         Map map = MAPS_MANAGER.getFromName(mapName);
         Location pLoc = player.getLocation();
-        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX(), pLoc.getBlockY(), pLoc.getBlockZ());
+        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX() + 0.5, pLoc.getBlockY(), pLoc.getBlockZ() + 0.5);
         if(DropperReloaded.getInstance().getConfig().getBoolean("games.add_y_cord_on_spawns")) {
             blockLoc.setY(blockLoc.getY() + 0.5);
         }

@@ -52,7 +52,7 @@ public class CommandWaitLobbyActions {
     }
     private static void setSpawn(Player player) {
         Location pLoc = player.getLocation();
-        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX(), pLoc.getBlockY() + 1.5, pLoc.getBlockZ());
+        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX() + 0.5, pLoc.getBlockY() + 0.5, pLoc.getBlockZ() + 0.5);
         blockLoc.setPitch(0);
         blockLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
         WAIT_LOBBY_CONFIGURATION.setSpawn(blockLoc);

@@ -1,39 +1,38 @@
 package fr.loudo.dropperReloaded.manager.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.manager.games.Game;
+import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class WaitLobby {
 
-    private List<Player> playerList;
     private int timer;
     private boolean isOnCountdown;
     private BukkitTask countdownTask;
+    private Game game;
 
-    public WaitLobby() {
-        this.playerList = new ArrayList<>();
+    public WaitLobby(Game game) {
+        this.game = game;
         this.isOnCountdown = false;
     }
 
-    public boolean addPlayer(Player player) {
-        if(playerList.contains(player)) return false;
-        playerList.add(player);
-        return true;
+    public void playerJoinedMessage(String username) {
+        String joinMessage = MessageConfigUtils.get("wait_lobby.join_message");
+        joinMessage = joinMessage.replace("%player%", username);
+        joinMessage = joinMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
+        joinMessage = joinMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+        game.sendMessageToPlayers(joinMessage);
     }
 
-    public boolean removePlayer(Player player) {
-        if(!playerList.contains(player)) return false;
-        playerList.remove(player);
-        return true;
-    }
-
-    public int getPlayerListSize() {
-        return playerList.size();
+    public void playerLeftMessage(String username) {
+        String leftMessage = MessageConfigUtils.get("wait_lobby.left_message");
+        leftMessage = leftMessage.replace("%player%", username);
+        leftMessage = leftMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
+        leftMessage = leftMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+        game.sendMessageToPlayers(leftMessage);
     }
 
     public boolean startCountdown() {
@@ -60,7 +59,7 @@ public class WaitLobby {
         return true;
     }
 
-    private void startGame() {
+    public void startGame() {
 
     }
 
