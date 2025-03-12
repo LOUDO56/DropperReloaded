@@ -94,12 +94,13 @@ public class CommandMapActions {
 
         Map map = MAPS_MANAGER.getFromName(mapName);
         Location pLoc = player.getLocation();
+        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX(), pLoc.getBlockY(), pLoc.getBlockZ());
         if(DropperReloaded.getInstance().getConfig().getBoolean("games.add_y_cord_on_spawns")) {
-            pLoc.setY(pLoc.getY() + 0.5);
+            blockLoc.setY(blockLoc.getY() + 0.5);
         }
-        pLoc.setPitch(0);
-        pLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
-        if(map.addSpawn(pLoc)) {
+        blockLoc.setPitch(0);
+        blockLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
+        if(map.addSpawn(blockLoc)) {
             player.sendMessage(ChatColor.GREEN + "You added a new spawn for " + ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + map.getSpawns().size() + ChatColor.GREEN + " in total)");
         } else {
             player.sendMessage(ChatColor.RED + "You already added this spawn.");

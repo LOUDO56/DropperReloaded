@@ -52,9 +52,10 @@ public class CommandWaitLobbyActions {
     }
     private static void setSpawn(Player player) {
         Location pLoc = player.getLocation();
-        pLoc.setPitch(0);
-        pLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
-        WAIT_LOBBY_CONFIGURATION.setSpawn(pLoc);
+        Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX(), pLoc.getBlockY() + 1.5, pLoc.getBlockZ());
+        blockLoc.setPitch(0);
+        blockLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
+        WAIT_LOBBY_CONFIGURATION.setSpawn(blockLoc);
         player.sendMessage(ChatColor.GREEN + "Wait lobby has been set!");
     }
 
