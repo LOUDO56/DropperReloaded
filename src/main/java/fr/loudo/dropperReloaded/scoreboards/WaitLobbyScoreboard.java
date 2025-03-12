@@ -49,7 +49,6 @@ public class WaitLobbyScoreboard {
                 Score score = objective.getScore(slot);
                 score.setScore(i);
                 spaceString += " ";
-                System.out.println(slot + " " + i);
             }
             player.setScoreboard(scoreboard);
         }
