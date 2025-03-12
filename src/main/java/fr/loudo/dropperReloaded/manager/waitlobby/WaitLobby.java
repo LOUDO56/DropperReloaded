@@ -1,7 +1,6 @@
 package fr.loudo.dropperReloaded.manager.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.manager.games.Game;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;

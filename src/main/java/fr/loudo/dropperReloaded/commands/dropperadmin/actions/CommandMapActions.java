@@ -43,6 +43,7 @@ public class CommandMapActions {
             //TODO: List with a gui
             default:
                 player.sendMessage(CommandHelpAdmin.send());
+                break;
         }
 
         MAPS_MANAGER.serialize();
@@ -97,20 +98,7 @@ public class CommandMapActions {
             pLoc.setY(pLoc.getY() + 0.5);
         }
         pLoc.setPitch(0);
-        switch (PlayerUtils.getCardinalDirection(pLoc.getYaw())) {
-            case "North":
-                pLoc.setYaw(180);
-                break;
-            case "South":
-                pLoc.setYaw(0);
-                break;
-            case "East":
-                pLoc.setYaw(-90);
-                break;
-            case "West":
-                pLoc.setYaw(90);
-                break;
-        }
+        pLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
         if(map.addSpawn(pLoc)) {
             player.sendMessage(ChatColor.GREEN + "You added a new spawn for " + ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + map.getSpawns().size() + ChatColor.GREEN + " in total)");
         } else {

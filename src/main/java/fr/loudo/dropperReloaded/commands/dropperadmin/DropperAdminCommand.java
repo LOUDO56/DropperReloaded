@@ -2,6 +2,7 @@ package fr.loudo.dropperReloaded.commands.dropperadmin;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMapActions;
+import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandWaitLobbyActions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -15,6 +16,7 @@ public class DropperAdminCommand implements TabExecutor {
 
     private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard");
     private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "list");
+    private final List<String> WAITLOBBY_ACTIONS = Arrays.asList("setminplayer", "setmaxplayer", "setspawn");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -54,6 +56,9 @@ public class DropperAdminCommand implements TabExecutor {
                 case "map":
                     CommandMapActions.execute(action, value, value2, player);
                     break;
+                case "waitlobby":
+                    CommandWaitLobbyActions.execute(action, value, player);
+                    break;
                 default:
                     player.sendMessage(CommandHelpAdmin.send());
                     break;
@@ -70,12 +75,14 @@ public class DropperAdminCommand implements TabExecutor {
             switch (args[0].toLowerCase()) {
                 case "map":
                     return MAP_ACTIONS;
+                case "waitlobby":
+                    return WAITLOBBY_ACTIONS;
                 default:
                     return SECTIONS;
             }
         }
 
-        if(args.length == 3 && !args[1].equalsIgnoreCase("create")) {
+        if(args.length == 3 && !args[1].equalsIgnoreCase("create") && !args[0].equalsIgnoreCase("waitlobby")) {
             return DropperReloaded.getMapsManager().getListMapName();
         }
 

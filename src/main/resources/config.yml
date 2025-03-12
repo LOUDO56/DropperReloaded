@@ -1,2 +1,6 @@
 games:
   add_y_cord_on_spawns: true
+
+wait_lobby:
+  min_player: 4
+  max_player: 10
