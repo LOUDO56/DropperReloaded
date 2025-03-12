@@ -1,11 +1,31 @@
+global:
+  website: www.yourserver.fr
+
 games:
   add_y_cord_on_spawns: true
 
 wait_lobby:
   min_player: 4
   max_player: 10
+  map_vote_count: 3
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
+  time_format: MM:SS
+  scoreboard:
+    title: §a§lDropper
+    game_state:
+      waiting: Waiting...
+      stating: Starting in §a%timer%
+    slots:
+      - "§7%date%"
+      - "{space}"
+      - "Players: §a%current_player%§f/§a%max_player%"
+      - "{space}"
+      - "{game_state}"
+      - "{space}"
+      - "Map vote left: §a%player_map_vote_count%"
+      - "{space}"
+      - "§e%website%"
 
 player:
   left_game: §cYou left the game.

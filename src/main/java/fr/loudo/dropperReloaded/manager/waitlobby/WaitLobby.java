@@ -2,6 +2,7 @@ package fr.loudo.dropperReloaded.manager.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.manager.games.Game;
+import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,10 +14,16 @@ public class WaitLobby {
     private boolean isOnCountdown;
     private BukkitTask countdownTask;
     private Game game;
+    private WaitLobbyScoreboard waitLobbyScoreboard;
 
     public WaitLobby(Game game) {
         this.game = game;
         this.isOnCountdown = false;
+        this.waitLobbyScoreboard = new WaitLobbyScoreboard(game);
+    }
+
+    public void updateScoreboard() {
+
     }
 
     public void playerJoinedMessage(String username) {
@@ -25,6 +32,7 @@ public class WaitLobby {
         joinMessage = joinMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
         joinMessage = joinMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(joinMessage);
+        waitLobbyScoreboard.update();
     }
 
     public void playerLeftMessage(String username) {
@@ -33,6 +41,7 @@ public class WaitLobby {
         leftMessage = leftMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
         leftMessage = leftMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(leftMessage);
+        waitLobbyScoreboard.update();
     }
 
     public boolean startCountdown() {

@@ -4,6 +4,7 @@ import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.manager.maps.Map;
 import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobbyConfiguration;
+import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

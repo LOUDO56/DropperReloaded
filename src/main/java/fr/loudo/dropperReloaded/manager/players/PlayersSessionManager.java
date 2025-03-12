@@ -19,7 +19,7 @@ public class PlayersSessionManager {
                 return playerSession;
             }
         }
-        return new PlayerSession(player);
+        return null;
     }
 
     public boolean isPlaying(Player player) {
@@ -31,7 +31,7 @@ public class PlayersSessionManager {
         return false;
     }
 
-    public List<PlayerSession> getPlayerGameList() {
+    public List<PlayerSession> getPlayerSessionList() {
         return playerSessionList;
     }
 }
