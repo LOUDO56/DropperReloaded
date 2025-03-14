@@ -2,10 +2,10 @@ package fr.loudo.dropperReloaded.commands.dropperadmin.actions;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.CommandHelpAdmin;
-import fr.loudo.dropperReloaded.manager.maps.Map;
-import fr.loudo.dropperReloaded.manager.maps.MapDifficulty;
-import fr.loudo.dropperReloaded.manager.maps.MapDifficultyColorPrefix;
-import fr.loudo.dropperReloaded.manager.maps.MapsManager;
+import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.maps.MapDifficulty;
+import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
+import fr.loudo.dropperReloaded.maps.MapsManager;
 import fr.loudo.dropperReloaded.utils.PlayerUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

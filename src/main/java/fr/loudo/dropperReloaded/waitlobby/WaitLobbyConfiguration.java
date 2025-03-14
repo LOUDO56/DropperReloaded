@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.waitlobby;
+package fr.loudo.dropperReloaded.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import org.bukkit.Location;

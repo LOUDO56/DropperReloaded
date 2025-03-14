@@ -3,14 +3,13 @@ package fr.loudo.dropperReloaded;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
-import fr.loudo.dropperReloaded.manager.games.GamesManager;
-import fr.loudo.dropperReloaded.manager.maps.MapsManager;
-import fr.loudo.dropperReloaded.manager.players.PlayersSessionManager;
-import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobbyConfiguration;
+import fr.loudo.dropperReloaded.games.GamesManager;
+import fr.loudo.dropperReloaded.maps.MapsManager;
+import fr.loudo.dropperReloaded.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public final class DropperReloaded extends JavaPlugin {

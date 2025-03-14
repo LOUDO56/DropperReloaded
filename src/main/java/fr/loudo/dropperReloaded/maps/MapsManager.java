@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.maps;
+package fr.loudo.dropperReloaded.maps;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;

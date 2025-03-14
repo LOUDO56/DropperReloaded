@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.maps;
+package fr.loudo.dropperReloaded.maps;
 
 import org.bukkit.ChatColor;
 

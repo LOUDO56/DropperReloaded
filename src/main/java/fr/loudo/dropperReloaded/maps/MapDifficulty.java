@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.maps;
+package fr.loudo.dropperReloaded.maps;
 
 public enum MapDifficulty {
     EASY,

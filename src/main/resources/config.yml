@@ -2,11 +2,14 @@ global:
   website: www.yourserver.fr
 
 games:
-  map_per_games: 5
   easy_map_count: 2
   medium_map_count: 2
   hard_map_count: 1
   add_y_cord_on_spawns: true
+  timer_before_drop: 5
+  timer_sound: BLOCK_NOTE_BLOCK_PLING #NOTE_PLING
+  timer_message: §aThe doors opens in §e%timer% §aseconds!
+  go_message: §a§lDROP!
 
 wait_lobby:
   min_player: 2
@@ -17,20 +20,20 @@ wait_lobby:
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
-  timer_sound: NOTE_STICKS
+  timer_sound: NOTE_STICKS #BLOCK_NOTE_BLOCK_HAT
   scoreboard:
     title: §a§lDropper
     game_state:
-      waiting: Waiting...
-      starting: Starting in §a%timer%
+      waiting: §fWaiting...
+      starting: §fStarting in §a%timer%
     slots:
       - "§7%date% §8#%game_id%"
       - "{space}"
-      - "Players: §a%current_player%§f/§a%max_player%"
+      - "§fPlayers: §a%current_player%§f/§a%max_player%"
       - "{space}"
       - "{game_state}"
       - "{space}"
-      - "Map vote left: §a%player_map_vote_count%"
+      - "§fMap vote left: §a%player_map_vote_count%"
       - "{space}"
       - "§e%website%"
 

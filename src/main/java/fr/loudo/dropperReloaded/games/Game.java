@@ -1,28 +1,37 @@
-package fr.loudo.dropperReloaded.manager.games;
+package fr.loudo.dropperReloaded.games;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.manager.maps.Map;
-import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobby;
-import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobbyConfiguration;
+import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.players.PlayerSession;
+import fr.loudo.dropperReloaded.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
+import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
+import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
 
-    private final WaitLobbyConfiguration WAIT_LOBBY_CONFIGURATION = DropperReloaded.getWaitLobbyConfiguration();
+    private final WaitLobbyConfiguration waitLobbyConfiguration = DropperReloaded.getWaitLobbyConfiguration();
+    private final PlayersSessionManager playersSessionManager = DropperReloaded.getPlayersSessionManager();
 
     private int id;
     private List<Player> playerList;
     private List<Map> mapList;
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
+    private BukkitTask countdownStart;
 
     public Game() {
         this.playerList = new ArrayList<>();
@@ -33,10 +42,10 @@ public class Game {
     }
 
     public boolean addPlayer(Player player) {
-        if(playerList.contains(player) && playerList.size() >= WAIT_LOBBY_CONFIGURATION.getMaxPlayer()) return false;
+        if(playerList.contains(player) && playerList.size() >= waitLobbyConfiguration.getMaxPlayer()) return false;
         playerList.add(player);
         if(!hasStarted()) {
-            player.teleport(WAIT_LOBBY_CONFIGURATION.getSpawn());
+            player.teleport(waitLobbyConfiguration.getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
         }
@@ -55,11 +64,17 @@ public class Game {
     public void start() {
         gameStatus = GameStatus.PLAYING;
         mapList = DropperReloaded.getMapsManager().getRandomMaps();
-        sendMessageToPlayers("Map chosen: " + mapList);
+        for(Player player : playerList) {
+            teleportPlayerToNextMap(player);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
+        }
+        startCountdownBeginning();
     }
 
     public void stop() {
         gameStatus = GameStatus.ENDED;
+        countdownStart.cancel();
+        countdownStart = null;
     }
 
     public void sendMessageToPlayers(String message) {
@@ -71,6 +86,12 @@ public class Game {
     public void playSoundToPlayers(Sound sound) {
         for(Player player : playerList) {
             player.playSound(player.getLocation(), sound, 1, 1);
+        }
+    }
+
+    public void playSoundToPlayers(Sound sound, float pitch, float volume) {
+        for(Player player : playerList) {
+            player.playSound(player.getLocation(), sound, pitch, volume);
         }
     }
 
@@ -120,6 +141,41 @@ public class Game {
                 player.sendTitle(title, subtitle);
             }
         }
+    }
+
+    public void teleportPlayerToNextMap(Player player) {
+        PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
+        if(playerSession == null) return;
+        int currentMapCount = playerSession.getCurrentMapCount();
+
+        if(currentMapCount + 1 == mapList.size()) return;
+
+        playerSession.setCurrentMapCount(currentMapCount + 1);
+
+        Map currentMap = mapList.get(playerSession.getCurrentMapCount());
+        player.teleport(currentMap.getRandomSpawn());
+    }
+
+    private void startCountdownBeginning() {
+        final int[] timer = {DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop")};
+        Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
+        countdownStart = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(timer[0] == 0) {
+                    for(Player player : playerList) {
+                        playersSessionManager.getPlayerSession(player).startStopwatch();
+                    }
+                    playSoundToPlayers(sound, 1.2f, 1f);
+                    sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
+                    this.cancel();
+                } else {
+                    sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(timer[0])));
+                    playSoundToPlayers(sound);
+                }
+                timer[0]--;
+            }
+        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
     }
 
     public boolean hasStarted() {

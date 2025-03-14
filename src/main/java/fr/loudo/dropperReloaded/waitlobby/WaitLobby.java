@@ -1,8 +1,8 @@
-package fr.loudo.dropperReloaded.manager.waitlobby;
+package fr.loudo.dropperReloaded.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.manager.games.Game;
-import fr.loudo.dropperReloaded.manager.games.GameStatus;
+import fr.loudo.dropperReloaded.games.Game;
+import fr.loudo.dropperReloaded.games.GameStatus;
 import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Sound;

@@ -2,7 +2,7 @@ package fr.loudo.dropperReloaded.commands.dropperadmin.actions;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.CommandHelpAdmin;
-import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobbyConfiguration;
+import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import fr.loudo.dropperReloaded.utils.PlayerUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

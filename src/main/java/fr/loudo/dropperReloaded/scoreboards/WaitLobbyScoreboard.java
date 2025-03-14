@@ -1,9 +1,9 @@
 package fr.loudo.dropperReloaded.scoreboards;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.manager.games.Game;
-import fr.loudo.dropperReloaded.manager.games.GameStatus;
-import fr.loudo.dropperReloaded.manager.players.PlayerSession;
+import fr.loudo.dropperReloaded.games.Game;
+import fr.loudo.dropperReloaded.games.GameStatus;
+import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

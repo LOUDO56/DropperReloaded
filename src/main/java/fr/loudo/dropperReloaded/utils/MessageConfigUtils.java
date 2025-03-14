@@ -8,4 +8,10 @@ public class MessageConfigUtils {
         return DropperReloaded.getInstance().getConfig().getString(path);
     }
 
+    public static String get(String path, String toReplace, String replaceTo) {
+        String message = DropperReloaded.getInstance().getConfig().getString(path);
+        message = message.replace(toReplace, replaceTo);
+        return message;
+    }
+
 }

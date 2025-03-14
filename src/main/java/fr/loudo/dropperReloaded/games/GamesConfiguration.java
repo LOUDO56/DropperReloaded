@@ -1,8 +1,6 @@
-package fr.loudo.dropperReloaded.manager.games;
+package fr.loudo.dropperReloaded.games;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-
-import java.util.ArrayList;
 
 public class GamesConfiguration {
 

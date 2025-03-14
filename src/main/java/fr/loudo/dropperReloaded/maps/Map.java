@@ -1,9 +1,10 @@
-package fr.loudo.dropperReloaded.manager.maps;
+package fr.loudo.dropperReloaded.maps;
 
 import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Map {
 
@@ -38,6 +39,10 @@ public class Map {
 
         spawns.remove(spawns.size() - 1);
         return true;
+    }
+
+    public Location getRandomSpawn() {
+        return spawns.get(new Random().nextInt(spawns.size()));
     }
 
     public MapDifficulty getDifficulty() {

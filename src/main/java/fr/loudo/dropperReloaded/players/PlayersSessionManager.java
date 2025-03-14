@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.players;
+package fr.loudo.dropperReloaded.players;
 
 import org.bukkit.entity.Player;
 

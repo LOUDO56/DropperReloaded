@@ -1,4 +1,4 @@
-package fr.loudo.dropperReloaded.manager.games;
+package fr.loudo.dropperReloaded.games;
 
 public enum GameStatus {
     WAITING,

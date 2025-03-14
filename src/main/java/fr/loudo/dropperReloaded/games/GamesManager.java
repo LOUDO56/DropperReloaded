@@ -1,8 +1,8 @@
-package fr.loudo.dropperReloaded.manager.games;
+package fr.loudo.dropperReloaded.games;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.manager.players.PlayerSession;
-import fr.loudo.dropperReloaded.manager.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.players.PlayerSession;
+import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
