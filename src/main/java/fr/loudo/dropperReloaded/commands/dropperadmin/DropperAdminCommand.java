@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded.commands.dropperadmin;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMapActions;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandWaitLobbyActions;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class DropperAdminCommand implements TabExecutor {
 
-    private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard");
+    private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard", "reload");
     private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "list");
     private final List<String> WAITLOBBY_ACTIONS = Arrays.asList("setminplayer", "setmaxplayer", "setspawn");
 
@@ -58,6 +59,10 @@ public class DropperAdminCommand implements TabExecutor {
                     break;
                 case "waitlobby":
                     CommandWaitLobbyActions.execute(action, value, player);
+                    break;
+                case "reload":
+                    DropperReloaded.getInstance().reloadConfig();
+                    player.sendMessage(ChatColor.GREEN + "Config reloaded successfully!");
                     break;
                 default:
                     player.sendMessage(CommandHelpAdmin.send());

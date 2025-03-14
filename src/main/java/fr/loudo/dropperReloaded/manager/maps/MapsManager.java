@@ -6,12 +6,16 @@ import com.google.gson.GsonBuilder;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.utils.LocationDeserializer;
 import fr.loudo.dropperReloaded.utils.LocationSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MapsManager {
 
@@ -78,6 +82,54 @@ public class MapsManager {
         return mapsName;
     }
 
+    public List<Map> getMapList() {
+        return mapList;
+    }
+
+    //TODO: get map from players votes
+    public List<Map> getRandomMaps() {
+
+        List<Map> randomMaps = new ArrayList<>();
+
+        List<Map> easyMaps = getMapsFromDifficulty(MapDifficulty.EASY);
+        List<Map> mediumMaps = getMapsFromDifficulty(MapDifficulty.MEDIUM);
+        List<Map> hardMaps = getMapsFromDifficulty(MapDifficulty.HARD);
+
+        Collections.shuffle(easyMaps);
+        Collections.shuffle(mediumMaps);
+        Collections.shuffle(hardMaps);
+
+        FileConfiguration config = DropperReloaded.getInstance().getConfig();
+        int mapCount = config.getInt("games.map_per_games");
+        int easyMapCount = config.getInt("games.easy_map_count");
+        int mediumMapCount = config.getInt("games.medium_map_count");
+        int hardMapCount = config.getInt("games.hard_map_count");
+
+        int diffTotalCount = easyMapCount + mediumMapCount + hardMapCount;
+        if(diffTotalCount != mapCount) {
+            Bukkit.getLogger().severe("[DropperReloaded] Your config argument is wrong. You set the map count to " + mapCount + " but it doesn't match the total of easy, medium and hard count. Got " + diffTotalCount);
+            return null;
+        }
+
+        for(int i = 0; i < easyMapCount; i++) {
+            randomMaps.add(easyMaps.get(i));
+        }
+        for(int i = 0; i < mediumMapCount; i++) {
+            randomMaps.add(mediumMaps.get(i));
+        }
+        for(int i = 0; i < hardMapCount; i++) {
+            randomMaps.add(hardMaps.get(i));
+        }
+
+        return randomMaps;
+
+    }
+
+    public List<Map> getMapsFromDifficulty(MapDifficulty mapDifficulty) {
+        return mapList.stream()
+                .filter(map -> map.getDifficulty() == mapDifficulty)
+                .collect(Collectors.toList());
+    }
 
     public void serialize() {
         fileInit();

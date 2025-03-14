@@ -2,6 +2,10 @@ global:
   website: www.yourserver.fr
 
 games:
+  map_per_games: 5
+  easy_map_count: 2
+  medium_map_count: 2
+  hard_map_count: 1
   add_y_cord_on_spawns: true
 
 wait_lobby:
@@ -13,13 +17,14 @@ wait_lobby:
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
+  timer_sound: NOTE_STICKS
   scoreboard:
     title: §a§lDropper
     game_state:
       waiting: Waiting...
       starting: Starting in §a%timer%
     slots:
-      - "§7%date%"
+      - "§7%date% §8#%game_id%"
       - "{space}"
       - "Players: §a%current_player%§f/§a%max_player%"
       - "{space}"

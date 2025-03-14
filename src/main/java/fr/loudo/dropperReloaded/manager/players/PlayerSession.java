@@ -4,11 +4,14 @@ import fr.loudo.dropperReloaded.manager.games.Game;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 
+import java.util.Date;
+
 public class PlayerSession {
 
     private Player player;
     private Game playerGame;
     private int voteCount;
+    private Date stopwatch;
 
     public PlayerSession(Player player) {
         this.player = player;
@@ -33,5 +36,9 @@ public class PlayerSession {
 
     public int getVoteCount() {
         return voteCount;
+    }
+
+    public Date getStopwatch() {
+        return stopwatch;
     }
 }

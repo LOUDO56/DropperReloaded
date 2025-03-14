@@ -4,7 +4,7 @@ import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.manager.maps.Map;
 import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobbyConfiguration;
-import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ public class Game {
 
     private final WaitLobbyConfiguration WAIT_LOBBY_CONFIGURATION = DropperReloaded.getWaitLobbyConfiguration();
 
+    private int id;
     private List<Player> playerList;
     private List<Map> mapList;
     private GameStatus gameStatus;
@@ -24,6 +25,7 @@ public class Game {
         this.mapList = new ArrayList<>();
         this.gameStatus = GameStatus.WAITING;
         this.waitLobby = new WaitLobby(this);
+        this.id = DropperReloaded.getGamesManager().getGameList().size();
     }
 
     public boolean addPlayer(Player player) {
@@ -31,6 +33,7 @@ public class Game {
         playerList.add(player);
         if(!hasStarted()) {
             player.teleport(WAIT_LOBBY_CONFIGURATION.getSpawn());
+            waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
         }
         return true;
@@ -46,7 +49,9 @@ public class Game {
     }
 
     public void start() {
-        gameStatus = GameStatus.STARTING;
+        gameStatus = GameStatus.PLAYING;
+        mapList = DropperReloaded.getMapsManager().getRandomMaps();
+        sendMessageToPlayers("Map chosen: " + mapList);
     }
 
     public void stop() {
@@ -59,8 +64,22 @@ public class Game {
         }
     }
 
+    public void playSoundToPlayers(Sound sound) {
+        for(Player player : playerList) {
+            player.playSound(player.getLocation(), sound, 1, 1);
+        }
+    }
+
+    public void sendTitleToPlayers(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        //TODO: if protocolLib installed, send title with protocolLib, else with 1.8 api
+    }
+
     public boolean hasStarted() {
         return gameStatus == GameStatus.PLAYING;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public List<Player> getPlayerList() {

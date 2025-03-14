@@ -33,8 +33,9 @@ public class GamesManager {
             .findFirst()
             .orElseGet(Game::new);
 
+        if(!gameList.contains(game)) gameList.add(game);
+
         playerSession.setPlayerGame(game);
-        gameList.add(game);
         playersSessionManager.getPlayerSessionList().add(playerSession);
         game.addPlayer(player);
 
