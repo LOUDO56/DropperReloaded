@@ -1,5 +1,9 @@
 package fr.loudo.dropperReloaded.manager.games;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.manager.maps.Map;
 import fr.loudo.dropperReloaded.manager.waitlobby.WaitLobby;
@@ -71,7 +75,51 @@ public class Game {
     }
 
     public void sendTitleToPlayers(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        //TODO: if protocolLib installed, send title with protocolLib, else with 1.8 api
+        if(DropperReloaded.isIsProtocolLibPluginEnabled()) {
+            PacketContainer titleTimesPacket;
+            PacketContainer titlePacket;
+            PacketContainer subtitlePacket;
+
+            if(DropperReloaded.isNewerVersion()) {
+                titlePacket = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
+                titlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(title));
+
+                subtitlePacket = new PacketContainer(PacketType.Play.Server.SET_SUBTITLE_TEXT);
+                subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
+
+                titleTimesPacket = new PacketContainer(PacketType.Play.Server.SET_TITLES_ANIMATION);
+                titleTimesPacket.getIntegers()
+                        .write(0, fadeIn)
+                        .write(1, stay)
+                        .write(2, fadeOut);
+            } else {
+
+                titleTimesPacket = new PacketContainer(PacketType.Play.Server.TITLE);
+                titleTimesPacket.getTitleActions().write(0, EnumWrappers.TitleAction.TIMES);
+                titleTimesPacket.getIntegers()
+                        .write(0, fadeIn)
+                        .write(1, stay)
+                        .write(2, fadeOut);
+
+                titlePacket = new PacketContainer(PacketType.Play.Server.TITLE);
+                titlePacket.getTitleActions().write(0, EnumWrappers.TitleAction.TITLE);
+                titlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(title));
+
+                subtitlePacket = new PacketContainer(PacketType.Play.Server.TITLE);
+                subtitlePacket.getTitleActions().write(0, EnumWrappers.TitleAction.SUBTITLE);
+                subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
+
+            }
+            for(Player player : playerList) {
+                DropperReloaded.getProtocolManager().sendServerPacket(player, titleTimesPacket);
+                DropperReloaded.getProtocolManager().sendServerPacket(player, titlePacket);
+                DropperReloaded.getProtocolManager().sendServerPacket(player, subtitlePacket);
+            }
+        } else {
+            for(Player player : playerList) {
+                player.sendTitle(title, subtitle);
+            }
+        }
     }
 
     public boolean hasStarted() {

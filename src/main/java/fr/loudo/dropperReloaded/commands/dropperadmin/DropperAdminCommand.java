@@ -61,6 +61,7 @@ public class DropperAdminCommand implements TabExecutor {
                     CommandWaitLobbyActions.execute(action, value, player);
                     break;
                 case "reload":
+                    DropperReloaded.getInstance().saveDefaultConfig();
                     DropperReloaded.getInstance().reloadConfig();
                     player.sendMessage(ChatColor.GREEN + "Config reloaded successfully!");
                     break;

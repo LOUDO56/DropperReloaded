@@ -63,12 +63,11 @@ public class WaitLobby {
             public void run() {
                 if (timer == 0) {
                     startGame();
-                } else if(timer % 15 == 0 || timer >= 1 && timer <= 5) {
+                } else if(timer % 10 == 0 && timer <= 30 || timer % 60 == 0 || timer >= 1 && timer <= 5) {
                     String startingMessage = MessageConfigUtils.get("wait_lobby.timer_message");
                     startingMessage = startingMessage.replace("%timer_seconds%", String.valueOf(timer));
                     game.sendMessageToPlayers(startingMessage);
                     game.playSoundToPlayers(timerSound);
-                        //TODO: send title with fadein and fadeout
                     if(timer >= 1 && timer <= 5) {
                         game.sendTitleToPlayers(String.valueOf(timer), "", 0, 30, 0);
                     }

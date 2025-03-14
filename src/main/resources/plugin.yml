@@ -5,7 +5,7 @@ main: fr.loudo.dropperReloaded.DropperReloaded
 api-version: '1.8'
 authors: [ LOUDO ]
 website: https://lucasll.xyz
-softdepend: [Citizens]
+softdepend: [ Citizens, ProtocolLib ]
 commands:
   dropperadmin:
     description: DropperReloaded admin command.
