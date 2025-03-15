@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
+import fr.loudo.dropperReloaded.events.RegisterEvents;
 import fr.loudo.dropperReloaded.games.GamesManager;
 import fr.loudo.dropperReloaded.maps.MapsManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
@@ -53,10 +54,14 @@ public final class DropperReloaded extends JavaPlugin {
         //Commands
         RegisterCommands.register(this);
 
+        //Listeners
+        RegisterEvents.register(getServer().getPluginManager(), this);
+
         //Manager
         playersSessionManager = new PlayersSessionManager();
         gamesManager = new GamesManager();
         mapsManager = new MapsManager();
+
 
         //Configuration class
         waitLobbyConfiguration = new WaitLobbyConfiguration(this);

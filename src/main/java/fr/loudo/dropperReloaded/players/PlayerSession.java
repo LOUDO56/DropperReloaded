@@ -1,8 +1,14 @@
 package fr.loudo.dropperReloaded.players;
 
+import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
+import fr.loudo.dropperReloaded.maps.Map;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Date;
 
@@ -11,18 +17,56 @@ public class PlayerSession {
     private Player player;
     private Game playerGame;
     private Date stopwatch;
+    private Map currentMap;
+
+    private BukkitTask detectPortal;
 
     private int voteCount;
     private int currentMapCount;
+    private int totalFails;
 
     public PlayerSession(Player player) {
         this.player = player;
         this.voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
-        this.currentMapCount = 0;
+        this.currentMapCount = 1;
+        this.totalFails = 0;
     }
 
     public void startStopwatch() {
         stopwatch = new Date();
+    }
+
+    public boolean hasFinishedGame() {
+        return currentMapCount == playerGame.getMapList().size();
+    }
+
+    public void addDeath() {
+        totalFails += 1;
+        playerGame.getInGameScoreboard().updateTotalFails(player);
+        player.teleport(currentMap.getRandomSpawn());
+        player.damage(0.001);
+    }
+
+    public void startDetectingPortal() {
+        detectPortal = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(currentMapCount == playerGame.getMapList().size()) {
+                    this.cancel();
+                }
+
+                Location checkLoc;
+                for (int x = -1; x <= 1; x += 2) {
+                    for (int z = -1; z <= 1; z += 2) {
+                        checkLoc = new Location(player.getWorld(), player.getLocation().getX() + 0.299 * x, player.getLocation().getBlockY(), player.getLocation().getZ() + 0.299 * z);
+                        if(checkLoc.getBlock().getType() == Material.PORTAL) {
+                            playerGame.teleportPlayerToNextMap(player);
+                        }
+                    }
+                }
+
+            }
+        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 1L);
     }
 
     public Player getPlayer() {
@@ -39,6 +83,12 @@ public class PlayerSession {
 
     public void reset() {
         voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
+        currentMapCount = 1;
+        totalFails = 0;
+        if(detectPortal != null) {
+            detectPortal.cancel();
+        }
+        detectPortal = null;
     }
 
     public int getVoteCount() {
@@ -55,5 +105,21 @@ public class PlayerSession {
 
     public void setCurrentMapCount(int currentMapCount) {
         this.currentMapCount = currentMapCount;
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
+    }
+
+    public void setCurrentMap(Map currentMap) {
+        this.currentMap = currentMap;
+    }
+
+    public int getTotalFails() {
+        return totalFails;
+    }
+
+    public void setTotalFails(int totalFails) {
+        this.totalFails = totalFails;
     }
 }

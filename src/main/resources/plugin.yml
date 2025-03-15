@@ -2,7 +2,6 @@ name: DropperReloaded
 description: Dropper plugin
 version: '1.0.0'
 main: fr.loudo.dropperReloaded.DropperReloaded
-api-version: '1.8'
 authors: [ LOUDO ]
 website: https://lucasll.xyz
 softdepend: [ Citizens, ProtocolLib ]

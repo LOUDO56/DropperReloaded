@@ -9,6 +9,11 @@ import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class WaitLobby {
 
     private final int maxPlayer = DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer();
@@ -93,9 +98,15 @@ public class WaitLobby {
         return true;
     }
 
+    public String getTimeFormatted() {
+        Date date = new Date(0);
+        date.setTime(date.getTime() + timer * 1000L);
+        return new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(date);
+    }
+
     public void startGame() {
         stopCountdown();
-        game.start();
+        game.setup();
     }
 
     public int getTimer() {

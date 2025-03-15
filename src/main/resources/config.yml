@@ -1,5 +1,6 @@
 global:
   website: www.yourserver.fr
+  scoreboard_title: §a§lDropper
 
 games:
   easy_map_count: 2
@@ -8,8 +9,27 @@ games:
   add_y_cord_on_spawns: true
   timer_before_drop: 5
   timer_sound: BLOCK_NOTE_BLOCK_PLING #NOTE_PLING
+  portal_enter_sound: ENTITY_FIREWORK_ROCKET_BLAST
   timer_message: §aThe doors opens in §e%timer% §aseconds!
   go_message: §a§lDROP!
+  timer_in_game: 600
+  time_format: mm:SS
+  scoreboard:
+    map_not_completed_symbol: §c✘
+    map_completed_symbol: §a✔
+    in_this_map_symbol: §6◀
+    lines:
+      - '§7%date% §8#%game_id%'
+      - '{space}'
+      - '§fTime Left: §a%time_left%'
+      - '{space}'
+      - '§fCurrent Map: §7(§e%current_map_count%§7/§b%total_map_count%§7)'
+      - ' %map_completed_symbol% %map_name% %in_this_map_symbol%'
+      - '{space}'
+      - '§fTotal Time: §a%total_time%' # Only shows when the player finished.
+      - '§fTotal Fails: §c%total_fails%'
+      - '{space}'
+      - '§e%website%'
 
 wait_lobby:
   min_player: 2
@@ -20,22 +40,21 @@ wait_lobby:
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
-  timer_sound: NOTE_STICKS #BLOCK_NOTE_BLOCK_HAT
+  timer_sound: BLOCK_NOTE_BLOCK_HAT #NOTE_HAT
   scoreboard:
-    title: §a§lDropper
     game_state:
       waiting: §fWaiting...
       starting: §fStarting in §a%timer%
-    slots:
-      - "§7%date% §8#%game_id%"
-      - "{space}"
-      - "§fPlayers: §a%current_player%§f/§a%max_player%"
-      - "{space}"
-      - "{game_state}"
-      - "{space}"
-      - "§fMap vote left: §a%player_map_vote_count%"
-      - "{space}"
-      - "§e%website%"
+    lines:
+      - '§7%date% §8#%game_id%'
+      - '{space}'
+      - '§fPlayers: §a%current_player%§f/§a%max_player%'
+      - '{space}'
+      - '{game_state}'
+      - '{space}'
+      - '§fMap vote left: §a%player_map_vote_count%'
+      - '{space}'
+      - '§e%website%'
 
 player:
   left_game: §cYou left the game.

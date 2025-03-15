@@ -8,6 +8,7 @@ import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.maps.Map;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
@@ -18,7 +19,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Game {
@@ -32,6 +37,9 @@ public class Game {
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
     private BukkitTask countdownStart;
+    private BukkitTask countdownGame;
+    private InGameScoreboard inGameScoreboard;
+    private int timeLeft;
 
     public Game() {
         this.playerList = new ArrayList<>();
@@ -39,6 +47,7 @@ public class Game {
         this.gameStatus = GameStatus.WAITING;
         this.waitLobby = new WaitLobby(this);
         this.id = DropperReloaded.getGamesManager().getGameList().size();
+        this.inGameScoreboard = new InGameScoreboard(this);
     }
 
     public boolean addPlayer(Player player) {
@@ -61,20 +70,45 @@ public class Game {
         return true;
     }
 
-    public void start() {
+    public void setup() {
         gameStatus = GameStatus.PLAYING;
+        timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
         mapList = DropperReloaded.getMapsManager().getRandomMaps();
         for(Player player : playerList) {
-            teleportPlayerToNextMap(player);
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
+            inGameScoreboard.setup(player);
+            player.teleport(mapList.get(0).getRandomSpawn());
+            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            playerSession.setCurrentMap(mapList.get(0));
         }
         startCountdownBeginning();
+    }
+
+    private void start() {
+        for(Player player : playerList) {
+            PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
+            playerSession.startStopwatch();
+            playerSession.startDetectingPortal();
+
+        }
+        countdownGame = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(timeLeft == 0) {
+                    this.cancel();
+                }
+                inGameScoreboard.updateTimeLeft();
+                timeLeft--;
+            }
+        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
     }
 
     public void stop() {
         gameStatus = GameStatus.ENDED;
         countdownStart.cancel();
         countdownStart = null;
+        countdownGame.cancel();
+        countdownGame = null;
     }
 
     public void sendMessageToPlayers(String message) {
@@ -148,12 +182,19 @@ public class Game {
         if(playerSession == null) return;
         int currentMapCount = playerSession.getCurrentMapCount();
 
-        if(currentMapCount + 1 == mapList.size()) return;
+        System.out.println(currentMapCount);
+        if(currentMapCount == mapList.size()) return;
 
         playerSession.setCurrentMapCount(currentMapCount + 1);
 
-        Map currentMap = mapList.get(playerSession.getCurrentMapCount());
+        Map currentMap = mapList.get(playerSession.getCurrentMapCount() - 1);
+        playerSession.setCurrentMap(currentMap);
         player.teleport(currentMap.getRandomSpawn());
+
+        Sound sound = Sound.valueOf(MessageConfigUtils.get("games.portal_enter_sound"));
+        player.playSound(player.getLocation(), sound, 1, 1);
+
+        inGameScoreboard.updateCurrentMapPlayer(player);
     }
 
     private void startCountdownBeginning() {
@@ -163,11 +204,9 @@ public class Game {
             @Override
             public void run() {
                 if(timer[0] == 0) {
-                    for(Player player : playerList) {
-                        playersSessionManager.getPlayerSession(player).startStopwatch();
-                    }
                     playSoundToPlayers(sound, 1.2f, 1f);
                     sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
+                    start();
                     this.cancel();
                 } else {
                     sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(timer[0])));
@@ -180,6 +219,12 @@ public class Game {
 
     public boolean hasStarted() {
         return gameStatus == GameStatus.PLAYING;
+    }
+
+    public String getTimeFormatted() {
+        Date date = new Date(0);
+        date.setTime(date.getTime() + timeLeft * 1000L);
+        return new SimpleDateFormat(MessageConfigUtils.get("games.time_format")).format(date);
     }
 
     public int getId() {
@@ -204,5 +249,13 @@ public class Game {
 
     public WaitLobby getWaitLobby() {
         return waitLobby;
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public InGameScoreboard getInGameScoreboard() {
+        return inGameScoreboard;
     }
 }

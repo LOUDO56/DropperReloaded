@@ -100,16 +100,9 @@ public class MapsManager {
         Collections.shuffle(hardMaps);
 
         FileConfiguration config = DropperReloaded.getInstance().getConfig();
-        int mapCount = config.getInt("games.map_per_games");
         int easyMapCount = config.getInt("games.easy_map_count");
         int mediumMapCount = config.getInt("games.medium_map_count");
         int hardMapCount = config.getInt("games.hard_map_count");
-
-        int diffTotalCount = easyMapCount + mediumMapCount + hardMapCount;
-        if(diffTotalCount != mapCount) {
-            Bukkit.getLogger().severe("[DropperReloaded] Your config argument is wrong. You set the map count to " + mapCount + " but it doesn't match the total of easy, medium and hard count. Got " + diffTotalCount);
-            return null;
-        }
 
         for(int i = 0; i < easyMapCount; i++) {
             randomMaps.add(easyMaps.get(i));

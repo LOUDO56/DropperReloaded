@@ -24,7 +24,7 @@ public class WaitLobbyScoreboard {
     private int lineGameStatus;
     private int linePlayerList;
 
-    private final List<String> slots = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.slots");
+    private final List<String> lines = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.lines");
 
     public WaitLobbyScoreboard(Game game) {
         this.game = game;
@@ -32,17 +32,17 @@ public class WaitLobbyScoreboard {
 
     public void setup(Player player) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("test", "dummy");
+        Objective objective = scoreboard.registerNewObjective("dropperReloaded", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(MessageConfigUtils.get("wait_lobby.scoreboard.title"));
+        objective.setDisplayName(MessageConfigUtils.get("global.scoreboard_title"));
 
         String statusMessage = game.getGameStatus() == GameStatus.WAITING ? MessageConfigUtils.get("wait_lobby.scoreboard.game_state.waiting") : MessageConfigUtils.get("wait_lobby.scoreboard.game_state.starting");
         statusMessage = statusMessage.replace("%timer%", new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(game.getWaitLobby().getTimer()));
 
         String spaceString = " ";
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-        for (int i = 0; i < slots.size(); i++) {
-            String slot = slots.get(i);
+        for (int i = 0; i < lines.size(); i++) {
+            String slot = lines.get(i);
             if(slot.contains("{game_state}")) lineGameStatus = i;
             if(slot.contains("%current_player%")) linePlayerList = i;
             slot = slot.replace("%game_id%", String.valueOf(game.getId()));
@@ -53,10 +53,10 @@ public class WaitLobbyScoreboard {
             slot = slot.replace("%player_map_vote_count%", String.valueOf(playerSession.getVoteCount()));
             slot = slot.replace("%website%", MessageConfigUtils.get("global.website"));
             slot = slot.replace("{space}", spaceString);
-            Team team = scoreboard.registerNewTeam("line" + i);
+            Team team = scoreboard.registerNewTeam("dropperReloaded_waitlobby_line_" + i);
             team.addEntry(ChatColor.values()[i].toString());
             team.setPrefix(slot);
-            objective.getScore(ChatColor.values()[i].toString()).setScore(slots.size() - i);
+            objective.getScore(ChatColor.values()[i].toString()).setScore(lines.size() - i);
             spaceString += " ";
         }
         player.setScoreboard(scoreboard);
@@ -65,12 +65,12 @@ public class WaitLobbyScoreboard {
 
     public void updatePlayerList() {
 
-        String playerListTemplate = slots.get(linePlayerList);
+        String playerListTemplate = lines.get(linePlayerList);
         playerListTemplate = playerListTemplate.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
         playerListTemplate = playerListTemplate.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
 
         for(Player player : game.getPlayerList()) {
-            Team teamPlayerList = player.getScoreboard().getTeam("line" + linePlayerList);
+            Team teamPlayerList = player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + linePlayerList);
             teamPlayerList.setPrefix(playerListTemplate);
         }
     }
@@ -78,11 +78,13 @@ public class WaitLobbyScoreboard {
     public void updateGameStatus() {
 
         String statusMessage = game.getGameStatus() == GameStatus.WAITING ? MessageConfigUtils.get("wait_lobby.scoreboard.game_state.waiting") : MessageConfigUtils.get("wait_lobby.scoreboard.game_state.starting");
-        statusMessage = statusMessage.replace("%timer%", new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(game.getWaitLobby().getTimer()));
+        statusMessage = statusMessage.replace("%timer%", game.getWaitLobby().getTimeFormatted());
 
         for(Player player : game.getPlayerList()) {
-            Team teamGameStatus = player.getScoreboard().getTeam("line" + lineGameStatus);
-            teamGameStatus.setPrefix(statusMessage);
+            if(game.getGameStatus() != GameStatus.PLAYING) {
+                Team teamGameStatus = player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + lineGameStatus);
+                teamGameStatus.setPrefix(statusMessage);
+            }
         }
     }
 }
