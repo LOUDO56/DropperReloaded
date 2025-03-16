@@ -12,6 +12,7 @@ import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -20,8 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +56,12 @@ public class Game {
             player.teleport(waitLobbyConfiguration.getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
+            }.runTaskLater(DropperReloaded.getInstance(), 10L);
         }
         return true;
     }
@@ -77,9 +82,15 @@ public class Game {
         for(Player player : playerList) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
             inGameScoreboard.setup(player);
-            player.teleport(mapList.get(0).getRandomSpawn());
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
             playerSession.setCurrentMap(mapList.get(0));
+            player.teleport(mapList.get(0).getRandomSpawn());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
+            }.runTaskLater(DropperReloaded.getInstance(), 10L);
         }
         startCountdownBeginning();
     }

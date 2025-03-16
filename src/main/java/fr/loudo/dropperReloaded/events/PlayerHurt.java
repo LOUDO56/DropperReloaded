@@ -1,14 +1,12 @@
 package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.games.GameStatus;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 
 public class PlayerHurt implements Listener {
     @EventHandler
@@ -16,10 +14,17 @@ public class PlayerHurt implements Listener {
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
-                if(event.getDamage() >= player.getHealth()) {
-                    event.setCancelled(true);
-                    PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-                    playerSession.addDeath();
+                PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+                event.setCancelled(true);
+                if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING) {
+                    if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                        player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
+                    }
+                } else {
+                    if(event.getDamage() >= player.getHealth()) {
+                        playerSession.addDeath();
+                        player.setHealth(20);
+                    }
                 }
             }
         }

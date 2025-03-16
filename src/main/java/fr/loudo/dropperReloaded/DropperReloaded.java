@@ -62,13 +62,11 @@ public final class DropperReloaded extends JavaPlugin {
         gamesManager = new GamesManager();
         mapsManager = new MapsManager();
 
-
         //Configuration class
         waitLobbyConfiguration = new WaitLobbyConfiguration(this);
 
         version = getServer().getBukkitVersion();
         version = version.split("-")[0];
-        System.out.println(version);
 
     }
 
