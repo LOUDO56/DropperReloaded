@@ -101,6 +101,9 @@ public class Game {
             playerFromGame.hidePlayer(player);
         }
         player.setAllowFlight(false);
+        if(playerList.isEmpty()) {
+            reset();
+        }
         return true;
     }
 
@@ -139,6 +142,7 @@ public class Game {
             @Override
             public void run() {
                 if(timeLeft == 0) {
+                    stop();
                     this.cancel();
                 }
                 inGameScoreboard.updateTimeLeft();
@@ -153,6 +157,37 @@ public class Game {
         countdownStart = null;
         countdownGame.cancel();
         countdownGame = null;
+        if(playerList.isEmpty()) {
+            reset();
+            return;
+        }
+
+        for(Player player : playerList) {
+            addPlayerSpectator(player);
+        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                reset();
+            }
+        }.runTaskLater(DropperReloaded.getInstance(), 5L * 20L);
+    }
+
+    public void reset() {
+        for(Player player : playerList) {
+            removePlayer(player);
+        }
+        if(countdownStart != null) {
+            countdownStart.cancel();
+        }
+        if(countdownGame != null) {
+            countdownGame.cancel();
+        }
+        gameStatus = GameStatus.WAITING;
+        playerList = new ArrayList<>();
+        mapList = new ArrayList<>();
+        spectatorList = new ArrayList<>();
+        onePlayerFinished = false;
     }
 
     public void sendMessageToPlayers(String message) {
@@ -235,7 +270,6 @@ public class Game {
             player.teleport(currentMap.getRandomSpawn());
         } else {
             addPlayerSpectator(player);
-            System.out.println(onePlayerFinished);
             if(!onePlayerFinished) {
                 reduceTimer();
             }
@@ -270,7 +304,9 @@ public class Game {
         if(spectatorList.contains(player)) return false;
         spectatorList.add(player);
         playersSessionManager.getPlayerSession(player).setSpectator(true);
-        player.teleport(mapList.get(mapList.size() - 1).getRandomSpawn());
+        if(timeLeft > 0) {
+            player.teleport(mapList.get(mapList.size() - 1).getRandomSpawn());
+        }
         player.getInventory().clear();
         player.getInventory().setItem(DropperItems.spectatorPlayerList.getSlot(), DropperItems.spectatorPlayerList.getItem());
         player.getInventory().setItem(DropperItems.playAgain.getSlot(), DropperItems.playAgain.getItem());
@@ -294,16 +330,16 @@ public class Game {
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
-                if(timer[0] == 0) {
-                    playSoundToPlayers(sound, 1.2f, 1f);
-                    sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
-                    start();
-                    this.cancel();
-                } else {
-                    sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(timer[0])));
-                    playSoundToPlayers(sound);
-                }
-                timer[0]--;
+            if(timer[0] == 0) {
+                playSoundToPlayers(sound, 1.2f, 1f);
+                sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
+                start();
+                this.cancel();
+            } else {
+                sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(timer[0])));
+                playSoundToPlayers(sound);
+            }
+            timer[0]--;
             }
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
     }
