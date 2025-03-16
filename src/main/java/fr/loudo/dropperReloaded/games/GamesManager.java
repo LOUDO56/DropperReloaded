@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded.games;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -24,7 +25,7 @@ public class GamesManager {
         if(playerSession == null) {
             playerSession = new PlayerSession(player);
         } else {
-            leaveGame(playerSession);
+            leaveGame(player);
             playerSession.reset();
         }
 
@@ -48,17 +49,14 @@ public class GamesManager {
         playersSessionManager.getPlayerSessionList().remove(playerSession);
         playerSession.getPlayerGame().removePlayer(player);
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        player.sendMessage(MessageConfigUtils.get("player.left_game"));
         //TODO: Teleport to main lobby
+        //TODO: restore old items
+        player.getInventory().clear();
 
         return true;
     }
 
-    public void leaveGame(PlayerSession playerSession) {
-        playersSessionManager.getPlayerSessionList().remove(playerSession);
-        playerSession.getPlayerGame().removePlayer(playerSession.getPlayer());
-        playerSession.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        //TODO: Teleport to main lobby
-    }
 
     public List<Game> getGameList() {
         return gameList;

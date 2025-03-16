@@ -5,6 +5,7 @@ import org.bukkit.Location;
 
 public class WaitLobbyConfiguration {
 
+    //TODO: fix reload config
     private DropperReloaded instance;
     private int minPlayer;
     private int maxPlayer;
@@ -12,6 +13,13 @@ public class WaitLobbyConfiguration {
 
     public WaitLobbyConfiguration(DropperReloaded instance) {
         this.instance = instance;
+        this.minPlayer = instance.getConfig().getInt("wait_lobby.min_player");
+        this.maxPlayer = instance.getConfig().getInt("wait_lobby.max_player");
+        this.spawn = (Location) instance.getConfig().get("wait_lobby.spawn");
+    }
+
+    public void reload() {
+        this.instance = DropperReloaded.getInstance();
         this.minPlayer = instance.getConfig().getInt("wait_lobby.min_player");
         this.maxPlayer = instance.getConfig().getInt("wait_lobby.max_player");
         this.spawn = (Location) instance.getConfig().get("wait_lobby.spawn");

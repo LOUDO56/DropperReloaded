@@ -25,11 +25,16 @@ public class PlayerSession {
     private int currentMapCount;
     private int totalFails;
 
+    private boolean isPlayersVisible;
+    private boolean isInvincible;
+
     public PlayerSession(Player player) {
         this.player = player;
         this.voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
         this.currentMapCount = 1;
         this.totalFails = 0;
+        this.isPlayersVisible = true;
+        this.isInvincible = false;
     }
 
     public void startStopwatch() {
@@ -45,6 +50,7 @@ public class PlayerSession {
         playerGame.getInGameScoreboard().updateTotalFails(player);
         player.teleport(currentMap.getRandomSpawn());
         player.damage(0.001);
+        player.setHealth(20);
     }
 
     public void startDetectingPortal() {
@@ -55,11 +61,18 @@ public class PlayerSession {
                     this.cancel();
                 }
 
+                Material netherPortal;
+                if(DropperReloaded.isNewerVersion()) {
+                    netherPortal = Material.valueOf("NETHER_PORTAL");
+                } else {
+                    netherPortal = Material.valueOf("PORTAL");
+                }
+
                 Location checkLoc;
                 for (int x = -1; x <= 1; x += 2) {
                     for (int z = -1; z <= 1; z += 2) {
                         checkLoc = new Location(player.getWorld(), player.getLocation().getX() + 0.299 * x, player.getLocation().getBlockY(), player.getLocation().getZ() + 0.299 * z);
-                        if(checkLoc.getBlock().getType() == Material.PORTAL) {
+                        if(checkLoc.getBlock().getType() == netherPortal) {
                             playerGame.teleportPlayerToNextMap(player);
                         }
                     }
@@ -121,5 +134,21 @@ public class PlayerSession {
 
     public void setTotalFails(int totalFails) {
         this.totalFails = totalFails;
+    }
+
+    public boolean isPlayersVisible() {
+        return isPlayersVisible;
+    }
+
+    public void setPlayersVisible(boolean playersVisible) {
+        isPlayersVisible = playersVisible;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public void setInvincible(boolean invincible) {
+        isInvincible = invincible;
     }
 }

@@ -15,15 +15,17 @@ public class PlayerHurt implements Listener {
             Player player = (Player) event.getEntity();
             if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
                 PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-                event.setCancelled(true);
-                if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING) {
-                    if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                        player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
+                if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING || playerSession.isInvincible()) {
+                    event.setCancelled(true);
+                    if(playerSession.getPlayerGame().getGameStatus() == GameStatus.STARTING || playerSession.getPlayerGame().getGameStatus() == GameStatus.WAITING) {
+                        if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                            player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
+                        }
                     }
                 } else {
                     if(event.getDamage() >= player.getHealth()) {
+                        event.setCancelled(true);
                         playerSession.addDeath();
-                        player.setHealth(20);
                     }
                 }
             }

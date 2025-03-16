@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.Map;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
@@ -56,6 +57,9 @@ public class Game {
             player.teleport(waitLobbyConfiguration.getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
+            player.getInventory().clear();
+            player.getInventory().setItem(DropperItems.mapVote.getSlot(), DropperItems.mapVote.getItem());
+            player.getInventory().setItem(DropperItems.leaveBed.getSlot(), DropperItems.leaveBed.getItem());
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -76,7 +80,7 @@ public class Game {
     }
 
     public void setup() {
-        gameStatus = GameStatus.PLAYING;
+        gameStatus = GameStatus.DOOR_COUNTDOWN;
         timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
         mapList = DropperReloaded.getMapsManager().getRandomMaps();
         for(Player player : playerList) {
@@ -85,6 +89,9 @@ public class Game {
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
             playerSession.setCurrentMap(mapList.get(0));
             player.teleport(mapList.get(0).getRandomSpawn());
+            player.getInventory().clear();
+            player.getInventory().setItem(DropperItems.resetLocation.getSlot(), DropperItems.resetLocation.getItem());
+            player.getInventory().setItem(DropperItems.playerVisibilityOn.getSlot(), DropperItems.playerVisibilityOn.getItem());
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -96,6 +103,7 @@ public class Game {
     }
 
     private void start() {
+        gameStatus = GameStatus.PLAYING;
         for(Player player : playerList) {
             PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
             playerSession.startStopwatch();

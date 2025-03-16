@@ -28,9 +28,7 @@ public class DropperCommand implements TabExecutor {
                     DropperReloaded.getGamesManager().joinGame(player);
                     break;
                 case "leave":
-                    if(DropperReloaded.getGamesManager().leaveGame(player)) {
-                        player.sendMessage(MessageConfigUtils.get("player.left_game"));
-                    } else {
+                    if(!DropperReloaded.getGamesManager().leaveGame(player)) {
                         player.sendMessage(MessageConfigUtils.get("player.not_in_a_game"));
                     }
                     break;

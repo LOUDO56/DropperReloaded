@@ -3,6 +3,8 @@ package fr.loudo.dropperReloaded.commands.dropperadmin;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMapActions;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandWaitLobbyActions;
+import fr.loudo.dropperReloaded.items.DropperItems;
+import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -63,6 +65,8 @@ public class DropperAdminCommand implements TabExecutor {
                 case "reload":
                     DropperReloaded.getInstance().saveDefaultConfig();
                     DropperReloaded.getInstance().reloadConfig();
+                    DropperReloaded.getWaitLobbyConfiguration().reload();
+                    DropperItems.registerItems();
                     player.sendMessage(ChatColor.GREEN + "Config reloaded successfully!");
                     break;
                 default:

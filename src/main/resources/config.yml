@@ -14,6 +14,26 @@ games:
   go_message: §a§lDROP!
   timer_in_game: 600
   time_format: mm:SS
+  reset_location: "§cReset location!"
+  items:
+    reset_location:
+      slot: 4
+      material: REDSTONE
+      name: "§cReset location §r§7(Right-click)"
+      description:
+        - "§7Reset your location."
+    player_visibility_on:
+      slot: 8
+      material: LIME_DYE
+      name: "§7Player visibility: §aON"
+      description:
+        - "§7Hide or show the players around you."
+    player_visibility_off:
+      slot: 8
+      material: GRAY_DYE
+      name: "§7Player visibility: §cOFF"
+      description:
+        - "§7Hide or show the players around you."
   scoreboard:
     map_not_completed_symbol: §c✘
     map_completed_symbol: §a✔
@@ -41,6 +61,19 @@ wait_lobby:
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
   timer_sound: BLOCK_NOTE_BLOCK_HAT #NOTE_HAT
+  items:
+    map_vote:
+      slot: 0
+      material: NAME_TAG
+      name: "§e§lMap vote §r§7(Right-click)"
+      description:
+        - "§7Vote your favourite map!"
+    leave:
+      slot: 8
+      material: RED_BED
+      name: "§c§lLeave §r§7(Right-click)"
+      description:
+        - "§7Leave your current game."
   scoreboard:
     game_state:
       waiting: §fWaiting...

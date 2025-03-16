@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
 import fr.loudo.dropperReloaded.events.RegisterEvents;
 import fr.loudo.dropperReloaded.games.GamesManager;
+import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.MapsManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
@@ -65,6 +66,9 @@ public final class DropperReloaded extends JavaPlugin {
         //Configuration class
         waitLobbyConfiguration = new WaitLobbyConfiguration(this);
 
+        //Items
+        DropperItems.registerItems();
+
         version = getServer().getBukkitVersion();
         version = version.split("-")[0];
 
@@ -107,7 +111,7 @@ public final class DropperReloaded extends JavaPlugin {
     }
 
     public static boolean isNewerVersion() {
-        return Stream.of("1.17", "1.18", "1.19", "1.20", "1.21")
+        return Stream.of("1.13", "1.14", "1.15", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20", "1.21")
                 .anyMatch(version::startsWith);
     }
 }

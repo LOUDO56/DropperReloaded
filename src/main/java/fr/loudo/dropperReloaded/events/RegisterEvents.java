@@ -10,6 +10,9 @@ public class RegisterEvents {
         pluginManager.registerEvents(new FoodLevelChange(), instance);
         pluginManager.registerEvents(new BlockBreak(), instance);
         pluginManager.registerEvents(new BlockPlace(), instance);
+        pluginManager.registerEvents(new InventoryClick(), instance);
+        pluginManager.registerEvents(new DropItem(), instance);
+        pluginManager.registerEvents(new PlayerInteract(), instance);
     }
 
 }

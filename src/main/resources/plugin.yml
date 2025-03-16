@@ -1,6 +1,7 @@
 name: DropperReloaded
 description: Dropper plugin
 version: '1.0.0'
+api-version: '1.13'
 main: fr.loudo.dropperReloaded.DropperReloaded
 authors: [ LOUDO ]
 website: https://lucasll.xyz
