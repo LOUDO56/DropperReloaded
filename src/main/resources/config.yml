@@ -22,6 +22,9 @@ games:
       name: "§cReset location §r§7(Right-click)"
       description:
         - "§7Reset your location."
+      extra:
+        countdown_before_new_click: 2
+        cant_reset_location: "§cPlease wait a bit before using it again!"
     player_visibility_on:
       slot: 8
       material: LIME_DYE

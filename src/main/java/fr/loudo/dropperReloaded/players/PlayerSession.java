@@ -16,8 +16,8 @@ public class PlayerSession {
 
     private Player player;
     private Game playerGame;
-    private Date stopwatch;
     private Map currentMap;
+    private Date stopwatch;
 
     private BukkitTask detectPortal;
 
@@ -27,6 +27,7 @@ public class PlayerSession {
 
     private boolean isPlayersVisible;
     private boolean isInvincible;
+    private boolean canResetLocation;
 
     public PlayerSession(Player player) {
         this.player = player;
@@ -35,6 +36,7 @@ public class PlayerSession {
         this.totalFails = 0;
         this.isPlayersVisible = true;
         this.isInvincible = false;
+        this.canResetLocation = true;
     }
 
     public void startStopwatch() {
@@ -51,6 +53,12 @@ public class PlayerSession {
         player.teleport(currentMap.getRandomSpawn());
         player.damage(0.001);
         player.setHealth(20);
+    }
+
+    public void addDeath(boolean silent) {
+        totalFails += 1;
+        playerGame.getInGameScoreboard().updateTotalFails(player);
+        player.teleport(currentMap.getRandomSpawn());
     }
 
     public void startDetectingPortal() {
@@ -150,5 +158,13 @@ public class PlayerSession {
 
     public void setInvincible(boolean invincible) {
         isInvincible = invincible;
+    }
+
+    public boolean canResetLocation() {
+        return canResetLocation;
+    }
+
+    public void setCanResetLocation(boolean canResetLocation) {
+        this.canResetLocation = canResetLocation;
     }
 }

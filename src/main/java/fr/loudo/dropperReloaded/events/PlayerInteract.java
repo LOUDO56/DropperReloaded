@@ -24,9 +24,14 @@ public class PlayerInteract implements Listener {
                     DropperReloaded.getGamesManager().leaveGame(player);
                 }
             } else {
+                if(!playerSession.canResetLocation()) {
+                    player.sendMessage(MessageConfigUtils.get("games.items.reset_location.extra.cant_reset_location"));
+                    return;
+                }
                 if(Objects.equals(player.getItemInHand(), DropperItems.resetLocation.getItem())) {
                     playerSession.setInvincible(true);
-                    player.teleport(playerSession.getCurrentMap().getRandomSpawn());
+                    playerSession.setCanResetLocation(false);
+                    playerSession.addDeath(true);
                     player.sendMessage(MessageConfigUtils.get("games.reset_location"));
                     new BukkitRunnable() {
                         @Override
@@ -34,6 +39,12 @@ public class PlayerInteract implements Listener {
                             playerSession.setInvincible(false);
                         }
                     }.runTaskLater(DropperReloaded.getInstance(), 10L);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            playerSession.setCanResetLocation(true);
+                        }
+                    }.runTaskLater(DropperReloaded.getInstance(), Long.parseLong(MessageConfigUtils.get("games.items.reset_location.extra.countdown_before_new_click")) * 20L);
                 }
             }
         }
