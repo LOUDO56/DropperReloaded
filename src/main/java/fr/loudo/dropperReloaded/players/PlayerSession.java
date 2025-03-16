@@ -105,7 +105,11 @@ public class PlayerSession {
     public void reset() {
         voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
         currentMapCount = 1;
+        currentMap = null;
         totalFails = 0;
+        isPlayersVisible = true;
+        isInvincible = false;
+        canResetLocation = true;
         if(detectPortal != null) {
             detectPortal.cancel();
         }
