@@ -15,6 +15,10 @@ public class DropperItems {
     public static DropperItem playerVisibilityOn;
     public static DropperItem playerVisibilityOff;
 
+    //Spectator
+    public static DropperItem spectatorPlayerList;
+    public static DropperItem playAgain;
+
     public static void registerItems() {
         mapVote = getItem("wait_lobby", "map_vote");
         leaveBed = getItem("wait_lobby", "leave");
@@ -22,6 +26,9 @@ public class DropperItems {
         resetLocation = getItem("games", "reset_location");
         playerVisibilityOn = getItem("games", "player_visibility_on");
         playerVisibilityOff = getItem("games", "player_visibility_off");
+
+        spectatorPlayerList = getItem("games", "spectator_player_list");
+        playAgain = getItem("games", "play_again");
     }
 
     private static DropperItem getItem(String type, String section) {

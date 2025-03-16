@@ -28,6 +28,7 @@ public class PlayerSession {
     private boolean isPlayersVisible;
     private boolean isInvincible;
     private boolean canResetLocation;
+    private boolean isSpectator;
 
     public PlayerSession(Player player) {
         this.player = player;
@@ -37,6 +38,7 @@ public class PlayerSession {
         this.isPlayersVisible = true;
         this.isInvincible = false;
         this.canResetLocation = true;
+        this.isSpectator = false;
     }
 
     public void startStopwatch() {
@@ -59,13 +61,14 @@ public class PlayerSession {
         totalFails += 1;
         playerGame.getInGameScoreboard().updateTotalFails(player);
         player.teleport(currentMap.getRandomSpawn());
+        player.setHealth(20);
     }
 
     public void startDetectingPortal() {
         detectPortal = new BukkitRunnable() {
             @Override
             public void run() {
-                if(currentMapCount == playerGame.getMapList().size()) {
+                if(currentMapCount > playerGame.getMapList().size()) {
                     this.cancel();
                 }
 
@@ -110,6 +113,7 @@ public class PlayerSession {
         isPlayersVisible = true;
         isInvincible = false;
         canResetLocation = true;
+        isSpectator = false;
         if(detectPortal != null) {
             detectPortal.cancel();
         }
@@ -170,5 +174,13 @@ public class PlayerSession {
 
     public void setCanResetLocation(boolean canResetLocation) {
         this.canResetLocation = canResetLocation;
+    }
+
+    public boolean isSpectator() {
+        return isSpectator;
+    }
+
+    public void setSpectator(boolean spectator) {
+        isSpectator = spectator;
     }
 }

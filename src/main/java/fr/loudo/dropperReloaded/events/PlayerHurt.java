@@ -14,6 +14,10 @@ public class PlayerHurt implements Listener {
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+                if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+                    event.setCancelled(true);
+                    return;
+                }
                 PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
                 if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING || playerSession.isInvincible()) {
                     event.setCancelled(true);

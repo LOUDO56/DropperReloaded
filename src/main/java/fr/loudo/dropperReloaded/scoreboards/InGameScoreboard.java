@@ -120,8 +120,9 @@ public class InGameScoreboard {
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
 
         String currentMapString = lines.get(configCurrentMapLineIndex);
+        int currentMapCount = Math.min(playerSession.getCurrentMapCount(), playerSession.getPlayerGame().getMapList().size());
         currentMapString = currentMapString
-                .replace("%current_map_count%", String.valueOf(playerSession.getCurrentMapCount()))
+                .replace("%current_map_count%", String.valueOf(currentMapCount))
                 .replace("%total_map_count%", String.valueOf(game.getMapList().size()));
         player.getScoreboard().getTeam("dropperReloaded_game_currentMap").setPrefix(currentMapString);
 

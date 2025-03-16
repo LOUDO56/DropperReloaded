@@ -13,6 +13,7 @@ public class RegisterEvents {
         pluginManager.registerEvents(new InventoryClick(), instance);
         pluginManager.registerEvents(new DropItem(), instance);
         pluginManager.registerEvents(new PlayerInteract(), instance);
+        pluginManager.registerEvents(new PlayerJoin(), instance);
     }
 
 }

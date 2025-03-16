@@ -46,6 +46,23 @@ public class PlayerInteract implements Listener {
                         }
                     }.runTaskLater(DropperReloaded.getInstance(), Long.parseLong(MessageConfigUtils.get("games.items.reset_location.extra.countdown_before_new_click")) * 20L);
                 }
+
+                if(Objects.equals(player.getItemInHand(), DropperItems.playerVisibilityOn.getItem())) {
+                    for(Player playerOfGame : playerSession.getPlayerGame().getPlayerList()) {
+                        player.hidePlayer(playerOfGame);
+                    }
+                    player.getInventory().setItem(DropperItems.playerVisibilityOff.getSlot(), DropperItems.playerVisibilityOff.getItem());
+                    player.sendMessage(MessageConfigUtils.get("games.items.player_visibility_on.extra.players_hidden"));
+                    return;
+                }
+
+                if(Objects.equals(player.getItemInHand(), DropperItems.playerVisibilityOff.getItem())) {
+                    for(Player playerOfGame : playerSession.getPlayerGame().getPlayerList()) {
+                        player.showPlayer(playerOfGame);
+                    }
+                    player.getInventory().setItem(DropperItems.playerVisibilityOn.getSlot(), DropperItems.playerVisibilityOn.getItem());
+                    player.sendMessage(MessageConfigUtils.get("games.items.player_visibility_off.extra.players_shown"));
+                }
             }
         }
 

@@ -13,6 +13,7 @@ import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -32,22 +33,29 @@ public class Game {
     private final PlayersSessionManager playersSessionManager = DropperReloaded.getPlayersSessionManager();
 
     private int id;
+    private int timeLeft;
+
+    private boolean onePlayerFinished;
+
     private List<Player> playerList;
+    private List<Player> spectatorList;
     private List<Map> mapList;
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
     private BukkitTask countdownStart;
     private BukkitTask countdownGame;
     private InGameScoreboard inGameScoreboard;
-    private int timeLeft;
+
 
     public Game() {
         this.playerList = new ArrayList<>();
         this.mapList = new ArrayList<>();
+        this.spectatorList = new ArrayList<>();
         this.gameStatus = GameStatus.WAITING;
         this.waitLobby = new WaitLobby(this);
         this.id = DropperReloaded.getGamesManager().getGameList().size();
         this.inGameScoreboard = new InGameScoreboard(this);
+        this.onePlayerFinished = false;
     }
 
     public boolean addPlayer(Player player) {
@@ -66,6 +74,14 @@ public class Game {
                     player.setGameMode(GameMode.ADVENTURE);
                 }
             }.runTaskLater(DropperReloaded.getInstance(), 10L);
+            for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                player.hidePlayer(onlinePlayer);
+                onlinePlayer.hidePlayer(player);
+            }
+            for(Player playerFromGame : playerList) {
+                player.showPlayer(playerFromGame);
+                playerFromGame.showPlayer(player);
+            }
         }
         return true;
     }
@@ -76,6 +92,15 @@ public class Game {
         if(!hasStarted()) {
             waitLobby.playerLeftMessage(player.getDisplayName());
         }
+        for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            player.showPlayer(onlinePlayer);
+            onlinePlayer.showPlayer(player);
+        }
+        for(Player playerFromGame : playerList) {
+            player.hidePlayer(playerFromGame);
+            playerFromGame.hidePlayer(player);
+        }
+        player.setFlying(false);
         return true;
     }
 
@@ -199,21 +224,68 @@ public class Game {
     public void teleportPlayerToNextMap(Player player) {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) return;
-        int currentMapCount = playerSession.getCurrentMapCount();
+        if(playerSession.isSpectator()) return;
+        int currentMapCount = playerSession.getCurrentMapCount() + 1;
 
-        System.out.println(currentMapCount);
-        if(currentMapCount == mapList.size()) return;
+        playerSession.setCurrentMapCount(currentMapCount);
 
-        playerSession.setCurrentMapCount(currentMapCount + 1);
-
-        Map currentMap = mapList.get(playerSession.getCurrentMapCount() - 1);
-        playerSession.setCurrentMap(currentMap);
-        player.teleport(currentMap.getRandomSpawn());
+        if(currentMapCount <= mapList.size()) {
+            Map currentMap = mapList.get(currentMapCount- 1);
+            playerSession.setCurrentMap(currentMap);
+            player.teleport(currentMap.getRandomSpawn());
+        }
 
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.portal_enter_sound"));
         player.playSound(player.getLocation(), sound, 1, 1);
 
         inGameScoreboard.updateCurrentMapPlayer(player);
+
+        if(currentMapCount == mapList.size() + 1) {
+            addPlayerSpectator(player);
+            if(!onePlayerFinished) {
+                reduceTimer();
+            }
+        }
+    }
+
+    public boolean reduceTimer() {
+        int reduceTimer = Integer.parseInt(MessageConfigUtils.get("games.first_done_cut_timer"));
+        if(timeLeft < reduceTimer || onePlayerFinished) return false;
+
+        timeLeft = reduceTimer;
+        inGameScoreboard.updateTimeLeft();
+        List<String> messages = DropperReloaded.getInstance().getConfig().getStringList("games.first_player_finished");
+        for(String message : messages) {
+            message = message.replace("%timer%", getTimeFormatted());
+            sendMessageToPlayers(message);
+        }
+
+        onePlayerFinished = true;
+
+        return true;
+
+    }
+
+    public boolean addPlayerSpectator(Player player){
+        if(spectatorList.contains(player)) return false;
+        spectatorList.add(player);
+        playersSessionManager.getPlayerSession(player).setSpectator(true);
+        player.teleport(mapList.get(mapList.size() - 1).getRandomSpawn());
+        player.getInventory().clear();
+        player.getInventory().setItem(DropperItems.spectatorPlayerList.getSlot(), DropperItems.spectatorPlayerList.getItem());
+        player.getInventory().setItem(DropperItems.playAgain.getSlot(), DropperItems.playAgain.getItem());
+        player.setFlying(true);
+        for(Player playerFromGame : playerList) {
+            playerFromGame.hidePlayer(player);
+        }
+        return true;
+    }
+
+    public boolean removePlayerSpectator(Player player){
+        if(!spectatorList.contains(player)) return false;
+        spectatorList.remove(player);
+        player.setFlying(false);
+        return true;
     }
 
     private void startCountdownBeginning() {
