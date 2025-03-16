@@ -47,6 +47,10 @@ public class PlayerInteract implements Listener {
                     }.runTaskLater(DropperReloaded.getInstance(), Long.parseLong(MessageConfigUtils.get("games.items.reset_location.extra.countdown_before_new_click")) * 20L);
                 }
 
+                if(playerSession.isSpectator() && Objects.equals(player.getItemInHand(), DropperItems.playAgain.getItem())) {
+                    DropperReloaded.getGamesManager().joinGame(player);
+                }
+
                 if(Objects.equals(player.getItemInHand(), DropperItems.playerVisibilityOn.getItem())) {
                     for(Player playerOfGame : playerSession.getPlayerGame().getPlayerList()) {
                         player.hidePlayer(playerOfGame);

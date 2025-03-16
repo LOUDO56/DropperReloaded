@@ -100,7 +100,7 @@ public class Game {
             player.hidePlayer(playerFromGame);
             playerFromGame.hidePlayer(player);
         }
-        player.setFlying(false);
+        player.setAllowFlight(false);
         return true;
     }
 
@@ -233,6 +233,12 @@ public class Game {
             Map currentMap = mapList.get(currentMapCount- 1);
             playerSession.setCurrentMap(currentMap);
             player.teleport(currentMap.getRandomSpawn());
+        } else {
+            addPlayerSpectator(player);
+            System.out.println(onePlayerFinished);
+            if(!onePlayerFinished) {
+                reduceTimer();
+            }
         }
 
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.portal_enter_sound"));
@@ -240,12 +246,6 @@ public class Game {
 
         inGameScoreboard.updateCurrentMapPlayer(player);
 
-        if(currentMapCount == mapList.size() + 1) {
-            addPlayerSpectator(player);
-            if(!onePlayerFinished) {
-                reduceTimer();
-            }
-        }
     }
 
     public boolean reduceTimer() {
@@ -274,7 +274,7 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().setItem(DropperItems.spectatorPlayerList.getSlot(), DropperItems.spectatorPlayerList.getItem());
         player.getInventory().setItem(DropperItems.playAgain.getSlot(), DropperItems.playAgain.getItem());
-        player.setFlying(true);
+        player.setAllowFlight(true);
         for(Player playerFromGame : playerList) {
             playerFromGame.hidePlayer(player);
         }
@@ -284,7 +284,7 @@ public class Game {
     public boolean removePlayerSpectator(Player player){
         if(!spectatorList.contains(player)) return false;
         spectatorList.remove(player);
-        player.setFlying(false);
+        player.setAllowFlight(false);
         return true;
     }
 
