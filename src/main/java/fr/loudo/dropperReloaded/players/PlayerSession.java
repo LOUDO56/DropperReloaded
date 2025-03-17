@@ -84,6 +84,8 @@ public class PlayerSession {
             actionBarTask.cancel();
         }
         actionBarTask = null;
+        stopwatchTotal = 0;
+        stopwatchMap = 0;
     }
 
     public void startDetectingPortal() {

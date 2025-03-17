@@ -46,10 +46,10 @@ public class Game {
     private List<Map> mapList;
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
-    private BukkitTask countdownStart;
-    private BukkitTask countdownGame;
     private InGameScoreboard inGameScoreboard;
 
+    private BukkitTask countdownStart;
+    private BukkitTask countdownGame;
 
     public Game() {
         this.playerList = new ArrayList<>();
