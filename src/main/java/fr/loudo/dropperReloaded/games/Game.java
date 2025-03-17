@@ -140,7 +140,6 @@ public class Game {
         for(Player player : playerList) {
             PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
             playerSession.startSession();
-
         }
         countdownGame = new BukkitRunnable() {
             @Override
@@ -300,6 +299,7 @@ public class Game {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) return;
         if(playerSession.isSpectator()) return;
+        playerSession.setCanEnterPortal(false);
         int currentMapCount = playerSession.getCurrentMapCount() + 1;
 
         playerSession.setCurrentMapCount(currentMapCount);
@@ -317,6 +317,7 @@ public class Game {
             playerSession.startStopwatchMap();
         } else {
             String totalTimeFormatted = playerSession.getTotalTimeFormatted();
+            //sendActionBar(player, totalTimeFormatted);
             String finishedAllMapsMessage = MessageConfigUtils.get("games.finished_all_maps_message");
             finishedAllMapsMessage = finishedAllMapsMessage.replace("%map_time%", totalTimeFormatted);
 

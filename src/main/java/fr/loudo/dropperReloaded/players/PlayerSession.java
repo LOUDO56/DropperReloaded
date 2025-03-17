@@ -30,6 +30,7 @@ public class PlayerSession {
     private boolean isInvincible;
     private boolean canResetLocation;
     private boolean isSpectator;
+    private boolean canEnterPortal;
 
     public PlayerSession(Player player) {
         this.player = player;
@@ -40,6 +41,7 @@ public class PlayerSession {
         this.isInvincible = false;
         this.canResetLocation = true;
         this.isSpectator = false;
+        this.canEnterPortal = false;
     }
 
     public void startStopwatchTotal() {
@@ -71,8 +73,8 @@ public class PlayerSession {
     public void startSession() {
         startStopwatchTotal();
         startStopwatchMap();
-        startDetectingPortal();
         startSendMapTimeActionBar();
+        canEnterPortal = true;
     }
 
     public void stopSession() {
@@ -88,33 +90,12 @@ public class PlayerSession {
         stopwatchMap = 0;
     }
 
-    public void startDetectingPortal() {
-        detectPortal = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(currentMapCount > playerGame.getMapList().size()) {
-                    this.cancel();
-                }
+    public boolean canEnterPortal() {
+        return canEnterPortal;
+    }
 
-                Material netherPortal;
-                if(DropperReloaded.isNewerVersion()) {
-                    netherPortal = Material.valueOf("NETHER_PORTAL");
-                } else {
-                    netherPortal = Material.valueOf("PORTAL");
-                }
-
-                Location checkLoc;
-                for (int x = -1; x <= 1; x += 2) {
-                    for (int z = -1; z <= 1; z += 2) {
-                        checkLoc = new Location(player.getWorld(), player.getLocation().getX() + 0.299 * x, player.getLocation().getBlockY(), player.getLocation().getZ() + 0.299 * z);
-                        if(checkLoc.getBlock().getType() == netherPortal) {
-                            playerGame.teleportPlayerToNextMap(player);
-                        }
-                    }
-                }
-
-            }
-        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 1L);
+    public void setCanEnterPortal(boolean canEnterPortal) {
+        this.canEnterPortal = canEnterPortal;
     }
 
     public void startSendMapTimeActionBar() {
@@ -170,6 +151,7 @@ public class PlayerSession {
         canResetLocation = true;
         isSpectator = false;
         actionBarTask = null;
+        canEnterPortal = false;
     }
 
     public int getVoteCount() {
