@@ -47,6 +47,7 @@ public class GamesManager {
         if(!playersSessionManager.getPlayerSessionList().contains(playerSession)) return false;
 
         playersSessionManager.getPlayerSessionList().remove(playerSession);
+        playerSession.reset();
         playerSession.getPlayerGame().removePlayer(player);
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));

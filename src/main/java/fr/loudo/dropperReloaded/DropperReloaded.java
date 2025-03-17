@@ -64,7 +64,7 @@ public final class DropperReloaded extends JavaPlugin {
         mapsManager = new MapsManager();
 
         //Configuration class
-        waitLobbyConfiguration = new WaitLobbyConfiguration(this);
+        waitLobbyConfiguration = new WaitLobbyConfiguration();
 
         //Items
         DropperItems.registerItems();

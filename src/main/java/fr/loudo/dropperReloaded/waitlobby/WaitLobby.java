@@ -10,8 +10,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class WaitLobby {
@@ -74,7 +72,7 @@ public class WaitLobby {
                     game.sendMessageToPlayers(startingMessage);
                     game.playSoundToPlayers(timerSound);
                     if(timer >= 1 && timer <= 5) {
-                        game.sendTitleToPlayers(String.valueOf(timer), "", 0, 30, 0);
+                        game.sendTitle(String.valueOf(timer), "", 0, 30, 0, null);
                     }
                 }
                 waitLobbyScoreboard.updateGameStatus();
@@ -101,7 +99,7 @@ public class WaitLobby {
     public String getTimeFormatted() {
         Date date = new Date(0);
         date.setTime(date.getTime() + timer * 1000L);
-        return new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(date);
+        return new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(date.getTime());
     }
 
     public void startGame() {

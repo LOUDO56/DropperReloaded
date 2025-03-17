@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
@@ -21,11 +22,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Game {
 
@@ -34,6 +37,7 @@ public class Game {
 
     private int id;
     private int timeLeft;
+    private int playerCountFinished;
 
     private boolean onePlayerFinished;
 
@@ -56,6 +60,7 @@ public class Game {
         this.id = DropperReloaded.getGamesManager().getGameList().size();
         this.inGameScoreboard = new InGameScoreboard(this);
         this.onePlayerFinished = false;
+        this.playerCountFinished = 0;
     }
 
     public boolean addPlayer(Player player) {
@@ -134,8 +139,7 @@ public class Game {
         gameStatus = GameStatus.PLAYING;
         for(Player player : playerList) {
             PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
-            playerSession.startStopwatch();
-            playerSession.startDetectingPortal();
+            playerSession.startSession();
 
         }
         countdownGame = new BukkitRunnable() {
@@ -188,6 +192,7 @@ public class Game {
         mapList = new ArrayList<>();
         spectatorList = new ArrayList<>();
         onePlayerFinished = false;
+        playerCountFinished = 0;
     }
 
     public void sendMessageToPlayers(String message) {
@@ -208,7 +213,32 @@ public class Game {
         }
     }
 
-    public void sendTitleToPlayers(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public void sendActionBar(Player player, String message) {
+        String version = DropperReloaded.getVersion();
+        boolean is1_8Version = Stream.of("1.8", "1.9", "1.10", "1.11", "1.12").anyMatch(version::startsWith);
+        boolean is1_13Version = Stream.of("1.13", "1.14", "1.15", "1.16").anyMatch(version::startsWith);
+        boolean is1_17Version = Stream.of("1.17", "1.18", "1.19", "1.20", "1.21").anyMatch(version::startsWith);
+
+        PacketContainer actionBarPacket;
+        if(is1_8Version) {
+            actionBarPacket = new PacketContainer(PacketType.Play.Server.CHAT);
+            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
+            actionBarPacket.getBytes().write(0, (byte) 2);
+        } else if (is1_13Version) {
+            actionBarPacket = new PacketContainer(PacketType.Play.Server.TITLE);
+            actionBarPacket.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
+            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
+        } else if (is1_17Version) {
+            actionBarPacket = new PacketContainer(PacketType.Play.Server.SET_ACTION_BAR_TEXT);
+            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
+        } else {
+            return;
+        }
+
+        DropperReloaded.getProtocolManager().sendServerPacket(player, actionBarPacket);
+    }
+
+    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut, @Nullable Player player) {
         if(DropperReloaded.isIsProtocolLibPluginEnabled()) {
             PacketContainer titleTimesPacket;
             PacketContainer titlePacket;
@@ -244,13 +274,23 @@ public class Game {
                 subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
 
             }
-            for(Player player : playerList) {
+            if(player == null) {
+                for(Player playerFromGame : playerList) {
+                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, titleTimesPacket);
+                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, titlePacket);
+                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, subtitlePacket);
+                }
+            } else {
                 DropperReloaded.getProtocolManager().sendServerPacket(player, titleTimesPacket);
                 DropperReloaded.getProtocolManager().sendServerPacket(player, titlePacket);
                 DropperReloaded.getProtocolManager().sendServerPacket(player, subtitlePacket);
             }
         } else {
-            for(Player player : playerList) {
+            if(player == null) {
+                for(Player playerFromGame : playerList) {
+                    playerFromGame.sendTitle(title, subtitle);
+                }
+            } else {
                 player.sendTitle(title, subtitle);
             }
         }
@@ -264,15 +304,45 @@ public class Game {
 
         playerSession.setCurrentMapCount(currentMapCount);
 
+        String mapFinishedMessage = MessageConfigUtils.get("games.map_finished_message");
+        mapFinishedMessage = mapFinishedMessage.replace("%map_count%", String.valueOf(currentMapCount - 1));
+        mapFinishedMessage = mapFinishedMessage.replace("%map_time%", playerSession.getTimeCurrentMapFormatted());
+        mapFinishedMessage = mapFinishedMessage.replace("%map_name%", MapDifficultyColorPrefix.get(playerSession.getCurrentMap().getDifficulty()) + playerSession.getCurrentMap().getName());
+        player.sendMessage(mapFinishedMessage);
+
         if(currentMapCount <= mapList.size()) {
             Map currentMap = mapList.get(currentMapCount- 1);
             playerSession.setCurrentMap(currentMap);
             player.teleport(currentMap.getRandomSpawn());
+            playerSession.startStopwatchMap();
         } else {
+            String totalTimeFormatted = playerSession.getTotalTimeFormatted();
+            String finishedAllMapsMessage = MessageConfigUtils.get("games.finished_all_maps_message");
+            finishedAllMapsMessage = finishedAllMapsMessage.replace("%map_time%", totalTimeFormatted);
+
+            String playerFinishedAllMaps = MessageConfigUtils.get("games.player_finished_all_maps");
+            playerFinishedAllMaps = playerFinishedAllMaps.replace("%player%", player.getDisplayName());
+            playerFinishedAllMaps = playerFinishedAllMaps.replace("%time%", totalTimeFormatted);
+
+            for(Player playerFromGame : playerList) {
+                if(!playerFromGame.getDisplayName().equals(player.getDisplayName())) {
+                    playerFromGame.sendMessage(playerFinishedAllMaps);
+                } else {
+                    playerFromGame.sendMessage(finishedAllMapsMessage);
+                }
+            }
+
+            String mapFinishedTitle = MessageConfigUtils.get("games.map_finished_title");
+            String mapFinishedSubtitle = MessageConfigUtils.get("games.map_finished_subtitle");
+            mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerCountFinished + 1));
+
+            sendTitle(mapFinishedTitle, mapFinishedSubtitle, 0, 2 * 20, 3 * 20, player);
+
             addPlayerSpectator(player);
             if(!onePlayerFinished) {
                 reduceTimer();
             }
+            playerCountFinished++;
         }
 
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.portal_enter_sound"));
@@ -303,7 +373,9 @@ public class Game {
     public boolean addPlayerSpectator(Player player){
         if(spectatorList.contains(player)) return false;
         spectatorList.add(player);
-        playersSessionManager.getPlayerSession(player).setSpectator(true);
+        PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
+        playerSession.stopSession();
+        playerSession.setSpectator(true);
         if(timeLeft > 0) {
             player.teleport(mapList.get(mapList.size() - 1).getRandomSpawn());
         }
@@ -351,7 +423,7 @@ public class Game {
     public String getTimeFormatted() {
         Date date = new Date(0);
         date.setTime(date.getTime() + timeLeft * 1000L);
-        return new SimpleDateFormat(MessageConfigUtils.get("games.time_format")).format(date);
+        return new SimpleDateFormat(MessageConfigUtils.get("games.time_format")).format(date.getTime());
     }
 
     public int getId() {

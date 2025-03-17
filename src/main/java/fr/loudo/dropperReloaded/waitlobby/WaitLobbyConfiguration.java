@@ -2,27 +2,27 @@ package fr.loudo.dropperReloaded.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class WaitLobbyConfiguration {
 
     //TODO: fix reload config
-    private DropperReloaded instance;
     private int minPlayer;
     private int maxPlayer;
     private Location spawn;
 
-    public WaitLobbyConfiguration(DropperReloaded instance) {
-        this.instance = instance;
-        this.minPlayer = instance.getConfig().getInt("wait_lobby.min_player");
-        this.maxPlayer = instance.getConfig().getInt("wait_lobby.max_player");
-        this.spawn = (Location) instance.getConfig().get("wait_lobby.spawn");
+    public WaitLobbyConfiguration() {
+        FileConfiguration configuration = DropperReloaded.getInstance().getConfig();
+        this.minPlayer = configuration.getInt("wait_lobby.min_player");
+        this.maxPlayer = configuration.getInt("wait_lobby.max_player");
+        this.spawn = (Location) configuration.get("wait_lobby.spawn");
     }
 
     public void reload() {
-        this.instance = DropperReloaded.getInstance();
-        this.minPlayer = instance.getConfig().getInt("wait_lobby.min_player");
-        this.maxPlayer = instance.getConfig().getInt("wait_lobby.max_player");
-        this.spawn = (Location) instance.getConfig().get("wait_lobby.spawn");
+        FileConfiguration configuration = DropperReloaded.getInstance().getConfig();
+        this.minPlayer = configuration.getInt("wait_lobby.min_player");
+        this.maxPlayer = configuration.getInt("wait_lobby.max_player");
+        this.spawn = (Location) configuration.get("wait_lobby.spawn");
     }
 
     public int getMinPlayer() {
@@ -31,7 +31,8 @@ public class WaitLobbyConfiguration {
 
     public void setMinPlayer(int minPlayer) {
         this.minPlayer = minPlayer;
-        instance.getConfig().set("wait_lobby.min_player", minPlayer);
+        FileConfiguration configuration = DropperReloaded.getInstance().getConfig();
+        configuration.set("wait_lobby.min_player", minPlayer);
     }
 
     public int getMaxPlayer() {
@@ -40,7 +41,8 @@ public class WaitLobbyConfiguration {
 
     public void setMaxPlayer(int maxPlayer) {
         this.maxPlayer = maxPlayer;
-        instance.getConfig().set("wait_lobby.max_player", maxPlayer);
+        FileConfiguration configuration = DropperReloaded.getInstance().getConfig();
+        configuration.set("wait_lobby.max_player", maxPlayer);
     }
 
     public Location getSpawn() {
@@ -49,7 +51,8 @@ public class WaitLobbyConfiguration {
 
     public void setSpawn(Location spawn) {
         this.spawn = spawn;
-        instance.getConfig().set("wait_lobby.spawn", spawn);
+        FileConfiguration configuration = DropperReloaded.getInstance().getConfig();
+        configuration.set("wait_lobby.spawn", spawn);
     }
 
 }

@@ -13,13 +13,19 @@ games:
   timer_message: §aThe doors opens in §e%timer% §aseconds!
   go_message: §a§lDROP!
   timer_in_game: 600
-  time_format: mm:SS
+  time_format: mm:ss
   reset_location: "§cReset location!"
   first_done_cut_timer: 120
   first_player_finished:
     - " "
-    - "§eA player finished all the maps! The timer has been reduced to %timer%!"
+    - "§eA player has finished, The timer has been reduced to %timer%!"
     - " "
+  player_action_bar: "Map Time: §a%time%"
+  map_finished_message: "§7You finished Map %map_count% (%map_name%§7) in §6%map_time%§7!"
+  finished_all_maps_message: "§aYou finished all maps in §6%map_time%§7!"
+  player_finished_all_maps: "§a%player% §7finished all maps in §6%time%§7!"
+  map_finished_title: "§aMAPS COMPLETED!"
+  map_finished_subtitle: "§aYou finished §6#%place%§a!"
   items:
     reset_location:
       slot: 4
@@ -45,7 +51,7 @@ games:
       description:
         - "§7Hide or show the players around you."
       extra:
-          players_shown: "§cPlayers are now shown."
+          players_shown: "§aPlayers are now shown."
     spectator_player_list:
       slot: 0
       material: COMPASS
@@ -67,7 +73,7 @@ games:
       - '{space}'
       - '§fTime Left: §a%time_left%'
       - '{space}'
-      - '§fCurrent Map: §7(§e%current_map_count%§7/§b%total_map_count%§7)'
+      - '§fCurrent Map: §7(§e%current_map_count%§7/§a%total_map_count%§7)'
       - ' %map_completed_symbol% %map_name% %in_this_map_symbol%'
       - '{space}'
       - '§fTotal Time: §a%total_time%' # Only shows when the player finished.
@@ -79,7 +85,7 @@ wait_lobby:
   min_player: 2
   max_player: 10
   map_vote_count: 3
-  time_format: mm:SS
+  time_format: mm:ss
   timer_start_seconds: 30
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!

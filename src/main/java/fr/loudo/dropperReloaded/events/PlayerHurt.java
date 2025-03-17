@@ -19,7 +19,7 @@ public class PlayerHurt implements Listener {
                     return;
                 }
                 PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-                if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING || playerSession.isInvincible()) {
+                if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING || playerSession.isInvincible() || playerSession.isSpectator()) {
                     event.setCancelled(true);
                     if(playerSession.getPlayerGame().getGameStatus() == GameStatus.STARTING || playerSession.getPlayerGame().getGameStatus() == GameStatus.WAITING) {
                         if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {

@@ -10,16 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Date;
-
 public class PlayerSession {
 
     private Player player;
     private Game playerGame;
     private Map currentMap;
-    private Date stopwatch;
+
+    private long stopwatchTotal;
+    private long stopwatchMap;
 
     private BukkitTask detectPortal;
+    private BukkitTask actionBarTask;
 
     private int voteCount;
     private int currentMapCount;
@@ -41,8 +42,11 @@ public class PlayerSession {
         this.isSpectator = false;
     }
 
-    public void startStopwatch() {
-        stopwatch = new Date();
+    public void startStopwatchTotal() {
+        stopwatchTotal = System.currentTimeMillis();
+    }
+    public void startStopwatchMap() {
+        stopwatchMap = System.currentTimeMillis();
     }
 
     public boolean hasFinishedGame() {
@@ -62,6 +66,24 @@ public class PlayerSession {
         playerGame.getInGameScoreboard().updateTotalFails(player);
         player.teleport(currentMap.getRandomSpawn());
         player.setHealth(20);
+    }
+
+    public void startSession() {
+        startStopwatchTotal();
+        startStopwatchMap();
+        startDetectingPortal();
+        startSendMapTimeActionBar();
+    }
+
+    public void stopSession() {
+        if(detectPortal != null) {
+            detectPortal.cancel();
+        }
+        detectPortal = null;
+        if(actionBarTask != null) {
+            actionBarTask.cancel();
+        }
+        actionBarTask = null;
     }
 
     public void startDetectingPortal() {
@@ -93,6 +115,36 @@ public class PlayerSession {
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 1L);
     }
 
+    public void startSendMapTimeActionBar() {
+        actionBarTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                String actionBarMessage = MessageConfigUtils.get("games.player_action_bar").replace("%time%", getTimeCurrentMapFormatted());
+                playerGame.sendActionBar(player, actionBarMessage);
+            }
+        }.runTaskTimerAsynchronously(DropperReloaded.getInstance(), 0L, 1L);
+    }
+
+    public String getTimeCurrentMapFormatted() {
+        long elapsedTime = System.currentTimeMillis() - stopwatchMap;
+
+        long minutes = (elapsedTime / 60000) % 60;
+        long seconds = (elapsedTime / 1000) % 60;
+        long milliseconds = elapsedTime % 1000;
+
+        return String.format("%02d:%02d:%03d", minutes, seconds, milliseconds);
+    }
+
+    public String getTotalTimeFormatted() {
+        long elapsedTime = System.currentTimeMillis() - stopwatchTotal;
+
+        long minutes = (elapsedTime / 60000) % 60;
+        long seconds = (elapsedTime / 1000) % 60;
+        long milliseconds = elapsedTime % 1000;
+
+        return String.format("%02d:%02d:%03d", minutes, seconds, milliseconds);
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -106,6 +158,7 @@ public class PlayerSession {
     }
 
     public void reset() {
+        stopSession();
         voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
         currentMapCount = 1;
         currentMap = null;
@@ -114,18 +167,11 @@ public class PlayerSession {
         isInvincible = false;
         canResetLocation = true;
         isSpectator = false;
-        if(detectPortal != null) {
-            detectPortal.cancel();
-        }
-        detectPortal = null;
+        actionBarTask = null;
     }
 
     public int getVoteCount() {
         return voteCount;
-    }
-
-    public Date getStopwatch() {
-        return stopwatch;
     }
 
     public int getCurrentMapCount() {
@@ -136,10 +182,6 @@ public class PlayerSession {
         this.currentMapCount = currentMapCount;
     }
 
-    public Map getCurrentMap() {
-        return currentMap;
-    }
-
     public void setCurrentMap(Map currentMap) {
         this.currentMap = currentMap;
     }
@@ -148,16 +190,8 @@ public class PlayerSession {
         return totalFails;
     }
 
-    public void setTotalFails(int totalFails) {
-        this.totalFails = totalFails;
-    }
-
-    public boolean isPlayersVisible() {
-        return isPlayersVisible;
-    }
-
-    public void setPlayersVisible(boolean playersVisible) {
-        isPlayersVisible = playersVisible;
+    public Map getCurrentMap() {
+        return currentMap;
     }
 
     public boolean isInvincible() {
