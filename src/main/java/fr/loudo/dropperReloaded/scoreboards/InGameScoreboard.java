@@ -16,33 +16,37 @@ import org.bukkit.scoreboard.Team;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class InGameScoreboard {
 
-    private final String mapNotCompletedSymbol;
-    private final String mapCompletedSymbol;
-    private final String inThisMapSymbol;
-    private final List<String> lines;
     private final Game game;
+
+    private String mapNotCompletedSymbol;
+    private String mapCompletedSymbol;
+    private String inThisMapSymbol;
+    private List<String> lines;
+    private HashMap<UUID, Integer> lineTimeLeftPlayer;
     private int lineTotalFails;
     private int configTotalFailsLineIndex;
-    private int lineTimeLeft;
     private int configTimeLeftLineIndex;
     private int currentMapLine;
     private int configCurrentMapLineIndex;
 
     public InGameScoreboard(Game game) {
         this.game = game;
-        DropperReloaded plugin = DropperReloaded.getInstance();
-        this.mapNotCompletedSymbol = plugin.getConfig().getString("games.scoreboard.map_not_completed_symbol");
-        this.mapCompletedSymbol = plugin.getConfig().getString("games.scoreboard.map_completed_symbol");
-        this.inThisMapSymbol = plugin.getConfig().getString("games.scoreboard.in_this_map_symbol");
-        this.lines = plugin.getConfig().getStringList("games.scoreboard.lines");
+        this.lineTimeLeftPlayer = new HashMap<>();
     }
 
     public void setup(Player player) {
 
+        this.mapNotCompletedSymbol = MessageConfigUtils.get("games.scoreboard.map_not_completed_symbol");
+        this.mapCompletedSymbol = MessageConfigUtils.get("games.scoreboard.map_completed_symbol");
+        this.inThisMapSymbol = MessageConfigUtils.get("games.scoreboard.in_this_map_symbol");
+        this.lines = DropperReloaded.getInstance().getConfig().getStringList("games.scoreboard.lines");
+        
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("dropperReloaded", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -62,7 +66,7 @@ public class InGameScoreboard {
         for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line.contains("%time_left%")) {
-                lineTimeLeft = lineIndex;
+                lineTimeLeftPlayer.put(player.getUniqueId(), lineIndex);
                 configTimeLeftLineIndex = i;
             }
             if (line.contains("%total_fails%")) {
@@ -159,7 +163,7 @@ public class InGameScoreboard {
     public void updateTimeLeft() {
         String line = lines.get(configTimeLeftLineIndex);
         for(Player player : game.getPlayerList()) {
-            player.getScoreboard().getTeam("dropperReloaded_game_line_" + lineTimeLeft).setPrefix(formatLine(line));
+            player.getScoreboard().getTeam("dropperReloaded_game_line_" + lineTimeLeftPlayer.get(player.getUniqueId())).setPrefix(formatLine(line));
         }
     }
 }
