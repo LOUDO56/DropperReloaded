@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.text.SimpleDateFormat;
+
 public class PlayerSession {
 
     private Player player;
@@ -17,6 +19,7 @@ public class PlayerSession {
     private Map currentMap;
 
     private long stopwatchTotal;
+    private long finalStopwatchTotal;
     private long stopwatchMap;
 
     private BukkitTask detectPortal;
@@ -98,34 +101,35 @@ public class PlayerSession {
         this.canEnterPortal = canEnterPortal;
     }
 
+    public long getStopwatchTotal() {
+        return stopwatchTotal;
+    }
+
     public void startSendMapTimeActionBar() {
         actionBarTask = new BukkitRunnable() {
             @Override
             public void run() {
-                String actionBarMessage = MessageConfigUtils.get("games.player_action_bar").replace("%time%", getTimeCurrentMapFormatted());
+                String actionBarMessage = MessageConfigUtils.get("games.player_action_bar").replace("%map_time%", getTimeCurrentMapFormatted());
+                actionBarMessage = actionBarMessage.replace("%total_time%", getTotalTimeFormatted());
                 playerGame.sendActionBar(player, actionBarMessage);
             }
         }.runTaskTimerAsynchronously(DropperReloaded.getInstance(), 0L, 1L);
     }
 
+    public void setFinalStopwatchTotal(long finalStopwatchTotal) {
+        this.finalStopwatchTotal = finalStopwatchTotal;
+    }
+
+    public String getFinalTimeStopwatchFormatted() {
+        return new SimpleDateFormat("mm:ss:SSS").format(finalStopwatchTotal);
+    }
+
     public String getTimeCurrentMapFormatted() {
-        long elapsedTime = System.currentTimeMillis() - stopwatchMap;
-
-        long minutes = (elapsedTime / 60000) % 60;
-        long seconds = (elapsedTime / 1000) % 60;
-        long milliseconds = elapsedTime % 1000;
-
-        return String.format("%02d:%02d:%03d", minutes, seconds, milliseconds);
+        return new SimpleDateFormat("mm:ss:SSS").format(System.currentTimeMillis() - stopwatchMap);
     }
 
     public String getTotalTimeFormatted() {
-        long elapsedTime = System.currentTimeMillis() - stopwatchTotal;
-
-        long minutes = (elapsedTime / 60000) % 60;
-        long seconds = (elapsedTime / 1000) % 60;
-        long milliseconds = elapsedTime % 1000;
-
-        return String.format("%02d:%02d:%03d", minutes, seconds, milliseconds);
+        return new SimpleDateFormat("mm:ss:SSS").format(System.currentTimeMillis() - stopwatchTotal);
     }
 
     public Player getPlayer() {

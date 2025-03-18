@@ -316,14 +316,21 @@ public class Game {
             player.teleport(currentMap.getRandomSpawn());
             playerSession.startStopwatchMap();
         } else {
-            String totalTimeFormatted = playerSession.getTotalTimeFormatted();
-            //sendActionBar(player, totalTimeFormatted);
+            playerSession.setFinalStopwatchTotal(System.currentTimeMillis() - playerSession.getStopwatchTotal());
+            String mapTimeFormatted = playerSession.getTimeCurrentMapFormatted();
+
+            String finalTotalTimeFormatted = playerSession.getFinalTimeStopwatchFormatted();
+
+            String actionBarMessage = MessageConfigUtils.get("games.player_action_bar").replace("%map_time%", mapTimeFormatted);
+            actionBarMessage = actionBarMessage.replace("%total_time%", finalTotalTimeFormatted);
+            sendActionBar(player, actionBarMessage);
+
             String finishedAllMapsMessage = MessageConfigUtils.get("games.finished_all_maps_message");
-            finishedAllMapsMessage = finishedAllMapsMessage.replace("%map_time%", totalTimeFormatted);
+            finishedAllMapsMessage = finishedAllMapsMessage.replace("%map_time%", finalTotalTimeFormatted);
 
             String playerFinishedAllMaps = MessageConfigUtils.get("games.player_finished_all_maps");
             playerFinishedAllMaps = playerFinishedAllMaps.replace("%player%", player.getDisplayName());
-            playerFinishedAllMaps = playerFinishedAllMaps.replace("%time%", totalTimeFormatted);
+            playerFinishedAllMaps = playerFinishedAllMaps.replace("%time%", finalTotalTimeFormatted);
 
             for(Player playerFromGame : playerList) {
                 if(!playerFromGame.getDisplayName().equals(player.getDisplayName())) {

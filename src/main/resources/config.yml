@@ -20,7 +20,7 @@ games:
     - " "
     - "§eA player has finished, The timer has been reduced to %timer%!"
     - " "
-  player_action_bar: "Map Time: §a%time%"
+  player_action_bar: "Map Time: §a%map_time% §f- Total Time: §a%total_time%"
   map_finished_message: "§7You finished Map %map_count% (%map_name%§7) in §6%map_time%§7!"
   finished_all_maps_message: "§aYou finished all maps in §6%map_time%§7!"
   player_finished_all_maps: "§a%player% §7finished all maps in §6%time%§7!"
