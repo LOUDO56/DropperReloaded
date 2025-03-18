@@ -28,18 +28,18 @@ public class GamesManager {
             leaveGame(player);
             playerSession.reset();
         }
-
-        Game game = gameList.stream()
-            .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING)
-            .findFirst()
-            .orElseGet(Game::new);
-
-        if(!gameList.contains(game)) gameList.add(game);
-
-        playerSession.setPlayerGame(game);
         playersSessionManager.getPlayerSessionList().add(playerSession);
+        Game game = getAvalaibleGame();
         game.addPlayer(player);
+    }
 
+    public Game getAvalaibleGame() {
+        Game game = gameList.stream()
+                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING)
+                .findFirst()
+                .orElseGet(Game::new);
+        if(!gameList.contains(game)) gameList.add(game);
+        return game;
     }
 
     public boolean leaveGame(Player player) {
@@ -57,6 +57,7 @@ public class GamesManager {
 
         return true;
     }
+
 
 
     public List<Game> getGameList() {

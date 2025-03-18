@@ -65,6 +65,7 @@ public class Game {
 
     public boolean addPlayer(Player player) {
         if(playerList.contains(player) && playerList.size() >= waitLobbyConfiguration.getMaxPlayer()) return false;
+        DropperReloaded.getPlayersSessionManager().getPlayerSession(player).setPlayerGame(this);
         playerList.add(player);
         if(!hasStarted()) {
             player.teleport(waitLobbyConfiguration.getSpawn());
@@ -178,7 +179,9 @@ public class Game {
     }
 
     public void reset() {
+        System.out.println("reset");
         for(Player player : playerList) {
+            System.out.println(player.getDisplayName());
             removePlayer(player);
         }
         if(countdownStart != null) {
