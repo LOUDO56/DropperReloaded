@@ -53,7 +53,12 @@ public class InGameScoreboard {
 
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
 
-        int lineIndex = lines.size() + game.getMapList().size();
+        int lineIndex;
+        if(playerSession.hasFinishedGame()) {
+            lineIndex = lines.size() - 1 + game.getMapList().size();
+        } else {
+            lineIndex = lines.size() - 2 + game.getMapList().size();
+        }
         for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line.contains("%time_left%")) {
@@ -72,7 +77,8 @@ public class InGameScoreboard {
             } else if (line.contains("%map_completed_symbol%")) {
                 setupMapLines(player);
                 updateCurrentMapPlayer(player);
-                lineIndex -= game.getMapList().size() + 1;
+                lineIndex -= game.getMapList().size();
+                lineIndex++;
             } else if (line.contains("%total_time%") && !playerSession.hasFinishedGame()) {
                 // Don't add line
                 lineIndex++;
