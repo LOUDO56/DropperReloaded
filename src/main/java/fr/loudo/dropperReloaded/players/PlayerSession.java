@@ -52,7 +52,7 @@ public class PlayerSession {
     }
 
     public boolean hasFinishedGame() {
-        return currentMapCount == playerGame.getMapList().size();
+        return currentMapCount > playerGame.getMapList().size();
     }
 
     public void addDeath() {

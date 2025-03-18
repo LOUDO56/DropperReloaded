@@ -78,6 +78,7 @@ public class InGameScoreboard {
                 lineIndex++;
             } else {
                 line = line.replace("{space}", spaceString);
+                line = line.replace("%total_time%", playerSession.getTotalTimeFormatted());
                 Team team = scoreboard.registerNewTeam("dropperReloaded_game_line_" + lineIndex);
                 team.addEntry(ChatColor.values()[lineIndex].toString());
                 objective.getScore(ChatColor.values()[lineIndex].toString()).setScore(lineIndex);

@@ -338,6 +338,7 @@ public class Game {
             mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerCountFinished + 1));
 
             sendTitle(mapFinishedTitle, mapFinishedSubtitle, 0, 2 * 20, 3 * 20, player);
+            inGameScoreboard.setup(player);
 
             addPlayerSpectator(player);
             if(!onePlayerFinished) {
