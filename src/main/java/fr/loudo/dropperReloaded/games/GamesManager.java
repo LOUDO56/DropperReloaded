@@ -26,7 +26,6 @@ public class GamesManager {
             playerSession = new PlayerSession(player);
         } else {
             leaveGame(player);
-            playerSession.reset();
         }
         playersSessionManager.getPlayerSessionList().add(playerSession);
         Game game = getAvalaibleGame();

@@ -65,7 +65,9 @@ public class Game {
 
     public boolean addPlayer(Player player) {
         if(playerList.contains(player) && playerList.size() >= waitLobbyConfiguration.getMaxPlayer()) return false;
-        DropperReloaded.getPlayersSessionManager().getPlayerSession(player).setPlayerGame(this);
+        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        playerSession.reset();
+        playerSession.setPlayerGame(this);
         playerList.add(player);
         if(!hasStarted()) {
             player.teleport(waitLobbyConfiguration.getSpawn());
@@ -95,12 +97,14 @@ public class Game {
     public boolean removePlayer(Player player) {
         if(!playerList.contains(player) && playerList.isEmpty()) return false;
         playerList.remove(player);
-        if(!hasStarted()) {
+        if(!hasStarted() && !hasEnded()) {
             waitLobby.playerLeftMessage(player.getDisplayName());
         }
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            player.showPlayer(onlinePlayer);
-            onlinePlayer.showPlayer(player);
+            if(!DropperReloaded.getPlayersSessionManager().isPlaying(onlinePlayer)) {
+                player.showPlayer(onlinePlayer);
+                onlinePlayer.showPlayer(player);
+            }
         }
         for(Player playerFromGame : playerList) {
             player.hidePlayer(playerFromGame);
@@ -173,16 +177,19 @@ public class Game {
         new BukkitRunnable() {
             @Override
             public void run() {
-                reset();
+                if(hasEnded()) {
+                    for(Player player : playerList) {
+                        DropperReloaded.getGamesManager().leaveGame(player);
+                    }
+                    reset();
+                }
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L * 20L);
     }
 
     public void reset() {
-        System.out.println("reset");
         for(Player player : playerList) {
-            System.out.println(player.getDisplayName());
-            removePlayer(player);
+            DropperReloaded.getGamesManager().leaveGame(player);
         }
         if(countdownStart != null) {
             countdownStart.cancel();
@@ -431,6 +438,10 @@ public class Game {
 
     public boolean hasStarted() {
         return gameStatus == GameStatus.PLAYING;
+    }
+
+    public boolean hasEnded() {
+        return gameStatus == GameStatus.ENDED;
     }
 
     public String getTimeFormatted() {

@@ -1,6 +1,7 @@
 package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.games.GameStatus;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.players.PlayerSession;
@@ -25,7 +26,9 @@ public class PlayerInteract implements Listener {
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.playAgain.getItem())) {
-                DropperReloaded.getGamesManager().joinGame(player);
+                playerSession.getPlayerGame().removePlayer(player);
+                Game newGame = DropperReloaded.getGamesManager().getAvalaibleGame();
+                newGame.addPlayer(player);
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.playerVisibilityOn.getItem())) {
