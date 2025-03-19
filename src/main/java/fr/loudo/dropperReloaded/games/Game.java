@@ -114,6 +114,7 @@ public class Game {
         if(playerList.isEmpty()) {
             reset();
         }
+        sendTitle(" ", " ", 0, 0, 0, player);
         return true;
     }
 
@@ -122,6 +123,7 @@ public class Game {
         timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
         mapList = DropperReloaded.getMapsManager().getRandomMaps();
         inGameScoreboard = new InGameScoreboard(this);
+        sendTitle(" ", " ", 0, 0, 0, null);
         for(Player player : playerList) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
             inGameScoreboard.setup(player);

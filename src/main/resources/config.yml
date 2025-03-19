@@ -91,6 +91,8 @@ wait_lobby:
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
   timer_sound: BLOCK_NOTE_BLOCK_HAT #NOTE_HAT
+  cancelled_title: "§cCANCELLED!"
+  cancelled_subtitle: "§cNot enough players..."
   items:
     map_vote:
       slot: 0

@@ -5,6 +5,7 @@ import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.games.GameStatus;
 import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -60,27 +61,37 @@ public class WaitLobby {
         game.setGameStatus(GameStatus.STARTING);
         timer = Integer.parseInt(MessageConfigUtils.get("wait_lobby.timer_start_seconds"));
         waitLobbyScoreboard.updateGameStatus();
-
+        sendStartMessage();
+        final boolean[] dontSendSendStartTwice = {true};
         countdownTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if (timer == 0) {
                     startGame();
                 } else if(timer % 10 == 0 && timer <= 30 || timer % 60 == 0 || timer >= 1 && timer <= 5) {
-                    String startingMessage = MessageConfigUtils.get("wait_lobby.timer_message");
-                    startingMessage = startingMessage.replace("%timer_seconds%", String.valueOf(timer));
-                    game.sendMessageToPlayers(startingMessage);
-                    game.playSoundToPlayers(timerSound);
+                    if(!dontSendSendStartTwice[0]) {
+                        sendStartMessage();
+                    }
                     if(timer >= 1 && timer <= 5) {
-                        game.sendTitle(String.valueOf(timer), "", 0, 30, 0, null);
+                        game.sendTitle(ChatColor.RED + String.valueOf(timer), "", 0, 30, 0, null);
                     }
                 }
                 waitLobbyScoreboard.updateGameStatus();
+                if(dontSendSendStartTwice[0]) {
+                    dontSendSendStartTwice[0] = false;
+                }
                 timer--;
             }
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
 
         return true;
+    }
+
+    private void sendStartMessage() {
+        String startingMessage = MessageConfigUtils.get("wait_lobby.timer_message");
+        startingMessage = startingMessage.replace("%timer_seconds%", String.valueOf(timer));
+        game.sendMessageToPlayers(startingMessage);
+        game.playSoundToPlayers(timerSound);
     }
 
     public boolean stopCountdown() {
@@ -91,6 +102,7 @@ public class WaitLobby {
         countdownTask = null;
 
         game.setGameStatus(GameStatus.WAITING);
+        game.sendTitle(MessageConfigUtils.get("wait_lobby.cancelled_title"), MessageConfigUtils.get("wait_lobby.cancelled_subtitle"), 0, 40 ,20, null);
         waitLobbyScoreboard.updateGameStatus();
 
         return true;
