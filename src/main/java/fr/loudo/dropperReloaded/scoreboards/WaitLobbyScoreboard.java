@@ -36,8 +36,8 @@ public class WaitLobbyScoreboard {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(MessageConfigUtils.get("global.scoreboard_title"));
 
-        String statusMessage = game.getGameStatus() == GameStatus.WAITING ? MessageConfigUtils.get("wait_lobby.scoreboard.game_state.waiting") : game.getWaitLobby().getTimeFormatted();
-        statusMessage = statusMessage.replace("%timer%", new SimpleDateFormat(MessageConfigUtils.get("wait_lobby.time_format")).format(game.getWaitLobby().getTimer()));
+        String statusMessage = game.getGameStatus() == GameStatus.WAITING ? MessageConfigUtils.get("wait_lobby.scoreboard.game_state.waiting") : MessageConfigUtils.get("wait_lobby.scoreboard.game_state.starting");
+        statusMessage = statusMessage.replace("%timer%", game.getWaitLobby().getTimeFormatted());
 
         String spaceString = " ";
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);

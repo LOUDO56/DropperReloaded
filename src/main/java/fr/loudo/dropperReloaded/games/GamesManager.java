@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GamesManager {
@@ -34,11 +35,11 @@ public class GamesManager {
 
     public Game getAvalaibleGame() {
         Game game = gameList.stream()
-                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING)
-                .findFirst()
+                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING).min(Comparator.comparing(currentGame -> currentGame.getGameStatus() == GameStatus.STARTING ? 0 : 1))
                 .orElseGet(Game::new);
-        if(!gameList.contains(game)) gameList.add(game);
+        if (!gameList.contains(game)) gameList.add(game);
         return game;
+
     }
 
     public boolean leaveGame(Player player) {

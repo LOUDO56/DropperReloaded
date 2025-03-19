@@ -404,6 +404,7 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().setItem(DropperItems.spectatorPlayerList.getSlot(), DropperItems.spectatorPlayerList.getItem());
         player.getInventory().setItem(DropperItems.playAgain.getSlot(), DropperItems.playAgain.getItem());
+        player.getInventory().setItem(DropperItems.leaveBed.getSlot(), DropperItems.leaveBed.getItem());
         player.setAllowFlight(true);
         for(Player playerFromGame : playerList) {
             playerFromGame.hidePlayer(player);

@@ -66,6 +66,7 @@ public class WaitLobby {
         countdownTask = new BukkitRunnable() {
             @Override
             public void run() {
+                timer--;
                 if (timer == 0) {
                     startGame();
                 } else if(timer % 10 == 0 && timer <= 30 || timer % 60 == 0 || timer >= 1 && timer <= 5) {
@@ -76,11 +77,12 @@ public class WaitLobby {
                         game.sendTitle(ChatColor.RED + String.valueOf(timer), "", 0, 30, 0, null);
                     }
                 }
-                waitLobbyScoreboard.updateGameStatus();
+                if(timer >= 1) {
+                    waitLobbyScoreboard.updateGameStatus();
+                }
                 if(dontSendSendStartTwice[0]) {
                     dontSendSendStartTwice[0] = false;
                 }
-                timer--;
             }
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
 
