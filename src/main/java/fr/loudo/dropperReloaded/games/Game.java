@@ -37,12 +37,10 @@ public class Game {
 
     private int id;
     private int timeLeft;
-    private int playerCountFinished;
-
-    private boolean onePlayerFinished;
 
     private List<Player> playerList;
     private List<Player> spectatorList;
+    private List<Player> playerFinished;
     private List<Map> mapList;
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
@@ -55,12 +53,11 @@ public class Game {
         this.playerList = new ArrayList<>();
         this.mapList = new ArrayList<>();
         this.spectatorList = new ArrayList<>();
+        this.playerFinished = new ArrayList<>();
         this.gameStatus = GameStatus.WAITING;
         this.waitLobby = new WaitLobby(this);
         this.id = DropperReloaded.getGamesManager().getGameList().size();
         this.inGameScoreboard = new InGameScoreboard(this);
-        this.onePlayerFinished = false;
-        this.playerCountFinished = 0;
     }
 
     public boolean addPlayer(Player player) {
@@ -173,6 +170,8 @@ public class Game {
             return;
         }
 
+        sendWinTitleToPlayers();
+
         for(Player player : playerList) {
             addPlayerSpectator(player);
         }
@@ -189,6 +188,17 @@ public class Game {
         }.runTaskLater(DropperReloaded.getInstance(), 5L * 20L);
     }
 
+    private void sendWinTitleToPlayers() {
+        sendTitle(MessageConfigUtils.get("games.game_finish_game_finished"), "", 10, 80, 40, null);
+        for(int i = 0; i < playerFinished.size(); i++) {
+            if(i == 0) {
+                sendTitle(MessageConfigUtils.get("games.game_finish_win"), " ", 10, 80, 40, playerFinished.get(i));
+            } else {
+                sendTitle(MessageConfigUtils.get("games.game_finish_game_over"), " ", 10, 80, 40, playerFinished.get(i));
+            }
+        }
+    }
+
     public void reset() {
         for(Player player : playerList) {
             DropperReloaded.getGamesManager().leaveGame(player);
@@ -203,8 +213,7 @@ public class Game {
         playerList = new ArrayList<>();
         mapList = new ArrayList<>();
         spectatorList = new ArrayList<>();
-        onePlayerFinished = false;
-        playerCountFinished = 0;
+        playerFinished = new ArrayList<>();
     }
 
     public void sendMessageToPlayers(String message) {
@@ -355,16 +364,20 @@ public class Game {
 
             String mapFinishedTitle = MessageConfigUtils.get("games.map_finished_title");
             String mapFinishedSubtitle = MessageConfigUtils.get("games.map_finished_subtitle");
-            mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerCountFinished + 1));
+            mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerFinished.size() + 1));
 
             sendTitle(mapFinishedTitle, mapFinishedSubtitle, 0, 2 * 20, 3 * 20, player);
             inGameScoreboard.setup(player);
 
             addPlayerSpectator(player);
-            if(!onePlayerFinished) {
+            if(playerFinished.isEmpty()) {
                 reduceTimer();
             }
-            playerCountFinished++;
+            playerFinished.add(player);
+
+            if(playerFinished.size() == playerList.size()) {
+                timeLeft = 0;
+            }
         }
 
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.portal_enter_sound"));
@@ -376,7 +389,7 @@ public class Game {
 
     public boolean reduceTimer() {
         int reduceTimer = Integer.parseInt(MessageConfigUtils.get("games.first_done_cut_timer"));
-        if(timeLeft < reduceTimer || onePlayerFinished) return false;
+        if(timeLeft < reduceTimer || !playerFinished.isEmpty()) return false;
 
         timeLeft = reduceTimer;
         inGameScoreboard.updateTimeLeft();
@@ -385,8 +398,6 @@ public class Game {
             message = message.replace("%timer%", getTimeFormatted());
             sendMessageToPlayers(message);
         }
-
-        onePlayerFinished = true;
 
         return true;
 

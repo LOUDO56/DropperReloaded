@@ -26,6 +26,9 @@ games:
   player_finished_all_maps: "§a%player% §7finished all maps in §6%time%§7!"
   map_finished_title: "§aMAPS COMPLETED!"
   map_finished_subtitle: "§aYou finished §6#%place%§a!"
+  game_finish_win: "§aYOU WIN!"
+  game_finish_game_over: "§cGAME OVER!"
+  game_finish_game_finished: "§cGAME FINISHED!"
   items:
     reset_location:
       slot: 4
