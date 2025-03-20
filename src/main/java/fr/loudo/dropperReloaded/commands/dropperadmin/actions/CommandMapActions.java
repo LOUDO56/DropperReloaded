@@ -241,7 +241,6 @@ public class CommandMapActions {
                 break;
             }
         }
-        DropperAdminCommand.getWAND_POS_HASH_MAP().remove(player);
     }
 
 }

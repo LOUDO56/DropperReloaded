@@ -14,6 +14,7 @@ public class RegisterEvents {
         pluginManager.registerEvents(new DropItem(), instance);
         pluginManager.registerEvents(new PlayerInteract(), instance);
         pluginManager.registerEvents(new PlayerJoin(), instance);
+        pluginManager.registerEvents(new PlayerLeave(), instance);
         pluginManager.registerEvents(new PortalEnter(), instance);
         pluginManager.registerEvents(new PortalPlayerEnter(), instance);
     }

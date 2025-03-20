@@ -96,6 +96,9 @@ public class Game {
         if(!hasStarted() && !hasEnded()) {
             waitLobby.playerLeftMessage(player.getDisplayName());
         }
+        if(gameStatus == GameStatus.DOOR_COUNTDOWN) {
+            resetDoorBlock(player);
+        }
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if(!DropperReloaded.getPlayersSessionManager().isPlaying(onlinePlayer)) {
                 player.showPlayer(onlinePlayer);
@@ -316,54 +319,6 @@ public class Game {
         }
     }
 
-    public void sendDoorBlockToPlayers1_12() {
-        List<Location> doorLocations = mapList.get(0).getDoorLocations();
-        if (doorLocations == null) return;
-
-        for (Player player : playerList) {
-            for (Location location : doorLocations) {
-                Material glassType = Material.GLASS;
-
-                if (countdownStartTimer >= 4) {
-                    glassType = Material.LIME_STAINED_GLASS;
-                } else if (countdownStartTimer >= 2) {
-                    glassType = Material.YELLOW_STAINED_GLASS;
-                } else if (countdownStartTimer == 1) {
-                    glassType = Material.RED_STAINED_GLASS;
-                } else if (countdownStartTimer == 0) {
-                    glassType = Material.AIR;
-                }
-
-                player.sendBlockChange(location, glassType.createBlockData());
-
-            }
-        }
-    }
-
-    public void sendDoorBlockToPlayers1_8() {
-        List<Location> doorLocations = mapList.get(0).getDoorLocations();
-        if(doorLocations == null) return;
-        for(Player player : playerList) {
-            for(Location location : doorLocations) {
-                byte color = 0;
-                if(countdownStartTimer >= 4) {
-                    color = 5;
-                } else if(countdownStartTimer >= 2) {
-                    color = 4;
-                } else if(countdownStartTimer == 1) {
-                    color = 6;
-                } else if(countdownStartTimer == 0) {
-                    color = 0;
-                }
-                if(countdownStartTimer > 0) {
-                    player.sendBlockChange(location, Material.GLASS, color);
-                } else {
-                    player.sendBlockChange(location, Material.AIR, (byte) 0);
-                }
-            }
-        }
-    }
-
     public void teleportPlayerToNextMap(Player player) {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) return;
@@ -501,6 +456,62 @@ public class Game {
             countdownStartTimer--;
             }
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
+    }
+
+    public void resetDoorBlock(Player player) {
+        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        if (doorLocations == null) return;
+        for (Location location : doorLocations) {
+            player.sendBlockChange(location, Material.AIR, (byte) 0);
+        }
+    }
+
+    public void sendDoorBlockToPlayers1_12() {
+        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        if (doorLocations == null) return;
+
+        for (Player player : playerList) {
+            for (Location location : doorLocations) {
+                Material glassType = Material.GLASS;
+
+                if (countdownStartTimer >= 4) {
+                    glassType = Material.LIME_STAINED_GLASS;
+                } else if (countdownStartTimer >= 2) {
+                    glassType = Material.YELLOW_STAINED_GLASS;
+                } else if (countdownStartTimer == 1) {
+                    glassType = Material.RED_STAINED_GLASS;
+                } else if (countdownStartTimer == 0) {
+                    glassType = Material.AIR;
+                }
+
+                player.sendBlockChange(location, glassType.createBlockData());
+
+            }
+        }
+    }
+
+    public void sendDoorBlockToPlayers1_8() {
+        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        if(doorLocations == null) return;
+        for(Player player : playerList) {
+            for(Location location : doorLocations) {
+                byte color = 0;
+                if(countdownStartTimer >= 4) {
+                    color = 5;
+                } else if(countdownStartTimer >= 2) {
+                    color = 4;
+                } else if(countdownStartTimer == 1) {
+                    color = 6;
+                } else if(countdownStartTimer == 0) {
+                    color = 0;
+                }
+                if(countdownStartTimer > 0) {
+                    player.sendBlockChange(location, Material.GLASS, color);
+                } else {
+                    player.sendBlockChange(location, Material.AIR, (byte) 0);
+                }
+            }
+        }
     }
 
     public boolean hasStarted() {
