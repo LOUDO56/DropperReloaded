@@ -1,10 +1,16 @@
 package fr.loudo.dropperReloaded.items;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+
 public class DropperItems {
+
+    //Admin
+    public static DropperItem stickWand;
 
     // Lobby
     public static DropperItem mapVote;
@@ -20,6 +26,17 @@ public class DropperItems {
     public static DropperItem playAgain;
 
     public static void registerItems() {
+        stickWand = new DropperItem(
+                -1,
+                ChatColor.GREEN
+                        + "DropperReloaded WAND - "
+                        + ChatColor.WHITE + "Pos 1 LEFT"
+                        + ChatColor.GREEN + " - "
+                        + ChatColor.WHITE + "Pos 2 RIGHT",
+                new ArrayList<>(),
+                Material.STICK
+        );
+
         mapVote = getItem("wait_lobby", "map_vote");
         leaveBed = getItem("wait_lobby", "leave");
 

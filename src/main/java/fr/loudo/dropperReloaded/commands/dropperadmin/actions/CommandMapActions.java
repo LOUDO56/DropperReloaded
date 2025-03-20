@@ -2,14 +2,23 @@ package fr.loudo.dropperReloaded.commands.dropperadmin.actions;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.CommandHelpAdmin;
+import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
+import fr.loudo.dropperReloaded.commands.dropperadmin.DropperWandPos;
+import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.Map;
 import fr.loudo.dropperReloaded.maps.MapDifficulty;
 import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.maps.MapsManager;
 import fr.loudo.dropperReloaded.utils.PlayerUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandMapActions {
 
@@ -39,6 +48,12 @@ public class CommandMapActions {
                 break;
             case "disable":
                 disableMap(value, player);
+                break;
+            case "wand":
+                giveWandStick(player);
+                break;
+            case "setdoors":
+                setDoors(value, player);
                 break;
             //TODO: List with a gui
             default:
@@ -166,6 +181,62 @@ public class CommandMapActions {
             return false;
         }
         return true;
+    }
+
+    private static void giveWandStick(Player player) {
+        PlayerInventory playerInventory = player.getInventory();
+        for(int i = 0; i < playerInventory.getSize(); i++) {
+            if(playerInventory.getItem(i) == null) {
+                playerInventory.setItem(i, DropperItems.stickWand.getItem());
+                break;
+            }
+        }
+        player.sendMessage(ChatColor.GREEN + "How to use the DropperReloaded WAND Item:");
+        player.sendMessage(ChatColor.GREEN + "- " + ChatColor.YELLOW + "Left click" + ChatColor.GREEN + " on a block to set the first position");
+        player.sendMessage(ChatColor.GREEN + "- " + ChatColor.YELLOW + "Right click" + ChatColor.GREEN + " on a block to set the second position");
+        player.sendMessage(ChatColor.GREEN + "- Finally, " + ChatColor.YELLOW + "/dropadm setdoors [map_name]" + ChatColor.GREEN + " to setup the doors");
+        DropperAdminCommand.getWAND_POS_HASH_MAP().put(player, new DropperWandPos());
+    }
+
+    private static void setDoors(String value, Player player) {
+        if(!DropperAdminCommand.getWAND_POS_HASH_MAP().containsKey(player)) {
+            player.sendMessage(ChatColor.GREEN  + "Positions are missing. do /dropadm wand if you haven't already.");
+            return;
+        }
+
+        DropperWandPos dropperWandPos = DropperAdminCommand.getWAND_POS_HASH_MAP().get(player);
+        Map map = DropperReloaded.getMapsManager().getFromName(value);
+        List<Location> blockLocs = new ArrayList<>();
+
+        double minX = Math.min(dropperWandPos.getPos1().getX(), dropperWandPos.getPos2().getX());
+        double minY = Math.min(dropperWandPos.getPos1().getY(), dropperWandPos.getPos2().getY());
+        double minZ = Math.min(dropperWandPos.getPos1().getZ(), dropperWandPos.getPos2().getZ());
+
+        double maxX = Math.max(dropperWandPos.getPos1().getX(), dropperWandPos.getPos2().getX());
+        double maxY = Math.max(dropperWandPos.getPos1().getY(), dropperWandPos.getPos2().getY());
+        double maxZ = Math.max(dropperWandPos.getPos1().getZ(), dropperWandPos.getPos2().getZ());
+
+        for(double x = minX; x < maxX; x++) {
+            for(double y = minY; y < maxY; y++) {
+                for(double z = minZ; z < maxZ; z++) {
+                    Block block = player.getWorld().getBlockAt(new Location(player.getWorld(), x, y, z));
+                    blockLocs.add(block.getLocation());
+                }
+            }
+        }
+
+        map.setDoorLocations(blockLocs);
+        DropperReloaded.getMapsManager().serialize();
+        player.sendMessage(ChatColor.GREEN + "Doors successfully set!");
+
+        PlayerInventory playerInventory = player.getInventory();
+        for(int i = 0; i < playerInventory.getSize(); i++) {
+            if(playerInventory.getItem(i) == DropperItems.stickWand.getItem()) {
+                playerInventory.setItem(i, null);
+                break;
+            }
+        }
+        DropperAdminCommand.getWAND_POS_HASH_MAP().remove(player);
     }
 
 }

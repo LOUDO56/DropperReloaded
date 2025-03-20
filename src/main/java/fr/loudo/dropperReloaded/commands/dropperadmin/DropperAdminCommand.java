@@ -6,6 +6,7 @@ import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandWaitLobbyAc
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -13,12 +14,15 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class DropperAdminCommand implements TabExecutor {
 
+    private static final HashMap<Player, DropperWandPos> WAND_POS_HASH_MAP = new HashMap<>();
+
     private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard", "reload");
-    private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "list");
+    private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "wand", "setdoors", "list");
     private final List<String> WAITLOBBY_ACTIONS = Arrays.asList("setminplayer", "setmaxplayer", "setspawn");
 
     @Override
@@ -92,7 +96,12 @@ public class DropperAdminCommand implements TabExecutor {
             }
         }
 
-        if(args.length == 3 && !args[1].equalsIgnoreCase("create") && !args[0].equalsIgnoreCase("waitlobby")) {
+        if(args.length == 3
+                && !args[1].equalsIgnoreCase("create")
+                && !args[1].equalsIgnoreCase("wand")
+                && !args[0].equalsIgnoreCase("waitlobby")
+                && !args[0].equalsIgnoreCase("leaderboard")
+        ) {
             return DropperReloaded.getMapsManager().getListMapName();
         }
 
@@ -103,4 +112,7 @@ public class DropperAdminCommand implements TabExecutor {
         return Collections.emptyList();
     }
 
+    public static HashMap<Player, DropperWandPos> getWAND_POS_HASH_MAP() {
+        return WAND_POS_HASH_MAP;
+    }
 }

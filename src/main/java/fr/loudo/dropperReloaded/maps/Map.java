@@ -10,12 +10,14 @@ public class Map {
 
     private String name;
     private List<Location> spawns;
+    private List<Location> doorLocations;
     private MapDifficulty difficulty;
     private boolean isEnabled;
 
     public Map(String name) {
         this.name = name;
         this.spawns = new ArrayList<>();
+        this.doorLocations = new ArrayList<>();
         this.difficulty = MapDifficulty.EASY;
         this.isEnabled = false;
     }
@@ -63,6 +65,14 @@ public class Map {
 
     public List<Location> getSpawns() {
         return spawns;
+    }
+
+    public List<Location> getDoorLocations() {
+        return doorLocations;
+    }
+
+    public void setDoorLocations(List<Location> doorLocations) {
+        this.doorLocations = doorLocations;
     }
 
     public boolean isEnabled() {

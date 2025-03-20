@@ -185,7 +185,7 @@ public class Game {
                     reset();
                 }
             }
-        }.runTaskLater(DropperReloaded.getInstance(), 5L * 20L);
+        }.runTaskLater(DropperReloaded.getInstance(), 10L * 20L);
     }
 
     private void sendWinTitleToPlayers() {

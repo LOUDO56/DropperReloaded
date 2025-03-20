@@ -1,6 +1,8 @@
 package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
+import fr.loudo.dropperReloaded.commands.dropperadmin.DropperWandPos;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.games.GameStatus;
 import fr.loudo.dropperReloaded.items.DropperItems;
@@ -9,7 +11,9 @@ import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -18,6 +22,29 @@ public class PlayerInteract implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+
+        if(Objects.equals(player.getItemInHand(), DropperItems.stickWand.getItem()) && event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_AIR) {
+            if(player.hasPermission("dropper_reloaded.admin")) {
+                if(DropperAdminCommand.getWAND_POS_HASH_MAP().containsKey(player)) {
+                    event.setCancelled(true);
+                    DropperWandPos dropperWandPos = DropperAdminCommand.getWAND_POS_HASH_MAP().get(player);
+                    if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                        dropperWandPos.setPos1(event.getClickedBlock().getLocation());
+                        player.sendMessage("Position 1 set.");
+                    } else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                        boolean check = true;
+                        if(!DropperReloaded.getVersion().startsWith("1.8")) {
+                            check = Objects.equals(event.getHand(), EquipmentSlot.HAND);
+                        }
+                        if(check) {
+                            dropperWandPos.setPos2(event.getClickedBlock().getLocation());
+                            player.sendMessage("Position 2 set.");
+                        }
+                    }
+                }
+            }
+        }
+
         if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
 
