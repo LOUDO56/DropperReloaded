@@ -14,9 +14,7 @@ import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -37,6 +35,7 @@ public class Game {
 
     private int id;
     private int timeLeft;
+    private int countdownStartTimer;
 
     private List<Player> playerList;
     private List<Player> spectatorList;
@@ -317,6 +316,54 @@ public class Game {
         }
     }
 
+    public void sendDoorBlockToPlayers1_12() {
+        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        if (doorLocations == null) return;
+
+        for (Player player : playerList) {
+            for (Location location : doorLocations) {
+                Material glassType = Material.GLASS;
+
+                if (countdownStartTimer >= 4) {
+                    glassType = Material.LIME_STAINED_GLASS;
+                } else if (countdownStartTimer >= 2) {
+                    glassType = Material.YELLOW_STAINED_GLASS;
+                } else if (countdownStartTimer == 1) {
+                    glassType = Material.RED_STAINED_GLASS;
+                } else if (countdownStartTimer == 0) {
+                    glassType = Material.AIR;
+                }
+
+                player.sendBlockChange(location, glassType.createBlockData());
+
+            }
+        }
+    }
+
+    public void sendDoorBlockToPlayers1_8() {
+        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        if(doorLocations == null) return;
+        for(Player player : playerList) {
+            for(Location location : doorLocations) {
+                byte color = 0;
+                if(countdownStartTimer >= 4) {
+                    color = 5;
+                } else if(countdownStartTimer >= 2) {
+                    color = 4;
+                } else if(countdownStartTimer == 1) {
+                    color = 6;
+                } else if(countdownStartTimer == 0) {
+                    color = 0;
+                }
+                if(countdownStartTimer > 0) {
+                    player.sendBlockChange(location, Material.GLASS, color);
+                } else {
+                    player.sendBlockChange(location, Material.AIR, (byte) 0);
+                }
+            }
+        }
+    }
+
     public void teleportPlayerToNextMap(Player player) {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) return;
@@ -431,21 +478,27 @@ public class Game {
     }
 
     private void startCountdownBeginning() {
-        final int[] timer = {DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop")};
+        countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop");
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
+        String versionMc = DropperReloaded.getVersion();
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
-            if(timer[0] == 0) {
+                if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(versionMc::startsWith)) {
+                    sendDoorBlockToPlayers1_8();
+                } else {
+                    sendDoorBlockToPlayers1_12();
+                }
+                if(countdownStartTimer == 0) {
                 playSoundToPlayers(sound, 1.2f, 1f);
                 sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
                 start();
                 this.cancel();
             } else {
-                sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(timer[0])));
+                sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(countdownStartTimer)));
                 playSoundToPlayers(sound);
             }
-            timer[0]--;
+            countdownStartTimer--;
             }
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
     }
