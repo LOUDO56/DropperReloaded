@@ -33,8 +33,6 @@ public class CommandHelpAdmin {
                 .append("Set the minimum number of players to start a game.\n")
                 .append(prefixCmd).append("waitlobby setspawn").append(separator)
                 .append("Set the location of the wait lobby.\n")
-                .append(prefixCmd).append("mainlobby setspawn").append(separator)
-                .append("Set the location of the main lobby.\n")
                 .append(prefixCmd).append("mainlobby setnpc").append(separator)
                 .append("Create an NPC that lets you join a game. (Available if Citizens is installed.)\n")
                 .append(prefixCmd).append("leaderboard add {win, time}").append(separator)

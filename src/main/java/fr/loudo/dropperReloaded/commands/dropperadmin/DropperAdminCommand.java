@@ -1,6 +1,7 @@
 package fr.loudo.dropperReloaded.commands.dropperadmin;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMainLobbyActions;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandMapActions;
 import fr.loudo.dropperReloaded.commands.dropperadmin.actions.CommandWaitLobbyActions;
 import fr.loudo.dropperReloaded.items.DropperItems;
@@ -24,6 +25,7 @@ public class DropperAdminCommand implements TabExecutor {
     private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard", "reload");
     private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "setdifficulty", "addspawn", "remlastspawn", "enable", "disable", "wand", "setdoors", "list");
     private final List<String> WAITLOBBY_ACTIONS = Arrays.asList("setminplayer", "setmaxplayer", "setspawn");
+    private final List<String> MAINLOBBY_ACTIONS = Arrays.asList("setnpc");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -66,6 +68,9 @@ public class DropperAdminCommand implements TabExecutor {
                 case "waitlobby":
                     CommandWaitLobbyActions.execute(action, value, player);
                     break;
+                case "mainlobby":
+                    CommandMainLobbyActions.execute(action, player);
+                    break;
                 case "reload":
                     DropperReloaded.getInstance().saveDefaultConfig();
                     DropperReloaded.getInstance().reloadConfig();
@@ -91,6 +96,8 @@ public class DropperAdminCommand implements TabExecutor {
                     return MAP_ACTIONS;
                 case "waitlobby":
                     return WAITLOBBY_ACTIONS;
+                case "mainlobby":
+                    return MAINLOBBY_ACTIONS;
                 default:
                     return SECTIONS;
             }
@@ -100,6 +107,7 @@ public class DropperAdminCommand implements TabExecutor {
                 && !args[1].equalsIgnoreCase("create")
                 && !args[1].equalsIgnoreCase("wand")
                 && !args[0].equalsIgnoreCase("waitlobby")
+                && !args[0].equalsIgnoreCase("mainlobby")
                 && !args[0].equalsIgnoreCase("leaderboard")
         ) {
             return DropperReloaded.getMapsManager().getListMapName();

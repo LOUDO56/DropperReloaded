@@ -40,7 +40,7 @@ public final class DropperReloaded extends JavaPlugin {
         //Configuration Init
         saveDefaultConfig();
 
-        isCitizenPluginEnabled = Bukkit.getPluginManager().isPluginEnabled("Citizen");
+        isCitizenPluginEnabled = Bukkit.getPluginManager().isPluginEnabled("Citizens");
         if(!isCitizenPluginEnabled) {
             getLogger().info("Citizens isn't on the server, npc feature disabled.");
         }
