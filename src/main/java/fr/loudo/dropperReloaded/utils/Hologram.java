@@ -1,5 +1,6 @@
 package fr.loudo.dropperReloaded.utils;
 
+import fr.loudo.dropperReloaded.DropperReloaded;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -10,36 +11,17 @@ import java.util.List;
 
 public class Hologram {
 
-    private final double defaultOffsetY = 0;
-    private final double defaultlineGap = 0.3;
-
     private List<String> stringLines;
     private List<ArmorStand> armorStandList;
     private Location location;
     private double offsetY;
     private double lineGap;
 
-    public Hologram(List<String> stringLines, Location location, double offsetY, double lineGap) {
-        this.stringLines = stringLines;
-        this.location = location;
-        this.offsetY = offsetY;
-        this.lineGap = lineGap;
-        this.armorStandList = new ArrayList<>();
-    }
-
-    public Hologram(List<String> stringLines, Location location, double offsetY) {
-        this.stringLines = stringLines;
-        this.location = location;
-        this.offsetY = offsetY;
-        this.lineGap = defaultlineGap;
-        this.armorStandList = new ArrayList<>();
-    }
-
     public Hologram(List<String> stringLines, Location location) {
         this.stringLines = stringLines;
         this.location = location;
-        this.offsetY = defaultOffsetY;
-        this.lineGap = defaultlineGap;
+        this.offsetY = DropperReloaded.getInstance().getConfig().getDouble("main_lobby.npc.hologram.offset_y");
+        this.lineGap = DropperReloaded.getInstance().getConfig().getDouble("main_lobby.npc.hologram.line_gap");
         this.armorStandList = new ArrayList<>();
     }
 
@@ -72,7 +54,9 @@ public class Hologram {
         }
         for(int i = 0; i < newLines.size(); i++) {
             if(i < armorStandList.size()) {
-                armorStandList.get(i).setCustomName(reversedLines.get(i));
+                ArmorStand armorStand = armorStandList.get(i);
+                armorStand.setCustomName(reversedLines.get(i));
+                armorStand.teleport(new Location(location.getWorld(), location.getX(), currentY, location.getZ()));
             } else {
                 instantiateArmorStand(currentY, reversedLines.get(i));
             }
@@ -85,6 +69,14 @@ public class Hologram {
         if(armorStand == null) return false;
         armorStand.setCustomName(newLine);
         return true;
+    }
+
+    public void setOffsetY(double offsetY) {
+        this.offsetY = offsetY;
+    }
+
+    public void setLineGap(double lineGap) {
+        this.lineGap = lineGap;
     }
 
     private void instantiateArmorStand(double y, String line) {
