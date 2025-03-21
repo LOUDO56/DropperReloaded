@@ -38,29 +38,7 @@ public class CommandMainLobbyActions {
             player.sendMessage(ChatColor.RED + "Plugin Citizens2 is required!");
             return;
         }
-        int npcId = DropperReloaded.getInstance().getConfig().getInt("main_lobby.npc.id");
-        NPC npc = npcId > -1 ? CitizensAPI.getNPCRegistry().getById(npcId) : null;
-        if(npc != null) {
-            CitizensAPI.getNPCRegistry().deregister(npc);
-        }
-        npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "[NPC_DropperReloaded_joinGame]");
-        npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
-        Location playerLoc = player.getLocation();
-        Location npcLoc = new Location(player.getWorld(), playerLoc.getBlockX() + 0.5, playerLoc.getBlockY(), playerLoc.getBlockZ() + 0.5);
-        npcLoc.setYaw(PlayerUtils.getDefaultYaw(playerLoc.getYaw()));
-        npcLoc.setPitch(0);
-        npc.spawn(npcLoc);
-
-        List<String> hologramLines = DropperReloaded.getInstance().getConfig().getStringList("main_lobby.npc.hologram");
-        for(int i = 0; i < hologramLines.size(); i++) {
-            hologramLines.set(i, hologramLines.get(i).replace("%player_number_playing%", String.valueOf(DropperReloaded.getPlayersSessionManager().getPlayerSessionList().size())));
-        }
-
-        Hologram joinGameHologram = new Hologram(hologramLines, npc.getEntity().getLocation());
-        joinGameHologram.spawn();
-
-        DropperReloaded.getInstance().getConfig().set("main_lobby.npc.id", npc.getId());
-        DropperReloaded.getInstance().saveConfig();
+        DropperReloaded.getJoinGameNPCManager().createJoinGameNPC(player);
         player.sendMessage(ChatColor.GREEN + "Join game NPC set with success!");
     }
 

@@ -127,7 +127,7 @@ wait_lobby:
 main_lobby:
   npc:
     id: -1 # -1 Means no NPC added
-    hologram:
+    hologram_lines:
       - "§e§lCLICK TO PLAY"
       - "§bDropper"
       - "§e%player_number_playing% Playing"

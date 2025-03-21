@@ -24,6 +24,7 @@ public class Hologram {
         this.location = location;
         this.offsetY = offsetY;
         this.lineGap = lineGap;
+        this.armorStandList = new ArrayList<>();
     }
 
     public Hologram(List<String> stringLines, Location location, double offsetY) {
@@ -31,6 +32,7 @@ public class Hologram {
         this.location = location;
         this.offsetY = offsetY;
         this.lineGap = defaultlineGap;
+        this.armorStandList = new ArrayList<>();
     }
 
     public Hologram(List<String> stringLines, Location location) {
@@ -38,6 +40,7 @@ public class Hologram {
         this.location = location;
         this.offsetY = defaultOffsetY;
         this.lineGap = defaultlineGap;
+        this.armorStandList = new ArrayList<>();
     }
 
     public void spawn() {
@@ -45,7 +48,6 @@ public class Hologram {
         Collections.reverse(reversedLines);
         double currentY = location.getY() - 0.2 + offsetY;
         for(String line : reversedLines) {
-            System.out.println(currentY);
             instantiateArmorStand(currentY, line);
             currentY += lineGap;
         }
@@ -59,7 +61,7 @@ public class Hologram {
     }
 
     public void update(List<String> newLines) {
-        for(int i = 0; i < newLines.size(); i++) {
+        for(int i = 0; i < armorStandList.size(); i++) { //Change with newLines size bc if new line then new armorstand
             armorStandList.get(i).setCustomName(newLines.get(i));
         }
     }
@@ -80,6 +82,7 @@ public class Hologram {
         armorStand.setGravity(false);
         armorStand.setBasePlate(false);
         armorStand.setCustomName(line);
+        armorStandList.add(armorStand);
     }
 
 }

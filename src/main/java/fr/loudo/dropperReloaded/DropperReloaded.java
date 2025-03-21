@@ -7,10 +7,12 @@ import fr.loudo.dropperReloaded.events.RegisterEvents;
 import fr.loudo.dropperReloaded.games.GamesManager;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.MapsManager;
+import fr.loudo.dropperReloaded.npc.JoinGameNPCManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.stream.Stream;
 
@@ -24,6 +26,7 @@ public final class DropperReloaded extends JavaPlugin {
     private static MapsManager mapsManager;
     private static WaitLobbyConfiguration waitLobbyConfiguration;
     private static PlayersSessionManager playersSessionManager;
+    private static JoinGameNPCManager joinGameNPCManager;
 
     private static ProtocolManager protocolManager;
 
@@ -62,6 +65,7 @@ public final class DropperReloaded extends JavaPlugin {
         playersSessionManager = new PlayersSessionManager();
         gamesManager = new GamesManager();
         mapsManager = new MapsManager();
+        joinGameNPCManager = new JoinGameNPCManager();
 
         //Configuration class
         waitLobbyConfiguration = new WaitLobbyConfiguration();
@@ -71,6 +75,13 @@ public final class DropperReloaded extends JavaPlugin {
 
         version = getServer().getBukkitVersion();
         version = version.split("-")[0];
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                joinGameNPCManager.createNPCHologramLines();
+            }
+        }.runTaskLater(this, 60L);
 
     }
 
@@ -104,6 +115,10 @@ public final class DropperReloaded extends JavaPlugin {
 
     public static ProtocolManager getProtocolManager() {
         return protocolManager;
+    }
+
+    public static JoinGameNPCManager getJoinGameNPCManager() {
+        return joinGameNPCManager;
     }
 
     public static String getVersion() {

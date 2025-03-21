@@ -31,6 +31,7 @@ public class GamesManager {
         playersSessionManager.getPlayerSessionList().add(playerSession);
         Game game = getAvalaibleGame();
         game.addPlayer(player);
+        DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
     }
 
     public Game getAvalaibleGame() {
@@ -54,6 +55,7 @@ public class GamesManager {
         //TODO: Teleport to main lobby
         //TODO: restore old items
         player.getInventory().clear();
+        DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
 
         return true;
     }
