@@ -35,6 +35,8 @@ public class CommandHelpAdmin {
                 .append("Set the location of the wait lobby.\n")
                 .append(prefixCmd).append("mainlobby setnpc").append(separator)
                 .append("Create an NPC that lets you join a game. (Available if Citizens is installed.)\n")
+                .append(prefixCmd).append("mainlobby delnpc").append(separator)
+                .append("Remove the join game NPC.\n")
                 .append(prefixCmd).append("leaderboard add {win, time}").append(separator)
                 .append("Create a hologram leaderboard.\n")
                 .append(prefixCmd).append("leaderboard remove {win, time}").append(separator)

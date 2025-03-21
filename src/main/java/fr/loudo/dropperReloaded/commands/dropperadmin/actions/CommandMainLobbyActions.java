@@ -24,6 +24,9 @@ public class CommandMainLobbyActions {
             case "setnpc":
                 spawnMainLobbyNpc(player);
                 break;
+            case "delnpc":
+                removeMainLobbyNpc(player);
+                break;
             default:
                 player.sendMessage(CommandHelpAdmin.send());
                 break;
@@ -40,6 +43,18 @@ public class CommandMainLobbyActions {
         }
         DropperReloaded.getJoinGameNPCManager().createJoinGameNPC(player);
         player.sendMessage(ChatColor.GREEN + "Join game NPC set with success!");
+    }
+
+    private static void removeMainLobbyNpc(Player player) {
+        if(!DropperReloaded.isIsCitizenPluginEnabled()) {
+            player.sendMessage(ChatColor.RED + "Plugin Citizens2 is required!");
+            return;
+        }
+        if(DropperReloaded.getJoinGameNPCManager().deleteJoinGameNPC()) {
+            player.sendMessage(ChatColor.GREEN + "Join game NPC deleted with success!");
+        } else {
+            player.sendMessage(ChatColor.RED + "Join game NPC does not exists!");
+        }
     }
 
 }

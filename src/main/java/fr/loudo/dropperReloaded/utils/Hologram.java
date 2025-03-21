@@ -61,8 +61,11 @@ public class Hologram {
     }
 
     public void update(List<String> newLines) {
+        stringLines = newLines;
+        List<String> reversedLines = new ArrayList<>(newLines);
+        Collections.reverse(reversedLines);
         for(int i = 0; i < armorStandList.size(); i++) { //Change with newLines size bc if new line then new armorstand
-            armorStandList.get(i).setCustomName(newLines.get(i));
+            armorStandList.get(i).setCustomName(reversedLines.get(i));
         }
     }
 

@@ -76,13 +76,27 @@ public final class DropperReloaded extends JavaPlugin {
         version = getServer().getBukkitVersion();
         version = version.split("-")[0];
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                joinGameNPCManager.createNPCHologramLines();
-            }
-        }.runTaskLater(this, 60L);
+        if(getConfig().getInt("main_lobby.npc.id") > -1) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(joinGameNPCManager.createNPCHologramLines()) {
+                        getLogger().info("Initialized NPC and holograms.");
+                    } else {
+                        getLogger().severe("NPC and his holograms couldn't be loaded, maybe the NPC is wrong?");
+                    }
+                }
+            }.runTaskLater(this, 20L);
+        }
 
+    }
+
+    @Override
+    public void onDisable() {
+        if(getConfig().getInt("main_lobby.npc.id") > -1) {
+            joinGameNPCManager.getHologram().remove();
+            getLogger().info("Removed holograms of NPC...");
+        }
     }
 
     public static DropperReloaded getInstance() {

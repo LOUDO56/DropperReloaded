@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 
@@ -18,33 +19,54 @@ public class JoinGameNPCManager {
     private Hologram hologram;
 
     public void createJoinGameNPC(Player player) {
-        npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "[NPC_DropperReloaded_joinGame]");
-        npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
+        if(hologram != null) {
+            hologram.remove();
+        }
 
         Location playerLoc = player.getLocation();
         Location npcLoc = new Location(player.getWorld(), playerLoc.getBlockX() + 0.5, playerLoc.getBlockY(), playerLoc.getBlockZ() + 0.5);
         npcLoc.setYaw(PlayerUtils.getDefaultYaw(playerLoc.getYaw()));
         npcLoc.setPitch(0);
-        npc.spawn(npcLoc);
+
+        if(npc == null) {
+            npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "[NPC_DropperReloaded_joinGame]");
+            npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
+            npc.spawn(npcLoc);
+        } else {
+            npc.teleport(npcLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        }
 
         hologram = new Hologram(getHologramLinesJoinGame(), npc.getEntity().getLocation());
         hologram.spawn();
 
         DropperReloaded.getInstance().getConfig().set("main_lobby.npc.id", npc.getId());
         DropperReloaded.getInstance().saveConfig();
-
-        player.sendMessage(ChatColor.GREEN + "Join game NPC set with success!");
     }
 
-    public void createNPCHologramLines() {
+    public boolean deleteJoinGameNPC() {
+        if(hologram == null || npc == null) {
+            return false;
+        }
+        hologram.remove();
+        CitizensAPI.getNPCRegistry().deregister(npc);
+        hologram = null;
+        npc = null;
+        DropperReloaded.getInstance().getConfig().set("main_lobby.npc.id", -1);
+        return true;
+    }
+
+    public boolean createNPCHologramLines() {
 
         int npcId = DropperReloaded.getInstance().getConfig().getInt("main_lobby.npc.id", -1);
-        NPC npc = npcId > - 1 ? CitizensAPI.getNPCRegistry().getById(npcId) : null;
+        npc = npcId > - 1 ? CitizensAPI.getNPCRegistry().getById(npcId) : null;
         if(npc == null) {
-            return;
+            return false;
         }
 
         hologram = new Hologram(getHologramLinesJoinGame(), npc.getEntity().getLocation());
+        hologram.spawn();
+
+        return true;
 
     }
 
@@ -62,4 +84,7 @@ public class JoinGameNPCManager {
         }
     }
 
+    public Hologram getHologram() {
+        return hologram;
+    }
 }
