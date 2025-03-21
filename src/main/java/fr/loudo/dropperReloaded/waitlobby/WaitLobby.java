@@ -15,8 +15,6 @@ import java.util.Date;
 
 public class WaitLobby {
 
-    private final int maxPlayer = DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer();
-    private final int minPlayer = DropperReloaded.getWaitLobbyConfiguration().getMinPlayer();
     private final Sound timerSound = Sound.valueOf(DropperReloaded.getInstance().getConfig().getString("wait_lobby.timer_sound"));
 
     private int timer;
@@ -35,10 +33,10 @@ public class WaitLobby {
         String joinMessage = MessageConfigUtils.get("wait_lobby.join_message");
         joinMessage = joinMessage.replace("%player%", username);
         joinMessage = joinMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-        joinMessage = joinMessage.replace("%max_player%", String.valueOf(maxPlayer));
+        joinMessage = joinMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(joinMessage);
         waitLobbyScoreboard.updatePlayerList();
-        if(game.getPlayerList().size() == minPlayer) {
+        if(game.getPlayerList().size() == DropperReloaded.getWaitLobbyConfiguration().getMinPlayer()) {
             startCountdown();
         }
     }
@@ -47,10 +45,10 @@ public class WaitLobby {
         String leftMessage = MessageConfigUtils.get("wait_lobby.left_message");
         leftMessage = leftMessage.replace("%player%", username);
         leftMessage = leftMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-        leftMessage = leftMessage.replace("%max_player%", String.valueOf(maxPlayer));
+        leftMessage = leftMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(leftMessage);
         waitLobbyScoreboard.updatePlayerList();
-        if(game.getPlayerList().size() < minPlayer) {
+        if(game.getPlayerList().size() < DropperReloaded.getWaitLobbyConfiguration().getMinPlayer()) {
             stopCountdown();
         }
     }

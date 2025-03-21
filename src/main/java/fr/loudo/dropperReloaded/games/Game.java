@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 public class Game {
 
-    private final WaitLobbyConfiguration waitLobbyConfiguration = DropperReloaded.getWaitLobbyConfiguration();
     private final PlayersSessionManager playersSessionManager = DropperReloaded.getPlayersSessionManager();
 
     private int id;
@@ -60,13 +59,13 @@ public class Game {
     }
 
     public boolean addPlayer(Player player) {
-        if(playerList.contains(player) && playerList.size() >= waitLobbyConfiguration.getMaxPlayer()) return false;
+        if(playerList.contains(player) && playerList.size() >= DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()) return false;
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
         playerSession.reset();
         playerSession.setPlayerGame(this);
         playerList.add(player);
         if(!hasStarted()) {
-            player.teleport(waitLobbyConfiguration.getSpawn());
+            player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
             new BukkitRunnable() {

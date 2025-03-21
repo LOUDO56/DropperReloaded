@@ -74,7 +74,6 @@ public class DropperAdminCommand implements TabExecutor {
                 case "reload":
                     DropperReloaded.getInstance().saveDefaultConfig();
                     DropperReloaded.getInstance().reloadConfig();
-                    DropperReloaded.getWaitLobbyConfiguration().reload();
                     DropperItems.registerItems();
                     DropperReloaded.getJoinGameNPCManager().reloadHologramConfig();
                     DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
