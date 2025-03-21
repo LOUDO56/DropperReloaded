@@ -229,9 +229,9 @@ public class Game {
         }
     }
 
-    public void playSoundToPlayers(Sound sound, float pitch, float volume) {
+    public void playSoundToPlayers(Sound sound, float volume, float pitch) {
         for(Player player : playerList) {
-            player.playSound(player.getLocation(), sound, pitch, volume);
+            player.playSound(player.getLocation(), sound, volume, pitch);
         }
     }
 
@@ -434,17 +434,12 @@ public class Game {
     private void startCountdownBeginning() {
         countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop");
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
-        String versionMc = DropperReloaded.getVersion();
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
-                if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(versionMc::startsWith)) {
-                    sendDoorBlockToPlayers1_8();
-                } else {
-                    sendDoorBlockToPlayers1_12();
-                }
+                sendDoorBlockGlobal();
                 if(countdownStartTimer == 0) {
-                playSoundToPlayers(sound, 1.2f, 1f);
+                playSoundToPlayers(sound, 1f, 1.2f);
                 sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
                 start();
                 this.cancel();
@@ -454,7 +449,16 @@ public class Game {
             }
             countdownStartTimer--;
             }
-        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 20L);
+        }.runTaskTimer(DropperReloaded.getInstance(), 40L, 20L);
+    }
+
+    private void sendDoorBlockGlobal() {
+        String versionMc = DropperReloaded.getVersion();
+        if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(versionMc::startsWith)) {
+            sendDoorBlockToPlayers1_8();
+        } else {
+            sendDoorBlockToPlayers1_12();
+        }
     }
 
     public void resetDoorBlock(Player player) {
@@ -473,12 +477,12 @@ public class Game {
             for (Location location : doorLocations) {
                 Material glassType = Material.GLASS;
 
-                if (countdownStartTimer >= 4) {
-                    glassType = Material.LIME_STAINED_GLASS;
-                } else if (countdownStartTimer >= 2) {
-                    glassType = Material.YELLOW_STAINED_GLASS;
-                } else if (countdownStartTimer == 1) {
+                if (countdownStartTimer == 5) {
                     glassType = Material.RED_STAINED_GLASS;
+                } else if (countdownStartTimer >= 3) {
+                    glassType = Material.YELLOW_STAINED_GLASS;
+                } else if (countdownStartTimer >= 1) {
+                    glassType = Material.LIME_STAINED_GLASS;
                 } else if (countdownStartTimer == 0) {
                     glassType = Material.AIR;
                 }
@@ -495,12 +499,12 @@ public class Game {
         for(Player player : playerList) {
             for(Location location : doorLocations) {
                 byte color = 0;
-                if(countdownStartTimer >= 4) {
-                    color = 5;
-                } else if(countdownStartTimer >= 2) {
-                    color = 4;
-                } else if(countdownStartTimer == 1) {
+                if(countdownStartTimer == 5) {
                     color = 6;
+                } else if(countdownStartTimer >= 3) {
+                    color = 4;
+                } else if(countdownStartTimer >= 1) {
+                    color = 5;
                 } else if(countdownStartTimer == 0) {
                     color = 0;
                 }

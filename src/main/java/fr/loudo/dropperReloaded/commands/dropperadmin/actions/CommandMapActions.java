@@ -43,6 +43,9 @@ public class CommandMapActions {
             case "remlastspawn":
                 removeLastSpawn(value, player);
                 break;
+            case "tp":
+                tpToMap(value, player);
+                break;
             case "enable":
                 enableMap(value, player);
                 break;
@@ -131,6 +134,15 @@ public class CommandMapActions {
         } else {
             player.sendMessage(ChatColor.RED + "There's currently no spawn added!");
         }
+
+    }
+
+    private static void tpToMap(String mapName, Player player) {
+        if(!validateMapName(mapName, player)) return;
+
+        Map map = DropperReloaded.getMapsManager().getFromName(mapName);
+        player.teleport(map.getRandomSpawn());
+        player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + map.getName());
 
     }
 
