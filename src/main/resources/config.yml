@@ -124,6 +124,14 @@ wait_lobby:
       - '{space}'
       - '§e%website%'
 
+main_lobby:
+  npc:
+    id: -1 # -1 Means no NPC added
+    hologram:
+      - "§e§lCLICK TO PLAY"
+      - "§bDropper"
+      - "§e%player_number_playing% Playing"
+
 player:
   left_game: §cYou left the game.
   not_in_a_game: §cYou are not in a game!
