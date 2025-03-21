@@ -58,14 +58,25 @@ public class Hologram {
         for(ArmorStand armorStand : armorStandList) {
             armorStand.remove();
         }
+        armorStandList = new ArrayList<>();
+        stringLines = new ArrayList<>();
     }
 
     public void update(List<String> newLines) {
         stringLines = newLines;
         List<String> reversedLines = new ArrayList<>(newLines);
         Collections.reverse(reversedLines);
-        for(int i = 0; i < armorStandList.size(); i++) { //TODO: Change with newLines size bc if new line then new armorstand
-            armorStandList.get(i).setCustomName(reversedLines.get(i));
+        double currentY = location.getY() - 0.2 + offsetY;
+        if(newLines.size() < armorStandList.size()) {
+            remove();
+        }
+        for(int i = 0; i < newLines.size(); i++) {
+            if(i < armorStandList.size()) {
+                armorStandList.get(i).setCustomName(reversedLines.get(i));
+            } else {
+                instantiateArmorStand(currentY, reversedLines.get(i));
+            }
+            currentY += lineGap;
         }
     }
 
