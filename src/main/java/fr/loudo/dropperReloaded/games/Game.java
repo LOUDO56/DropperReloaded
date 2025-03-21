@@ -69,15 +69,15 @@ public class Game {
             player.teleport(waitLobbyConfiguration.getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
-            player.getInventory().clear();
-            player.getInventory().setItem(DropperItems.mapVote.getSlot(), DropperItems.mapVote.getItem());
-            player.getInventory().setItem(DropperItems.leaveBed.getSlot(), DropperItems.leaveBed.getItem());
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    player.getInventory().clear();
+                    player.getInventory().setItem(DropperItems.mapVote.getSlot(), DropperItems.mapVote.getItem());
+                    player.getInventory().setItem(DropperItems.leaveBed.getSlot(), DropperItems.leaveBed.getItem());
                     player.setGameMode(GameMode.ADVENTURE);
                 }
-            }.runTaskLater(DropperReloaded.getInstance(), 10L);
+            }.runTaskLater(DropperReloaded.getInstance(), 1L);
             for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 player.hidePlayer(onlinePlayer);
                 onlinePlayer.hidePlayer(player);

@@ -17,6 +17,8 @@ public class RegisterEvents {
         pluginManager.registerEvents(new PlayerLeave(), instance);
         pluginManager.registerEvents(new PortalEnter(), instance);
         pluginManager.registerEvents(new PortalPlayerEnter(), instance);
+        pluginManager.registerEvents(new NPCHit(), instance);
+        pluginManager.registerEvents(new NPCRightClick(), instance);
     }
 
 }
