@@ -32,20 +32,25 @@ public class PlayerInteract implements Listener {
                         dropperWandPos.setPos1(event.getClickedBlock().getLocation());
                         player.sendMessage("Position 1 set.");
                     } else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                        boolean check = true;
                         if(!DropperReloaded.getVersion().startsWith("1.8")) {
-                            check = Objects.equals(event.getHand(), EquipmentSlot.HAND);
+                            if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
+                                return;
+                            }
                         }
-                        if(check) {
-                            dropperWandPos.setPos2(event.getClickedBlock().getLocation());
-                            player.sendMessage("Position 2 set.");
-                        }
+                        dropperWandPos.setPos2(event.getClickedBlock().getLocation());
+                        player.sendMessage("Position 2 set.");
                     }
                 }
             }
         }
 
         if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+            if(!DropperReloaded.getVersion().startsWith("1.8")) {
+                if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
+                    return;
+                }
+            }
+
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
 
             if(Objects.equals(player.getItemInHand(), DropperItems.leaveBed.getItem())) {
@@ -62,7 +67,12 @@ public class PlayerInteract implements Listener {
                 for(Player playerOfGame : playerSession.getPlayerGame().getPlayerList()) {
                     player.hidePlayer(playerOfGame);
                 }
-                player.getInventory().setItem(DropperItems.playerVisibilityOff.getSlot(), DropperItems.playerVisibilityOff.getItem());
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.getInventory().setItem(DropperItems.playerVisibilityOff.getSlot(), DropperItems.playerVisibilityOff.getItem());
+                    }
+                }.runTaskLater(DropperReloaded.getInstance(), 1L);
                 player.sendMessage(MessageConfigUtils.get("games.items.player_visibility_on.extra.players_hidden"));
                 return;
             }
@@ -71,7 +81,12 @@ public class PlayerInteract implements Listener {
                 for(Player playerOfGame : playerSession.getPlayerGame().getPlayerList()) {
                     player.showPlayer(playerOfGame);
                 }
-                player.getInventory().setItem(DropperItems.playerVisibilityOn.getSlot(), DropperItems.playerVisibilityOn.getItem());
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.getInventory().setItem(DropperItems.playerVisibilityOn.getSlot(), DropperItems.playerVisibilityOn.getItem());
+                    }
+                }.runTaskLater(DropperReloaded.getInstance(), 1L);
                 player.sendMessage(MessageConfigUtils.get("games.items.player_visibility_off.extra.players_shown"));
             }
 
@@ -81,22 +96,27 @@ public class PlayerInteract implements Listener {
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.resetLocation.getItem())) {
-                playerSession.setInvincible(true);
-                playerSession.setCanResetLocation(false);
-                playerSession.addDeath(true);
-                player.sendMessage(MessageConfigUtils.get("games.reset_location"));
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        playerSession.setInvincible(false);
-                    }
-                }.runTaskLater(DropperReloaded.getInstance(), 10L);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        playerSession.setCanResetLocation(true);
-                    }
-                }.runTaskLater(DropperReloaded.getInstance(), Long.parseLong(MessageConfigUtils.get("games.items.reset_location.extra.countdown_before_new_click")) * 20L);
+               new BukkitRunnable() {
+                   @Override
+                   public void run() {
+                       playerSession.setInvincible(true);
+                       playerSession.setCanResetLocation(false);
+                       playerSession.addDeath(true);
+                       player.sendMessage(MessageConfigUtils.get("games.reset_location"));
+                       new BukkitRunnable() {
+                           @Override
+                           public void run() {
+                               playerSession.setInvincible(false);
+                           }
+                       }.runTaskLater(DropperReloaded.getInstance(), 10L);
+                       new BukkitRunnable() {
+                           @Override
+                           public void run() {
+                               playerSession.setCanResetLocation(true);
+                           }
+                       }.runTaskLater(DropperReloaded.getInstance(), Long.parseLong(MessageConfigUtils.get("games.items.reset_location.extra.countdown_before_new_click")) * 20L);
+                   }
+               }.runTaskLater(DropperReloaded.getInstance(), 1L);
             }
         }
     }
