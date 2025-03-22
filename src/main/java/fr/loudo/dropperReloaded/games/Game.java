@@ -185,10 +185,13 @@ public class Game {
             @Override
             public void run() {
                 if(hasEnded()) {
-                    for(Player player : playerList) {
-                        DropperReloaded.getGamesManager().leaveGame(player);
+                    synchronized (playerList) {
+                        List<Player> copyList = new ArrayList<>(playerList);
+                        for (Player player : copyList) {
+                            DropperReloaded.getGamesManager().leaveGame(player);
+                        }
+                        reset();
                     }
-                    reset();
                 }
             }
         }.runTaskLater(DropperReloaded.getInstance(), 10L * 20L);
