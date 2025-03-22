@@ -13,7 +13,6 @@ import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
-import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -134,6 +133,7 @@ public class Game {
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    sendDoorBlockGlobal();
                     player.setGameMode(GameMode.ADVENTURE);
                 }
             }.runTaskLater(DropperReloaded.getInstance(), 10L);
@@ -142,7 +142,12 @@ public class Game {
     }
 
     private void start() {
-        gameStatus = GameStatus.PLAYING;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                gameStatus = GameStatus.PLAYING;
+            }
+        }.runTaskLater(DropperReloaded.getInstance(), 5L);
         for(Player player : playerList) {
             PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
             playerSession.startSession();
@@ -477,7 +482,7 @@ public class Game {
             for (Location location : doorLocations) {
                 Material glassType = Material.GLASS;
 
-                if (countdownStartTimer == 5) {
+                if (countdownStartTimer >= 5) {
                     glassType = Material.RED_STAINED_GLASS;
                 } else if (countdownStartTimer >= 3) {
                     glassType = Material.YELLOW_STAINED_GLASS;
@@ -499,7 +504,7 @@ public class Game {
         for(Player player : playerList) {
             for(Location location : doorLocations) {
                 byte color = 0;
-                if(countdownStartTimer == 5) {
+                if(countdownStartTimer >= 5) {
                     color = 6;
                 } else if(countdownStartTimer >= 3) {
                     color = 4;

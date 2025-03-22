@@ -4,12 +4,16 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
 import fr.loudo.dropperReloaded.events.RegisterEvents;
+import fr.loudo.dropperReloaded.filters.KickPlayerFilter;
 import fr.loudo.dropperReloaded.games.GamesManager;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.MapsManager;
 import fr.loudo.dropperReloaded.npc.JoinGameNPCManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,6 +22,7 @@ import java.util.stream.Stream;
 
 public final class DropperReloaded extends JavaPlugin {
 
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(DropperReloaded.class);
     private static DropperReloaded instance;
     private static boolean isCitizenPluginEnabled;
     private static boolean isProtocolLibPluginEnabled;
@@ -98,6 +103,7 @@ public final class DropperReloaded extends JavaPlugin {
             getLogger().info("Removed holograms of NPC...");
         }
     }
+
 
     public static DropperReloaded getInstance() {
         return instance;
