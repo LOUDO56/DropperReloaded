@@ -527,7 +527,7 @@ public class Game {
     }
 
     public boolean hasStarted() {
-        return gameStatus == GameStatus.PLAYING;
+        return gameStatus == GameStatus.PLAYING || gameStatus == GameStatus.DOOR_COUNTDOWN;
     }
 
     public boolean hasEnded() {

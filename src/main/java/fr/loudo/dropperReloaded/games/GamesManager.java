@@ -36,10 +36,15 @@ public class GamesManager {
 
     public Game getAvalaibleGame() {
         Game game = gameList.stream()
-                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING).min(Comparator.comparing(currentGame -> currentGame.getGameStatus() == GameStatus.STARTING ? 0 : 1))
+                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING)
+                .max(Comparator.comparingInt((Game currentGame) -> currentGame.getPlayerList().size())
+                        .thenComparing(currentGame -> currentGame.getGameStatus() == GameStatus.STARTING ? 0 : 1))
                 .orElseGet(Game::new);
+
         if (!gameList.contains(game)) gameList.add(game);
+
         return game;
+
 
     }
 
