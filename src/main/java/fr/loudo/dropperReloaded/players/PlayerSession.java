@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded.players;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.utils.Gui;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,12 +12,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerSession {
 
     private Player player;
     private Game playerGame;
     private Map currentMap;
+
+    private Gui currentGui;
+    private List<Map> votedMaps;
 
     private long stopwatchTotal;
     private long finalStopwatchTotal;
@@ -45,6 +51,7 @@ public class PlayerSession {
         this.canResetLocation = true;
         this.isSpectator = false;
         this.canEnterPortal = false;
+        this.votedMaps = new ArrayList<>();
     }
 
     public void startStopwatchTotal() {
@@ -156,6 +163,7 @@ public class PlayerSession {
         isSpectator = false;
         actionBarTask = null;
         canEnterPortal = false;
+        votedMaps = new ArrayList<>();
     }
 
     public int getVoteCount() {
@@ -164,6 +172,14 @@ public class PlayerSession {
 
     public int getCurrentMapCount() {
         return currentMapCount;
+    }
+
+    public Gui getCurrentGui() {
+        return currentGui;
+    }
+
+    public void setCurrentGui(Gui currentGui) {
+        this.currentGui = currentGui;
     }
 
     public void setCurrentMapCount(int currentMapCount) {
@@ -204,5 +220,9 @@ public class PlayerSession {
 
     public void setSpectator(boolean spectator) {
         isSpectator = spectator;
+    }
+
+    public List<Map> getVotedMaps() {
+        return votedMaps;
     }
 }

@@ -96,6 +96,39 @@ wait_lobby:
   timer_sound: BLOCK_NOTE_BLOCK_HAT #NOTE_HAT
   cancelled_title: "§cCANCELLED!"
   cancelled_subtitle: "§cNot enough players..."
+  guis:
+    map_voting:
+      name: Map Voting
+      items:
+        next_page:
+          name: "§bNext page"
+          item: ARROW
+        previous_page:
+          name: "§bPrevious page"
+          item: ARROW
+        map:
+          item:
+            easy_map: LIME_TERRACOTTA
+            medium_map: YELLOW_TERRACOTTA
+            hard_map: RED_TERRACOTTA
+          on_click:
+            message_voted: "§bYou voted for %map_name%§b!"
+            message_revoked_vote: "§cYou revoked your vote for %map_name%§c!"
+            message_no_remaining_vote: "§cYou have no remaining vote!"
+          description:
+            - "§7Difficulty: %map_difficulty%"
+          extra:
+            vote:
+              - " "
+              - "§eClick to vote!"
+            voted:
+              - " "
+              - "§aYou voted for this map!"
+              - "§cClick to revoke your vote!"
+            no_remaining_vote:
+              - " "
+              - "§cYou have no remaining vote!"
+
   items:
     map_vote:
       slot: 0

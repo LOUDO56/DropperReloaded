@@ -23,11 +23,13 @@ public class WaitLobbyScoreboard {
 
     private int lineGameStatus;
     private int linePlayerList;
+    private int lineMapCount;
 
-    private final List<String> lines = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.lines");
+    private List<String> lines;
 
     public WaitLobbyScoreboard(Game game) {
         this.game = game;
+        this.lines = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.lines");
     }
 
     public void setup(Player player) {
@@ -50,6 +52,7 @@ public class WaitLobbyScoreboard {
             String slot = lines.get(i);
             if(slot.contains("{game_state}")) lineGameStatus = i;
             if(slot.contains("%current_player%")) linePlayerList = i;
+            if(slot.contains("%player_map_vote_count%")) lineMapCount = i;
             slot = slot.replace("%game_id%", String.valueOf(game.getId()));
             slot = slot.replace("%date%", new SimpleDateFormat("dd/MM/yy").format(new Date()));
             slot = slot.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
@@ -91,5 +94,15 @@ public class WaitLobbyScoreboard {
                 teamGameStatus.setPrefix(statusMessage);
             }
         }
+    }
+
+    public void updateMapCount(Player player) {
+
+        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        int mapVoteCount = DropperReloaded.getInstance().getConfig().getInt("wait_lobby.map_vote_count") - playerSession.getVotedMaps().size();
+        String mapCountSting = lines.get(lineMapCount).replace("%player_map_vote_count%", String.valueOf(mapVoteCount));
+
+        player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + lineMapCount).setPrefix(mapCountSting);
+
     }
 }

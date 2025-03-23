@@ -124,6 +124,21 @@ public class MapsManager {
                 .collect(Collectors.toList());
     }
 
+    public List<Map> getMapsSortedDifficulty() {
+        List<Map> finalMapList = new ArrayList<>();
+        finalMapList.addAll(mapList.stream()
+                .filter(map -> map.getDifficulty() == MapDifficulty.EASY)
+                .collect(Collectors.toList()));
+        finalMapList.addAll(mapList.stream()
+                .filter(map -> map.getDifficulty() == MapDifficulty.MEDIUM)
+                .collect(Collectors.toList()));
+        finalMapList.addAll(mapList.stream()
+                .filter(map -> map.getDifficulty() == MapDifficulty.HARD)
+                .collect(Collectors.toList()));
+
+        return finalMapList;
+    }
+
     public void serialize() {
         fileInit();
         Gson gson = new GsonBuilder()

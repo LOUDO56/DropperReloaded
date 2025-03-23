@@ -1,6 +1,7 @@
 package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.guis.mapVote.MapVoteListener;
 import org.bukkit.plugin.PluginManager;
 
 public class RegisterEvents {
@@ -20,6 +21,9 @@ public class RegisterEvents {
         pluginManager.registerEvents(new PortalPlayerEnter(), instance);
         pluginManager.registerEvents(new NPCHit(), instance);
         pluginManager.registerEvents(new NPCRightClick(), instance);
+
+        //GUIS
+        pluginManager.registerEvents(new MapVoteListener(), instance);
     }
 
 }

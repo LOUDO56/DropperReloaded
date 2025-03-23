@@ -71,6 +71,7 @@ public class JoinGameNPCManager {
     }
 
     public void reloadHologramConfig() {
+        if(hologram == null) return;
         hologram.setLineGap(DropperReloaded.getInstance().getConfig().getDouble("main_lobby.npc.hologram.line_gap"));
         hologram.setOffsetY(DropperReloaded.getInstance().getConfig().getDouble("main_lobby.npc.hologram.offset_y"));
     }

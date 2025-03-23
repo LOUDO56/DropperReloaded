@@ -242,6 +242,9 @@ public class Game {
     }
 
     public void sendActionBar(Player player, String message) {
+
+        if(!DropperReloaded.isIsProtocolLibPluginEnabled()) return;
+
         String version = DropperReloaded.getVersion();
         boolean is1_8Version = Stream.of("1.8", "1.9", "1.10", "1.11", "1.12").anyMatch(version::startsWith);
         boolean is1_13Version = Stream.of("1.13", "1.14", "1.15", "1.16").anyMatch(version::startsWith);

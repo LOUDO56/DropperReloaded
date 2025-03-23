@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded.waitlobby;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.games.GameStatus;
+import fr.loudo.dropperReloaded.guis.mapVote.MapVoteGui;
 import fr.loudo.dropperReloaded.scoreboards.WaitLobbyScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.ChatColor;
@@ -22,6 +23,7 @@ public class WaitLobby {
     private BukkitTask countdownTask;
     private Game game;
     private WaitLobbyScoreboard waitLobbyScoreboard;
+    private MapVoteGui mapVoteGui;
 
     public WaitLobby(Game game) {
         this.game = game;
