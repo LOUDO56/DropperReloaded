@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class MapVoteListener implements Listener {
+public class MapVoteListenerGui implements Listener {
     //TODO: fix index out of bound if we click outside the inventory
     @EventHandler
     public void onItemClick(InventoryClickEvent event) {
@@ -43,6 +43,9 @@ public class MapVoteListener implements Listener {
                         mapVoteGui.updateItemMap(slotGui, mapVoteGui.getSlotAndMaps().get(slotGui));
                     }
                     playerSession.getPlayerGame().getWaitLobby().getWaitLobbyScoreboard().updateMapCount(player);
+                }
+                if(slot == 49) {
+                    player.closeInventory();
                 }
                 if(slot == 53) {
                     mapVoteGui.nextPage();

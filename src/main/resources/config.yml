@@ -9,6 +9,9 @@ global:
       previous_page:
         name: "§bPrevious page"
         item: ARROW
+      close:
+        name: "§cClose"
+        item: BARRIER
 
 games:
   easy_map_count: 2
@@ -69,6 +72,12 @@ games:
       name: "§aPlayer list §7(Right-click)"
       description:
         - "§7Teleport to a player."
+    view_map:
+      slot: 1
+      material: NAME_TAG
+      name: "§eView map §7(Right-click)"
+      description:
+        - "§7Teleport to a map."
     play_again:
       slot: 4
       material: NETHER_STAR
@@ -92,7 +101,7 @@ games:
       - '{space}'
       - '§e%website%'
   guis:
-    teleporter:
+    teleporter_player:
       name: Teleporter
       items:
         player_head:
@@ -100,6 +109,17 @@ games:
             tped_to_player: §aTeleported to §e%player_name%!
           description:
             - "§7Current map: %map_name%"
+            - " "
+            - "§7Click to teleport."
+    teleporter_map:
+      name: Map list
+      items:
+        dropper_map:
+          item: NAME_TAG
+          on_click:
+            tped_to_map: §aTeleported to §e%map_name%!
+          name: "%map_name%"
+          description:
             - " "
             - "§7Click to teleport."
 
@@ -146,13 +166,13 @@ wait_lobby:
     map_vote:
       slot: 0
       material: NAME_TAG
-      name: "§e§lMap vote §r§7(Right-click)"
+      name: "§lMap vote §r§7(Right-click)"
       description:
         - "§7Vote your favourite map!"
     leave:
       slot: 8
       material: RED_BED
-      name: "§c§lLeave §r§7(Right-click)"
+      name: "§lLeave §r§7(Right-click)"
       description:
         - "§7Leave your current game."
   scoreboard:

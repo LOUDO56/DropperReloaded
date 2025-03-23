@@ -23,6 +23,7 @@ public class DropperItems {
 
     //Spectator
     public static DropperItem spectatorPlayerList;
+    public static DropperItem viewMap;
     public static DropperItem playAgain;
 
     public static void registerItems() {
@@ -45,6 +46,7 @@ public class DropperItems {
         playerVisibilityOff = getItem("games", "player_visibility_off");
 
         spectatorPlayerList = getItem("games", "spectator_player_list");
+        viewMap = getItem("games", "view_map");
         playAgain = getItem("games", "play_again");
     }
 

@@ -5,6 +5,8 @@ import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
 import fr.loudo.dropperReloaded.commands.dropperadmin.DropperWandPos;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.guis.mapVote.MapVoteGui;
+import fr.loudo.dropperReloaded.guis.teleportMap.TeleportMapGui;
+import fr.loudo.dropperReloaded.guis.teleportMap.TeleportMapListenerGui;
 import fr.loudo.dropperReloaded.guis.teleportPlayer.TeleportPlayerGui;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.players.PlayerSession;
@@ -58,6 +60,12 @@ public class PlayerInteract implements Listener {
                 TeleportPlayerGui teleportPlayerGui = new TeleportPlayerGui(player);
                 teleportPlayerGui.open();
                 teleportPlayerGui.showCurrentPage();
+            }
+
+            if(Objects.equals(player.getItemInHand(), DropperItems.viewMap.getItem())) {
+                TeleportMapGui teleportMapGui = new TeleportMapGui(player);
+                teleportMapGui.open();
+                teleportMapGui.showCurrentPage();
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.mapVote.getItem())) {

@@ -66,6 +66,8 @@ public class MapVoteGui extends Gui {
             if ((slot - 17) % 9 == 0) slot += 2;
 
         }
+        Material barrier = Material.valueOf(config.getString("global.guis.items.close.item"));
+        addItem(barrier, 49, config.getString("global.guis.items.close.name"));
         if(page < totalPages) {
             addItem(NEXT_PAGE_ITEM, 53, config.getString("global.guis.items.next_page.name"));
         }

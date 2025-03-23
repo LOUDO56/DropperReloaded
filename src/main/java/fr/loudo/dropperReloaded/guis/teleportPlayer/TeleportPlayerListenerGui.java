@@ -1,8 +1,6 @@
 package fr.loudo.dropperReloaded.guis.teleportPlayer;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.maps.DropperMap;
-import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
@@ -10,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class TeleportPlayerListener implements Listener {
+public class TeleportPlayerListenerGui implements Listener {
     //TODO: fix index out of bound if we click outside the inventory
     @EventHandler
     public void onItemClick(InventoryClickEvent event) {
@@ -23,10 +21,15 @@ public class TeleportPlayerListener implements Listener {
                 TeleportPlayerGui teleportPlayerGui = (TeleportPlayerGui) playerSession.getCurrentGui();
                 int slot = event.getSlot();
                 Player playerHead = teleportPlayerGui.getSlotAndPlayers().get(slot);
-                PlayerSession playerHeadSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(playerHead);
-                if(playerHead != null && playerHeadSession != null && !playerHeadSession.isSpectator()) {
-                    player.teleport(playerHead.getLocation());
-                    player.sendMessage(MessageConfigUtils.get("games.guis.teleporter.items.player_head.on_click.tped_to_player", "%player_name%", playerHead.getDisplayName()));
+                if(playerHead != null) {
+                    PlayerSession playerHeadSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(playerHead);
+                    if(playerHeadSession != null && !playerHeadSession.isSpectator()) {
+                        player.teleport(playerHead.getLocation());
+                        player.sendMessage(MessageConfigUtils.get("games.guis.teleporter_player.items.player_head.on_click.tped_to_player", "%player_name%", playerHead.getDisplayName()));
+                    }
+                }
+                if(slot == 49) {
+                    player.closeInventory();
                 }
                 if(slot == 53) {
                     teleportPlayerGui.nextPage();

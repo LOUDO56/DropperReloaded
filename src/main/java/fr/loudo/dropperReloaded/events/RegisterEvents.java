@@ -1,8 +1,9 @@
 package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
-import fr.loudo.dropperReloaded.guis.mapVote.MapVoteListener;
-import fr.loudo.dropperReloaded.guis.teleportPlayer.TeleportPlayerListener;
+import fr.loudo.dropperReloaded.guis.mapVote.MapVoteListenerGui;
+import fr.loudo.dropperReloaded.guis.teleportMap.TeleportMapListenerGui;
+import fr.loudo.dropperReloaded.guis.teleportPlayer.TeleportPlayerListenerGui;
 import org.bukkit.plugin.PluginManager;
 
 public class RegisterEvents {
@@ -24,8 +25,9 @@ public class RegisterEvents {
         pluginManager.registerEvents(new NPCRightClick(), instance);
 
         //GUIS
-        pluginManager.registerEvents(new MapVoteListener(), instance);
-        pluginManager.registerEvents(new TeleportPlayerListener(), instance);
+        pluginManager.registerEvents(new MapVoteListenerGui(), instance);
+        pluginManager.registerEvents(new TeleportPlayerListenerGui(), instance);
+        pluginManager.registerEvents(new TeleportMapListenerGui(), instance);
     }
 
 }
