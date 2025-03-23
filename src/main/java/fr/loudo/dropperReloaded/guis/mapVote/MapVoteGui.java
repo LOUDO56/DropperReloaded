@@ -6,7 +6,7 @@ import fr.loudo.dropperReloaded.maps.DropperMap;
 import fr.loudo.dropperReloaded.maps.DropperMapDifficulty;
 import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
-import fr.loudo.dropperReloaded.utils.Gui;
+import fr.loudo.dropperReloaded.guis.Gui;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;

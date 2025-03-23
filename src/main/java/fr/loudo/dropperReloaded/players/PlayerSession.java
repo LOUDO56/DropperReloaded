@@ -3,7 +3,7 @@ package fr.loudo.dropperReloaded.players;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.maps.DropperMap;
-import fr.loudo.dropperReloaded.utils.Gui;
+import fr.loudo.dropperReloaded.guis.Gui;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

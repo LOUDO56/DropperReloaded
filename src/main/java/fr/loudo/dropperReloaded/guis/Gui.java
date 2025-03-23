@@ -1,16 +1,12 @@
-package fr.loudo.dropperReloaded.utils;
+package fr.loudo.dropperReloaded.guis;
 
-import fr.loudo.dropperReloaded.DropperReloaded;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Gui {
