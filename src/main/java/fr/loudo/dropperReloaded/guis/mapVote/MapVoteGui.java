@@ -28,14 +28,12 @@ public class MapVoteGui extends Gui {
     private static Material PREVIOUS_PAGE_ITEM = Material.ARROW;
     private static int ITEMS_PER_PAGE = 24;
 
-    private Game game;
     private PlayerSession playerSession;
     private HashMap<Integer, DropperMap> slotAndMaps;
     private int page;
 
-    public MapVoteGui(Player player, Game game) {
+    public MapVoteGui(Player player) {
         super(player, 9 * 6, DropperReloaded.getInstance().getConfig().getString(CONFIG_STRING + "name"));
-        this.game = game;
         this.page = 1;
         this.slotAndMaps = new HashMap<>();
         this.playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
@@ -48,8 +46,8 @@ public class MapVoteGui extends Gui {
         MEDIUM_ITEM = Material.valueOf(config.getString(CONFIG_STRING + "items.map.item.medium_map"));
         HARD_ITEM = Material.valueOf(config.getString(CONFIG_STRING + "items.map.item.hard_map"));
         HARD_ITEM = Material.valueOf(config.getString(CONFIG_STRING + "items.map.item.hard_map"));
-        NEXT_PAGE_ITEM = Material.valueOf(config.getString(CONFIG_STRING + "items.next_page.item"));
-        PREVIOUS_PAGE_ITEM = Material.valueOf(config.getString(CONFIG_STRING + "items.previous_page.item"));
+        NEXT_PAGE_ITEM = Material.valueOf(config.getString("global.guis.items.next_page.item"));
+        PREVIOUS_PAGE_ITEM = Material.valueOf(config.getString("global.guis.items.previous_page.item"));
     }
 
     public void showCurrentPage() {
@@ -69,11 +67,11 @@ public class MapVoteGui extends Gui {
 
         }
         if(page < totalPages) {
-            addItem(NEXT_PAGE_ITEM, 53, config.getString(CONFIG_STRING + "items.next_page.name"));
+            addItem(NEXT_PAGE_ITEM, 53, config.getString("global.guis.items.next_page.name"));
         }
 
         if(page > 1) {
-            addItem(PREVIOUS_PAGE_ITEM, 45, config.getString(CONFIG_STRING + "items.previous_page.name"));
+            addItem(PREVIOUS_PAGE_ITEM, 45, config.getString("global.guis.items.previous_page.name"));
         }
     }
 

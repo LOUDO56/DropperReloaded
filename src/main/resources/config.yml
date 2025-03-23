@@ -1,6 +1,14 @@
 global:
   website: www.yourserver.fr
   scoreboard_title: §a§lDropper
+  guis:
+    items:
+      next_page:
+        name: "§bNext page"
+        item: ARROW
+      previous_page:
+        name: "§bPrevious page"
+        item: ARROW
 
 games:
   easy_map_count: 2
@@ -83,6 +91,17 @@ games:
       - '§fTotal Fails: §c%total_fails%'
       - '{space}'
       - '§e%website%'
+  guis:
+    teleporter:
+      name: Teleporter
+      items:
+        player_head:
+          on_click:
+            tped_to_player: §aTeleported to §e%player_name%!
+          description:
+            - "§7Current map: %map_name%"
+            - " "
+            - "§7Click to teleport."
 
 wait_lobby:
   min_player: 2
@@ -100,12 +119,6 @@ wait_lobby:
     map_voting:
       name: Map Voting
       items:
-        next_page:
-          name: "§bNext page"
-          item: ARROW
-        previous_page:
-          name: "§bPrevious page"
-          item: ARROW
         map:
           item:
             easy_map: LIME_TERRACOTTA

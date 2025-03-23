@@ -43,6 +43,10 @@ public class DropperMap {
         return true;
     }
 
+    public String getColoredName() {
+        return DropperMapDifficultyColorPrefix.get(difficulty) + name;
+    }
+
     public Location getRandomSpawn() {
         return spawns.get(new Random().nextInt(spawns.size()));
     }

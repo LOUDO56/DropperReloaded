@@ -5,6 +5,7 @@ import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
 import fr.loudo.dropperReloaded.commands.dropperadmin.DropperWandPos;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.guis.mapVote.MapVoteGui;
+import fr.loudo.dropperReloaded.guis.teleportPlayer.TeleportPlayerGui;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
@@ -53,8 +54,14 @@ public class PlayerInteract implements Listener {
 
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
 
+            if(Objects.equals(player.getItemInHand(), DropperItems.spectatorPlayerList.getItem())) {
+                TeleportPlayerGui teleportPlayerGui = new TeleportPlayerGui(player);
+                teleportPlayerGui.open();
+                teleportPlayerGui.showCurrentPage();
+            }
+
             if(Objects.equals(player.getItemInHand(), DropperItems.mapVote.getItem())) {
-                MapVoteGui mapVoteGui = new MapVoteGui(player, playerSession.getPlayerGame());
+                MapVoteGui mapVoteGui = new MapVoteGui(player);
                 mapVoteGui.open();
                 mapVoteGui.showCurrentPage();
             }
