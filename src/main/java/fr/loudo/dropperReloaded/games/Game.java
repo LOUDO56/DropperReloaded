@@ -6,8 +6,8 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.items.DropperItems;
-import fr.loudo.dropperReloaded.maps.Map;
-import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
+import fr.loudo.dropperReloaded.maps.DropperMap;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
@@ -38,7 +38,7 @@ public class Game {
     private List<Player> playerList;
     private List<Player> spectatorList;
     private List<Player> playerFinished;
-    private List<Map> mapList;
+    private List<DropperMap> dropperMapList;
     private GameStatus gameStatus;
     private WaitLobby waitLobby;
     private InGameScoreboard inGameScoreboard;
@@ -48,7 +48,7 @@ public class Game {
 
     public Game() {
         this.playerList = new ArrayList<>();
-        this.mapList = new ArrayList<>();
+        this.dropperMapList = new ArrayList<>();
         this.spectatorList = new ArrayList<>();
         this.playerFinished = new ArrayList<>();
         this.gameStatus = GameStatus.WAITING;
@@ -118,15 +118,15 @@ public class Game {
     public void setup() {
         gameStatus = GameStatus.DOOR_COUNTDOWN;
         timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
-        mapList = DropperReloaded.getMapsManager().getRandomMaps();
+        dropperMapList = DropperReloaded.getMapsManager().getMapsFromPlayersVote(playerList);
         inGameScoreboard = new InGameScoreboard(this);
         sendTitle(" ", " ", 0, 0, 0, null);
         for(Player player : playerList) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
             inGameScoreboard.setup(player);
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-            playerSession.setCurrentMap(mapList.get(0));
-            player.teleport(mapList.get(0).getRandomSpawn());
+            playerSession.setCurrentMap(dropperMapList.get(0));
+            player.teleport(dropperMapList.get(0).getRandomSpawn());
             player.getInventory().clear();
             player.getInventory().setItem(DropperItems.resetLocation.getSlot(), DropperItems.resetLocation.getItem());
             player.getInventory().setItem(DropperItems.playerVisibilityOn.getSlot(), DropperItems.playerVisibilityOn.getItem());
@@ -218,7 +218,7 @@ public class Game {
         }
         gameStatus = GameStatus.WAITING;
         playerList = new ArrayList<>();
-        mapList = new ArrayList<>();
+        dropperMapList = new ArrayList<>();
         spectatorList = new ArrayList<>();
         playerFinished = new ArrayList<>();
     }
@@ -339,13 +339,13 @@ public class Game {
         String mapFinishedMessage = MessageConfigUtils.get("games.map_finished_message");
         mapFinishedMessage = mapFinishedMessage.replace("%map_count%", String.valueOf(currentMapCount - 1));
         mapFinishedMessage = mapFinishedMessage.replace("%map_time%", playerSession.getTimeCurrentMapFormatted());
-        mapFinishedMessage = mapFinishedMessage.replace("%map_name%", MapDifficultyColorPrefix.get(playerSession.getCurrentMap().getDifficulty()) + playerSession.getCurrentMap().getName());
+        mapFinishedMessage = mapFinishedMessage.replace("%map_name%", DropperMapDifficultyColorPrefix.get(playerSession.getCurrentMap().getDifficulty()) + playerSession.getCurrentMap().getName());
         player.sendMessage(mapFinishedMessage);
 
-        if(currentMapCount <= mapList.size()) {
-            Map currentMap = mapList.get(currentMapCount- 1);
-            playerSession.setCurrentMap(currentMap);
-            player.teleport(currentMap.getRandomSpawn());
+        if(currentMapCount <= dropperMapList.size()) {
+            DropperMap currentDropperMap = dropperMapList.get(currentMapCount- 1);
+            playerSession.setCurrentMap(currentDropperMap);
+            player.teleport(currentDropperMap.getRandomSpawn());
             playerSession.startStopwatchMap();
         } else {
             playerSession.setFinalStopwatchTotal(System.currentTimeMillis() - playerSession.getStopwatchTotal());
@@ -420,7 +420,7 @@ public class Game {
         playerSession.stopSession();
         playerSession.setSpectator(true);
         if(timeLeft > 0) {
-            player.teleport(mapList.get(mapList.size() - 1).getRandomSpawn());
+            player.teleport(dropperMapList.get(dropperMapList.size() - 1).getRandomSpawn());
         }
         player.getInventory().clear();
         player.getInventory().setItem(DropperItems.spectatorPlayerList.getSlot(), DropperItems.spectatorPlayerList.getItem());
@@ -471,7 +471,7 @@ public class Game {
     }
 
     public void resetDoorBlock(Player player) {
-        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if (doorLocations == null) return;
         for (Location location : doorLocations) {
             player.sendBlockChange(location, Material.AIR, (byte) 0);
@@ -479,7 +479,7 @@ public class Game {
     }
 
     public void sendDoorBlockToPlayers1_12() {
-        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if (doorLocations == null) return;
 
         for (Player player : playerList) {
@@ -503,7 +503,7 @@ public class Game {
     }
 
     public void sendDoorBlockToPlayers1_8() {
-        List<Location> doorLocations = mapList.get(0).getDoorLocations();
+        List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if(doorLocations == null) return;
         for(Player player : playerList) {
             for(Location location : doorLocations) {
@@ -548,8 +548,8 @@ public class Game {
         return playerList;
     }
 
-    public List<Map> getMapList() {
-        return mapList;
+    public List<DropperMap> getMapList() {
+        return dropperMapList;
     }
 
     public GameStatus getGameStatus() {

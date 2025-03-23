@@ -1,6 +1,6 @@
 package fr.loudo.dropperReloaded.maps;
 
-public enum MapDifficulty {
+public enum DropperMapDifficulty {
     EASY,
     MEDIUM,
     HARD,

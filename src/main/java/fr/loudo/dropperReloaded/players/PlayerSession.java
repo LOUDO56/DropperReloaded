@@ -2,11 +2,9 @@ package fr.loudo.dropperReloaded.players;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
-import fr.loudo.dropperReloaded.maps.Map;
+import fr.loudo.dropperReloaded.maps.DropperMap;
 import fr.loudo.dropperReloaded.utils.Gui;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,10 +17,10 @@ public class PlayerSession {
 
     private Player player;
     private Game playerGame;
-    private Map currentMap;
+    private DropperMap currentDropperMap;
 
     private Gui currentGui;
-    private List<Map> votedMaps;
+    private List<DropperMap> votedDropperMaps;
 
     private long stopwatchTotal;
     private long finalStopwatchTotal;
@@ -51,7 +49,7 @@ public class PlayerSession {
         this.canResetLocation = true;
         this.isSpectator = false;
         this.canEnterPortal = false;
-        this.votedMaps = new ArrayList<>();
+        this.votedDropperMaps = new ArrayList<>();
     }
 
     public void startStopwatchTotal() {
@@ -68,7 +66,7 @@ public class PlayerSession {
     public void addDeath() {
         totalFails += 1;
         playerGame.getInGameScoreboard().updateTotalFails(player);
-        player.teleport(currentMap.getRandomSpawn());
+        player.teleport(currentDropperMap.getRandomSpawn());
         player.damage(0.001);
         player.setHealth(20);
     }
@@ -76,7 +74,7 @@ public class PlayerSession {
     public void addDeath(boolean silent) {
         totalFails += 1;
         playerGame.getInGameScoreboard().updateTotalFails(player);
-        player.teleport(currentMap.getRandomSpawn());
+        player.teleport(currentDropperMap.getRandomSpawn());
         player.setHealth(20);
     }
 
@@ -155,7 +153,7 @@ public class PlayerSession {
         stopSession();
         voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
         currentMapCount = 1;
-        currentMap = null;
+        currentDropperMap = null;
         totalFails = 0;
         isPlayersVisible = true;
         isInvincible = false;
@@ -163,7 +161,7 @@ public class PlayerSession {
         isSpectator = false;
         actionBarTask = null;
         canEnterPortal = false;
-        votedMaps = new ArrayList<>();
+        votedDropperMaps = new ArrayList<>();
     }
 
     public int getVoteCount() {
@@ -186,16 +184,16 @@ public class PlayerSession {
         this.currentMapCount = currentMapCount;
     }
 
-    public void setCurrentMap(Map currentMap) {
-        this.currentMap = currentMap;
+    public void setCurrentMap(DropperMap currentDropperMap) {
+        this.currentDropperMap = currentDropperMap;
     }
 
     public int getTotalFails() {
         return totalFails;
     }
 
-    public Map getCurrentMap() {
-        return currentMap;
+    public DropperMap getCurrentMap() {
+        return currentDropperMap;
     }
 
     public boolean isInvincible() {
@@ -222,7 +220,7 @@ public class PlayerSession {
         isSpectator = spectator;
     }
 
-    public List<Map> getVotedMaps() {
-        return votedMaps;
+    public List<DropperMap> getVotedMaps() {
+        return votedDropperMaps;
     }
 }

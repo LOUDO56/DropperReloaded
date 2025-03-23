@@ -2,10 +2,10 @@ package fr.loudo.dropperReloaded.maps;
 
 import org.bukkit.ChatColor;
 
-public class MapDifficultyColorPrefix {
+public class DropperMapDifficultyColorPrefix {
 
-    public static ChatColor get(MapDifficulty mapDifficulty) {
-        switch (mapDifficulty) {
+    public static ChatColor get(DropperMapDifficulty dropperMapDifficulty) {
+        switch (dropperMapDifficulty) {
             case EASY:
                 return ChatColor.GREEN;
             case MEDIUM:

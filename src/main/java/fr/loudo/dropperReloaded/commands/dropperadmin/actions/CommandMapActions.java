@@ -5,12 +5,11 @@ import fr.loudo.dropperReloaded.commands.dropperadmin.CommandHelpAdmin;
 import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
 import fr.loudo.dropperReloaded.commands.dropperadmin.DropperWandPos;
 import fr.loudo.dropperReloaded.items.DropperItems;
-import fr.loudo.dropperReloaded.maps.Map;
-import fr.loudo.dropperReloaded.maps.MapDifficulty;
-import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
-import fr.loudo.dropperReloaded.maps.MapsManager;
+import fr.loudo.dropperReloaded.maps.DropperMap;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficulty;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
+import fr.loudo.dropperReloaded.maps.DropperMapsManager;
 import fr.loudo.dropperReloaded.utils.PlayerUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class CommandMapActions {
 
-    private static final MapsManager MAPS_MANAGER = DropperReloaded.getMapsManager();
+    private static final DropperMapsManager MAPS_MANAGER = DropperReloaded.getMapsManager();
     private static final String PUT_A_NAME_MESSAGE = ChatColor.RED + "You need to put a name!";
     private static final String MAP_DONT_EXIST = ChatColor.RED + "This map doesn't exist.";
 
@@ -70,8 +69,8 @@ public class CommandMapActions {
     private static void createMap(String mapName, Player player) {
         if(!validateMapName(mapName, player, false)) return;
 
-        Map map = new Map(mapName);
-        if(MAPS_MANAGER.addMap(map)) {
+        DropperMap dropperMap = new DropperMap(mapName);
+        if(MAPS_MANAGER.addMap(dropperMap)) {
             player.sendMessage(ChatColor.GREEN + "The map" + ChatColor.YELLOW + " " + mapName + ChatColor.GREEN + " has been successfully created.");
         } else {
             player.sendMessage(ChatColor.RED + "This map already exist.");
@@ -81,9 +80,9 @@ public class CommandMapActions {
     private static void removeMap(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = MAPS_MANAGER.getFromName(mapName);
-        if(MAPS_MANAGER.removeMap(map)) {
-            player.sendMessage(ChatColor.GREEN + "The map" + ChatColor.YELLOW + " " + map.getName() + ChatColor.GREEN + " has been successfully removed.");
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
+        if(MAPS_MANAGER.removeMap(dropperMap)) {
+            player.sendMessage(ChatColor.GREEN + "The map" + ChatColor.YELLOW + " " + dropperMap.getName() + ChatColor.GREEN + " has been successfully removed.");
         } else {
             player.sendMessage(MAP_DONT_EXIST);
         }
@@ -93,16 +92,16 @@ public class CommandMapActions {
         if(!validateMapName(mapName, player)) return;
 
         try {
-            MapDifficulty mapDifficulty = MapDifficulty.valueOf(difficulty.toUpperCase());
-            Map map = MAPS_MANAGER.getFromName(mapName);
-            map.setDifficulty(mapDifficulty);
-            player.sendMessage(ChatColor.GREEN + "The map " + ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " has been set to " + MapDifficultyColorPrefix.get(mapDifficulty) + mapDifficulty.toString().toLowerCase() + ChatColor.GREEN + ".");
+            DropperMapDifficulty dropperMapDifficulty = DropperMapDifficulty.valueOf(difficulty.toUpperCase());
+            DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
+            dropperMap.setDifficulty(dropperMapDifficulty);
+            player.sendMessage(ChatColor.GREEN + "The map " + ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " has been set to " + DropperMapDifficultyColorPrefix.get(dropperMapDifficulty) + dropperMapDifficulty.toString().toLowerCase() + ChatColor.GREEN + ".");
         } catch (Exception e) {
             player.sendMessage(
                     ChatColor.RED + "Not a valid difficulty, choose "
-                            + MapDifficultyColorPrefix.get(MapDifficulty.EASY) + "easy"
-                            + ChatColor.RED + ", " + MapDifficultyColorPrefix.get(MapDifficulty.MEDIUM) + "medium"
-                            + MapDifficultyColorPrefix.get(MapDifficulty.HARD) + " or hard.");
+                            + DropperMapDifficultyColorPrefix.get(DropperMapDifficulty.EASY) + "easy"
+                            + ChatColor.RED + ", " + DropperMapDifficultyColorPrefix.get(DropperMapDifficulty.MEDIUM) + "medium"
+                            + DropperMapDifficultyColorPrefix.get(DropperMapDifficulty.HARD) + " or hard.");
         }
 
     }
@@ -110,7 +109,7 @@ public class CommandMapActions {
     private static void addSpawn(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = MAPS_MANAGER.getFromName(mapName);
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
         Location pLoc = player.getLocation();
         Location blockLoc = new Location(player.getWorld(), pLoc.getBlockX() + 0.5, pLoc.getBlockY(), pLoc.getBlockZ() + 0.5);
         if(DropperReloaded.getInstance().getConfig().getBoolean("games.add_y_cord_on_spawns")) {
@@ -118,8 +117,8 @@ public class CommandMapActions {
         }
         blockLoc.setPitch(0);
         blockLoc.setYaw(PlayerUtils.getDefaultYaw(pLoc.getYaw()));
-        if(map.addSpawn(blockLoc)) {
-            player.sendMessage(ChatColor.GREEN + "You added a new spawn for " + ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + map.getSpawns().size() + ChatColor.GREEN + " in total)");
+        if(dropperMap.addSpawn(blockLoc)) {
+            player.sendMessage(ChatColor.GREEN + "You added a new spawn for " + ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + dropperMap.getSpawns().size() + ChatColor.GREEN + " in total)");
         } else {
             player.sendMessage(ChatColor.RED + "You already added this spawn.");
         }
@@ -128,9 +127,9 @@ public class CommandMapActions {
     private static void removeLastSpawn(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = MAPS_MANAGER.getFromName(mapName);
-        if(map.removeLastSpawn()) {
-            player.sendMessage(ChatColor.GREEN + "You removed the last spawn for " + ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + map.getSpawns().size() + ChatColor.GREEN + " in total)");
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
+        if(dropperMap.removeLastSpawn()) {
+            player.sendMessage(ChatColor.GREEN + "You removed the last spawn for " + ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + dropperMap.getSpawns().size() + ChatColor.GREEN + " in total)");
         } else {
             player.sendMessage(ChatColor.RED + "There's currently no spawn added!");
         }
@@ -140,42 +139,42 @@ public class CommandMapActions {
     private static void tpToMap(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = DropperReloaded.getMapsManager().getFromName(mapName);
-        player.teleport(map.getRandomSpawn());
-        player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + map.getName());
+        DropperMap dropperMap = DropperReloaded.getMapsManager().getFromName(mapName);
+        player.teleport(dropperMap.getRandomSpawn());
+        player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + dropperMap.getName());
 
     }
 
     private static void enableMap(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = MAPS_MANAGER.getFromName(mapName);
-        if(map.isEnabled()) {
-            player.sendMessage(ChatColor.YELLOW + map.getName() + ChatColor.RED + " is already enabled!");
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
+        if(dropperMap.isEnabled()) {
+            player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.RED + " is already enabled!");
             return;
         }
 
-        if(map.getSpawns().isEmpty()) {
-            player.sendMessage(ChatColor.YELLOW + map.getName() + ChatColor.RED + " have no spawn!");
+        if(dropperMap.getSpawns().isEmpty()) {
+            player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.RED + " have no spawn!");
             return;
         }
 
-        map.setEnabled(true);
-        player.sendMessage(ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " has been enabled!" );
+        dropperMap.setEnabled(true);
+        player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " has been enabled!" );
 
     }
 
     private static void disableMap(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        Map map = MAPS_MANAGER.getFromName(mapName);
-        if(!map.isEnabled()) {
-            player.sendMessage(ChatColor.YELLOW + map.getName() + ChatColor.RED + " is already disabled!");
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
+        if(!dropperMap.isEnabled()) {
+            player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.RED + " is already disabled!");
             return;
         }
 
-        map.setEnabled(false);
-        player.sendMessage(ChatColor.YELLOW + map.getName() + ChatColor.GREEN + " has been disabled!" );
+        dropperMap.setEnabled(false);
+        player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " has been disabled!" );
 
     }
 
@@ -223,7 +222,7 @@ public class CommandMapActions {
         }
 
         DropperWandPos dropperWandPos = DropperAdminCommand.getWAND_POS_HASH_MAP().get(player);
-        Map map = DropperReloaded.getMapsManager().getFromName(mapName);
+        DropperMap dropperMap = DropperReloaded.getMapsManager().getFromName(mapName);
         List<Location> blockLocs = new ArrayList<>();
 
         int minX = (int) Math.min(dropperWandPos.getPos1().getX(), dropperWandPos.getPos2().getX());
@@ -243,7 +242,7 @@ public class CommandMapActions {
             }
         }
 
-        map.setDoorLocations(blockLocs);
+        dropperMap.setDoorLocations(blockLocs);
         player.sendMessage(ChatColor.GREEN + "Doors successfully set!");
 
         PlayerInventory playerInventory = player.getInventory();

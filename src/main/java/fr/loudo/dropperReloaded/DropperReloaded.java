@@ -4,16 +4,13 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
 import fr.loudo.dropperReloaded.events.RegisterEvents;
-import fr.loudo.dropperReloaded.filters.KickPlayerFilter;
 import fr.loudo.dropperReloaded.games.GamesManager;
 import fr.loudo.dropperReloaded.items.DropperItems;
-import fr.loudo.dropperReloaded.maps.MapsManager;
+import fr.loudo.dropperReloaded.maps.DropperMapsManager;
 import fr.loudo.dropperReloaded.npc.JoinGameNPCManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Filter;
-import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,7 +25,7 @@ public final class DropperReloaded extends JavaPlugin {
     private static boolean isProtocolLibPluginEnabled;
 
     private static GamesManager gamesManager;
-    private static MapsManager mapsManager;
+    private static DropperMapsManager dropperMapsManager;
     private static WaitLobbyConfiguration waitLobbyConfiguration;
     private static PlayersSessionManager playersSessionManager;
     private static JoinGameNPCManager joinGameNPCManager;
@@ -69,7 +66,7 @@ public final class DropperReloaded extends JavaPlugin {
         //Manager
         playersSessionManager = new PlayersSessionManager();
         gamesManager = new GamesManager();
-        mapsManager = new MapsManager();
+        dropperMapsManager = new DropperMapsManager();
         joinGameNPCManager = new JoinGameNPCManager();
 
         //Configuration class
@@ -113,8 +110,8 @@ public final class DropperReloaded extends JavaPlugin {
         return gamesManager;
     }
 
-    public static MapsManager getMapsManager() {
-        return mapsManager;
+    public static DropperMapsManager getMapsManager() {
+        return dropperMapsManager;
     }
 
     public static WaitLobbyConfiguration getWaitLobbyConfiguration() {

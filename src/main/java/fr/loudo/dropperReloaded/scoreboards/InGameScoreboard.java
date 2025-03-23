@@ -2,8 +2,8 @@ package fr.loudo.dropperReloaded.scoreboards;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
-import fr.loudo.dropperReloaded.maps.Map;
-import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
+import fr.loudo.dropperReloaded.maps.DropperMap;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
@@ -112,8 +112,8 @@ public class InGameScoreboard {
     }
 
     private void setupMapLines(Player player) {
-        List<Map> mapList = game.getMapList();
-        for (int i = 0; i < mapList.size(); i++) {
+        List<DropperMap> dropperMapList = game.getMapList();
+        for (int i = 0; i < dropperMapList.size(); i++) {
             Team team = player.getScoreboard().registerNewTeam("dropperReloaded_game_map_" + i);
             team.addEntry(ChatColor.values()[currentMapLine - i - 1].toString());
             player.getScoreboard().getObjective("dropperReloaded").getScore(ChatColor.values()[currentMapLine - i - 1].toString()).setScore(currentMapLine - i - 1);
@@ -137,15 +137,15 @@ public class InGameScoreboard {
                 .replace("%total_map_count%", String.valueOf(game.getMapList().size()));
         player.getScoreboard().getTeam("dropperReloaded_game_currentMap").setPrefix(currentMapString);
 
-        List<Map> mapList = game.getMapList();
+        List<DropperMap> dropperMapList = game.getMapList();
         int currentMapIndex = playerSession.getCurrentMapCount();
 
-        for (int i = 0; i < mapList.size(); i++) {
+        for (int i = 0; i < dropperMapList.size(); i++) {
             Team mapTeam = player.getScoreboard().getTeam("dropperReloaded_game_map_" + i);
-            Map map = mapList.get(i);
+            DropperMap dropperMap = dropperMapList.get(i);
             String line = lines.get(configCurrentMapLineIndex + 1);
 
-            line = line.replace("%map_name%", MapDifficultyColorPrefix.get(map.getDifficulty()) + map.getName())
+            line = line.replace("%map_name%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getName())
                     .replace("%map_completed_symbol%", i + 1 < currentMapIndex ? mapCompletedSymbol : mapNotCompletedSymbol)
                     .replace("%in_this_map_symbol%", i + 1 == currentMapIndex ? inThisMapSymbol : "");
 

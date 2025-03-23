@@ -6,23 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Map {
+public class DropperMap {
 
     private String name;
     private List<Location> spawns;
     private List<Location> doorLocations;
-    private MapDifficulty difficulty;
+    private DropperMapDifficulty difficulty;
     private boolean isEnabled;
 
-    public Map(String name) {
+    public DropperMap(String name) {
         this.name = name;
         this.spawns = new ArrayList<>();
         this.doorLocations = new ArrayList<>();
-        this.difficulty = MapDifficulty.EASY;
+        this.difficulty = DropperMapDifficulty.EASY;
         this.isEnabled = false;
     }
 
-    public Map(String name, List<Location> spawns, MapDifficulty difficulty, boolean isEnabled) {
+    public DropperMap(String name, List<Location> spawns, DropperMapDifficulty difficulty, boolean isEnabled) {
         this.name = name;
         this.spawns = spawns;
         this.difficulty = difficulty;
@@ -47,11 +47,11 @@ public class Map {
         return spawns.get(new Random().nextInt(spawns.size()));
     }
 
-    public MapDifficulty getDifficulty() {
+    public DropperMapDifficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(MapDifficulty difficulty) {
+    public void setDifficulty(DropperMapDifficulty difficulty) {
         this.difficulty = difficulty;
     }
 

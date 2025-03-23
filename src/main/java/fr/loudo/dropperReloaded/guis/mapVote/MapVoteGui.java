@@ -2,9 +2,9 @@ package fr.loudo.dropperReloaded.guis.mapVote;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
-import fr.loudo.dropperReloaded.maps.Map;
-import fr.loudo.dropperReloaded.maps.MapDifficulty;
-import fr.loudo.dropperReloaded.maps.MapDifficultyColorPrefix;
+import fr.loudo.dropperReloaded.maps.DropperMap;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficulty;
+import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.utils.Gui;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public class MapVoteGui extends Gui {
 
     private Game game;
     private PlayerSession playerSession;
-    private HashMap<Integer, Map> slotAndMaps;
+    private HashMap<Integer, DropperMap> slotAndMaps;
     private int page;
 
     public MapVoteGui(Player player, Game game) {
@@ -56,14 +56,14 @@ public class MapVoteGui extends Gui {
         initItemCongig();
         getInventory().clear();
         slotAndMaps.clear();
-        List<Map> maps = DropperReloaded.getMapsManager().getMapsSortedDifficulty();
+        List<DropperMap> dropperMaps = DropperReloaded.getMapsManager().getMapsSortedDifficulty();
         int slot = 10;
-        int totalPages = (int) Math.ceil((double) maps.size() / ITEMS_PER_PAGE);
+        int totalPages = (int) Math.ceil((double) dropperMaps.size() / ITEMS_PER_PAGE);
         FileConfiguration config = DropperReloaded.getInstance().getConfig();
-        for(int i = (page - 1) * ITEMS_PER_PAGE; i < Math.min(maps.size(), page * ITEMS_PER_PAGE); i++) {
-            Map map = maps.get(i);
-            updateItemMap(slot, map);
-            slotAndMaps.put(slot, map);
+        for(int i = (page - 1) * ITEMS_PER_PAGE; i < Math.min(dropperMaps.size(), page * ITEMS_PER_PAGE); i++) {
+            DropperMap dropperMap = dropperMaps.get(i);
+            updateItemMap(slot, dropperMap);
+            slotAndMaps.put(slot, dropperMap);
             slot++;
             if ((slot - 17) % 9 == 0) slot += 2;
 
@@ -77,28 +77,28 @@ public class MapVoteGui extends Gui {
         }
     }
 
-    public void updateItemMap(int slot, Map map) {
+    public void updateItemMap(int slot, DropperMap dropperMap) {
         initItemCongig();
         FileConfiguration config = DropperReloaded.getInstance().getConfig();
         ItemStack item;
-        String name = MapDifficultyColorPrefix.get(map.getDifficulty()) + map.getName();
+        String name = DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getName();
         List<String> description = config.getStringList(CONFIG_STRING + "items.map.description");
-        description.replaceAll(s -> s.replace("%map_difficulty%", MapDifficultyColorPrefix.get(map.getDifficulty()) + map.getDifficulty().name()));
+        description.replaceAll(s -> s.replace("%map_difficulty%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDifficulty().name()));
 
-        if(map.getDifficulty() == MapDifficulty.EASY) {
+        if(dropperMap.getDifficulty() == DropperMapDifficulty.EASY) {
             item = new ItemStack(EASY_ITEM);
-        } else if(map.getDifficulty() == MapDifficulty.MEDIUM) {
+        } else if(dropperMap.getDifficulty() == DropperMapDifficulty.MEDIUM) {
             item = new ItemStack(MEDIUM_ITEM);
-        } else if(map.getDifficulty() == MapDifficulty.HARD) {
+        } else if(dropperMap.getDifficulty() == DropperMapDifficulty.HARD) {
             item = new ItemStack(HARD_ITEM);
         } else {
             item = new ItemStack(EASY_ITEM);
         }
 
-        List<Map> votedMaps = playerSession.getVotedMaps();
-        if(!votedMaps.contains(map) && playerSession.getVotedMaps().size() >= config.getInt("wait_lobby.map_vote_count")) {
+        List<DropperMap> votedDropperMaps = playerSession.getVotedMaps();
+        if(!votedDropperMaps.contains(dropperMap) && playerSession.getVotedMaps().size() >= config.getInt("wait_lobby.map_vote_count")) {
             description.addAll(config.getStringList(CONFIG_STRING + "items.map.extra.no_remaining_vote"));
-        } else if(votedMaps.contains(map)) {
+        } else if(votedDropperMaps.contains(dropperMap)) {
             description.addAll(config.getStringList(CONFIG_STRING + "items.map.extra.voted"));
             item.addUnsafeEnchantment(Enchantment.DURABILITY, 2);
             ItemMeta itemMeta = item.getItemMeta();
@@ -121,7 +121,7 @@ public class MapVoteGui extends Gui {
         showCurrentPage();
     }
 
-    public HashMap<Integer, Map> getSlotAndMaps() {
+    public HashMap<Integer, DropperMap> getSlotAndMaps() {
         return slotAndMaps;
     }
 }
