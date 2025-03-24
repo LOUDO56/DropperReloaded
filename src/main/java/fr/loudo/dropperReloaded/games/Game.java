@@ -345,7 +345,7 @@ public class Game {
         String mapFinishedMessage = MessageConfigUtils.get("games.map_finished_message");
         mapFinishedMessage = mapFinishedMessage.replace("%map_count%", String.valueOf(currentMapCount - 1));
         mapFinishedMessage = mapFinishedMessage.replace("%map_time%", playerSession.getTimeCurrentMapFormatted());
-        mapFinishedMessage = mapFinishedMessage.replace("%map_name%", DropperMapDifficultyColorPrefix.get(playerSession.getCurrentMap().getDifficulty()) + playerSession.getCurrentMap().getName());
+        mapFinishedMessage = mapFinishedMessage.replace("%map_name%",  playerSession.getCurrentMap().getColoredName());
         player.sendMessage(mapFinishedMessage);
 
         if(currentMapCount <= dropperMapList.size()) {

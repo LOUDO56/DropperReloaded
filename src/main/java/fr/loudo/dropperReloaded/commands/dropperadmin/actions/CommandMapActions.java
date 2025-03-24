@@ -173,7 +173,7 @@ public class CommandMapActions {
 
         DropperMap dropperMap = DropperReloaded.getMapsManager().getFromName(mapName);
         player.teleport(dropperMap.getRandomSpawn());
-        player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + dropperMap.getName());
+        player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + dropperMap.getColoredName());
 
     }
 
