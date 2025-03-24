@@ -25,7 +25,7 @@ public class DropperAdminCommand implements TabExecutor {
     private final List<String> SECTIONS = Arrays.asList("map", "waitlobby", "mainlobby", "leaderboard", "reload");
     private final List<String> MAP_ACTIONS = Arrays.asList("create", "delete", "rename", "setdifficulty", "addspawn", "remlastspawn", "tp", "enable", "disable", "wand", "setdoors", "list");
     private final List<String> WAITLOBBY_ACTIONS = Arrays.asList("setminplayer", "setmaxplayer", "setspawn");
-    private final List<String> MAINLOBBY_ACTIONS = Arrays.asList("setnpc", "delnpc");
+    private final List<String> MAINLOBBY_ACTIONS = Arrays.asList("setnpc", "delnpc", "setspawn");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

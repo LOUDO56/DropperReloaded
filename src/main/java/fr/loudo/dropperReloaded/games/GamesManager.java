@@ -6,6 +6,7 @@ import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -71,8 +72,10 @@ public class GamesManager {
         playerSession.getPlayerGame().removePlayer(player);
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));
-        //TODO: Teleport to main lobby
-        //TODO: restore old items
+        Location mainLobbySpawn = DropperReloaded.getInstance().getConfig().getLocation("main_lobby.spawn");
+        if(mainLobbySpawn != null) {
+            player.teleport(mainLobbySpawn);
+        }
         player.getInventory().clear();
         player.closeInventory();
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);

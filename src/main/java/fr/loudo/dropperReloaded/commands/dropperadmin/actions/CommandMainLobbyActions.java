@@ -2,7 +2,9 @@ package fr.loudo.dropperReloaded.commands.dropperadmin.actions;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.CommandHelpAdmin;
+import fr.loudo.dropperReloaded.utils.PlayerUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class CommandMainLobbyActions {
@@ -14,6 +16,9 @@ public class CommandMainLobbyActions {
                 break;
             case "delnpc":
                 removeMainLobbyNpc(player);
+                break;
+            case "setspawn":
+                setMainLobbySpawn(player);
                 break;
             default:
                 player.sendMessage(CommandHelpAdmin.send());
@@ -43,6 +48,15 @@ public class CommandMainLobbyActions {
         } else {
             player.sendMessage(ChatColor.RED + "Join game NPC does not exists!");
         }
+    }
+
+    private static void setMainLobbySpawn(Player player) {
+        Location location = player.getLocation();
+        location = new Location(player.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getZ() + 0.5);
+        location.setPitch(0);
+        location.setYaw(PlayerUtils.getDefaultYaw(player.getLocation().getYaw()));
+        DropperReloaded.getInstance().getConfig().set("main_lobby.spawn", location);
+        player.sendMessage(ChatColor.GREEN + "Main lobby spawn set!");
     }
 
 }
