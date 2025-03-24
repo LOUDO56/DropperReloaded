@@ -45,6 +45,7 @@ public class Game {
 
     private BukkitTask countdownStart;
     private BukkitTask countdownGame;
+    private BukkitTask sendDoorBlockTask;
 
     public Game() {
         this.playerList = new ArrayList<>();
@@ -134,10 +135,9 @@ public class Game {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    sendDoorBlockGlobal();
                     player.setGameMode(GameMode.ADVENTURE);
                 }
-            }.runTaskLater(DropperReloaded.getInstance(), 10L);
+            }.runTaskLater(DropperReloaded.getInstance(), 5L);
         }
         startCountdownBeginning();
     }
@@ -149,10 +149,7 @@ public class Game {
                 gameStatus = GameStatus.PLAYING;
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
-        for(Player player : playerList) {
-            PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
-            playerSession.startSession();
-        }
+        sendDoorBlockGlobal();
         countdownGame = new BukkitRunnable() {
             @Override
             public void run() {
@@ -443,24 +440,26 @@ public class Game {
     }
 
     private void startCountdownBeginning() {
-        countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop");
+        countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20 + 40;
+        int cooldownTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20;
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
+
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
                 sendDoorBlockGlobal();
                 if(countdownStartTimer == 0) {
-                playSoundToPlayers(sound, 1f, 2f);
-                sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
-                start();
-                this.cancel();
-            } else {
-                sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(countdownStartTimer)));
-                playSoundToPlayers(sound);
+                    playSoundToPlayers(sound, 1f, 2f);
+                    sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
+                    start();
+                    this.cancel();
+                } else if(countdownStartTimer % 20 == 0 && countdownStartTimer <= cooldownTimer) {
+                    sendMessageToPlayers(MessageConfigUtils.get("games.timer_message", "%timer%", String.valueOf(countdownStartTimer / 20)));
+                    playSoundToPlayers(sound);
+                }
+                countdownStartTimer--;
             }
-            countdownStartTimer--;
-            }
-        }.runTaskTimer(DropperReloaded.getInstance(), 40L, 20L);
+        }.runTaskTimer(DropperReloaded.getInstance(), 0L, 1L);
     }
 
     private void sendDoorBlockGlobal() {
@@ -476,26 +475,31 @@ public class Game {
         List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if (doorLocations == null) return;
         for (Location location : doorLocations) {
-            player.sendBlockChange(location, Material.AIR, (byte) 0);
+            if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(DropperReloaded.getVersion()::startsWith)) {
+                player.sendBlockChange(location, Material.AIR, (byte) 0);
+            } else {
+                player.sendBlockChange(location, Material.AIR.createBlockData());
+
+            }
         }
     }
 
     public void sendDoorBlockToPlayers1_12() {
         List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if (doorLocations == null) return;
-
+        int syncTimer = countdownStartTimer + 20;
         for (Player player : playerList) {
             for (Location location : doorLocations) {
                 Material glassType = Material.GLASS;
-
-                if (countdownStartTimer >= 5) {
+                if (syncTimer / 20 >= 5) {
                     glassType = Material.RED_STAINED_GLASS;
-                } else if (countdownStartTimer >= 3) {
+                } else if (syncTimer / 20 >= 3) {
                     glassType = Material.YELLOW_STAINED_GLASS;
-                } else if (countdownStartTimer >= 1) {
+                } else if (syncTimer / 20 >= 1 && countdownStartTimer != 0) {
                     glassType = Material.LIME_STAINED_GLASS;
-                } else if (countdownStartTimer == 0) {
+                } else if(countdownStartTimer == 0) {
                     glassType = Material.AIR;
+
                 }
 
                 player.sendBlockChange(location, glassType.createBlockData());
@@ -510,16 +514,16 @@ public class Game {
         for(Player player : playerList) {
             for(Location location : doorLocations) {
                 byte color = 0;
-                if(countdownStartTimer >= 5) {
+                if(countdownStartTimer / 20 >= 5) {
                     color = 6;
-                } else if(countdownStartTimer >= 3) {
+                } else if(countdownStartTimer / 20 >= 3) {
                     color = 4;
-                } else if(countdownStartTimer >= 1) {
+                } else if(countdownStartTimer / 20 >= 1) {
                     color = 5;
                 } else if(countdownStartTimer == 0) {
                     color = 0;
                 }
-                if(countdownStartTimer > 0) {
+                if(countdownStartTimer / 20 > 0) {
                     player.sendBlockChange(location, Material.GLASS, color);
                 } else {
                     player.sendBlockChange(location, Material.AIR, (byte) 0);

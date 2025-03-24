@@ -9,7 +9,7 @@ softdepend: [ Citizens, ProtocolLib ]
 commands:
   dropperadmin:
     description: DropperReloaded admin command.
-    permission: dropperreloaded.admin
+    permission: dropper-reloaded.admin
     aliases: dropadm
   dropper:
     description: DropperReloaded player command.

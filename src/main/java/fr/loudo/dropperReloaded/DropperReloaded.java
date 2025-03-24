@@ -3,6 +3,7 @@ package fr.loudo.dropperReloaded;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import fr.loudo.dropperReloaded.commands.RegisterCommands;
+import fr.loudo.dropperReloaded.database.Database;
 import fr.loudo.dropperReloaded.events.RegisterEvents;
 import fr.loudo.dropperReloaded.games.GamesManager;
 import fr.loudo.dropperReloaded.items.DropperItems;
@@ -29,6 +30,7 @@ public final class DropperReloaded extends JavaPlugin {
     private static WaitLobbyConfiguration waitLobbyConfiguration;
     private static PlayersSessionManager playersSessionManager;
     private static JoinGameNPCManager joinGameNPCManager;
+    private static Database database;
 
     private static ProtocolManager protocolManager;
 
@@ -72,6 +74,9 @@ public final class DropperReloaded extends JavaPlugin {
         gamesManager = new GamesManager();
         dropperMapsManager = new DropperMapsManager();
         joinGameNPCManager = new JoinGameNPCManager();
+        database = new Database(this, getConfig().getString("database.type"));
+        database.connect();
+        database.initialize();
 
         //Configuration class
         waitLobbyConfiguration = new WaitLobbyConfiguration();

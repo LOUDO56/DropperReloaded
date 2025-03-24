@@ -27,7 +27,7 @@ public class PlayerInteract implements Listener {
         Player player = event.getPlayer();
 
         if(Objects.equals(player.getItemInHand(), DropperItems.stickWand.getItem()) && event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_AIR) {
-            if(player.hasPermission("dropper_reloaded.admin")) {
+            if(player.hasPermission("dropper-reloaded.admin")) {
                 if(DropperAdminCommand.getWAND_POS_HASH_MAP().containsKey(player)) {
                     event.setCancelled(true);
                     DropperWandPos dropperWandPos = DropperAdminCommand.getWAND_POS_HASH_MAP().get(player);
