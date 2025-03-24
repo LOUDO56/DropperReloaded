@@ -1,7 +1,10 @@
 package fr.loudo.dropperReloaded.games;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
@@ -458,10 +461,17 @@ public class Game {
         int cooldownTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20;
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
 
+        int doorY = dropperMapList.get(0).getDoorLocations().get(0).getBlockY();
+
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
                 sendDoorBlockGlobal();
+                for(Player player : playerList) {
+                    if(player.getLocation().getY() < doorY) {
+                        player.teleport(dropperMapList.get(0).getRandomSpawn());
+                    }
+                }
                 if(countdownStartTimer == 0) {
                     playSoundToPlayers(sound, 1f, 2f);
                     sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));

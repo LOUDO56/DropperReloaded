@@ -81,10 +81,12 @@ public class PlayerSession {
     }
 
     public void startSession() {
-        startStopwatchTotal();
-        startStopwatchMap();
-        startSendMapTimeActionBar();
-        canEnterPortal = true;
+        if(!isSpectator) {
+            startStopwatchTotal();
+            startStopwatchMap();
+            startSendMapTimeActionBar();
+            canEnterPortal = true;
+        }
     }
 
     public void stopSession() {
