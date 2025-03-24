@@ -145,7 +145,7 @@ public class InGameScoreboard {
             DropperMap dropperMap = dropperMapList.get(i);
             String line = lines.get(configCurrentMapLineIndex + 1);
 
-            line = line.replace("%map_name%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getName())
+            line = line.replace("%map_name%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDisplayName())
                     .replace("%map_completed_symbol%", i + 1 < currentMapIndex ? mapCompletedSymbol : mapNotCompletedSymbol)
                     .replace("%in_this_map_symbol%", i + 1 == currentMapIndex ? inThisMapSymbol : "");
 

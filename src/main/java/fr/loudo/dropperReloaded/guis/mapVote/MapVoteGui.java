@@ -73,7 +73,7 @@ public class MapVoteGui extends Gui {
 
     public void updateItemMap(int slot, DropperMap dropperMap) {
         FileConfiguration config = DropperReloaded.getInstance().getConfig();
-        String name = DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getName();
+        String name = DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDisplayName();
         List<String> description = config.getStringList(CONFIG_STRING + "items.map.description");
         description.replaceAll(s -> s.replace("%map_difficulty%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDifficulty().name()));
 

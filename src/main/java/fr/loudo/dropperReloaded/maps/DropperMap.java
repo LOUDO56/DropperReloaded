@@ -9,6 +9,7 @@ import java.util.Random;
 public class DropperMap {
 
     private String name;
+    private String displayName;
     private List<Location> spawns;
     private List<Location> doorLocations;
     private DropperMapDifficulty difficulty;
@@ -17,6 +18,7 @@ public class DropperMap {
     public DropperMap(String name) {
         this.name = name;
         this.spawns = new ArrayList<>();
+        this.displayName = String.join(" ", name.split("_"));
         this.doorLocations = new ArrayList<>();
         this.difficulty = DropperMapDifficulty.EASY;
         this.isEnabled = false;
@@ -44,7 +46,7 @@ public class DropperMap {
     }
 
     public String getColoredName() {
-        return DropperMapDifficultyColorPrefix.get(difficulty) + name;
+        return DropperMapDifficultyColorPrefix.get(difficulty) + displayName;
     }
 
     public Location getRandomSpawn() {
@@ -64,7 +66,12 @@ public class DropperMap {
     }
 
     public void setName(String name) {
+        displayName = String.join(" ", name.split("_"));
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public List<Location> getSpawns() {
