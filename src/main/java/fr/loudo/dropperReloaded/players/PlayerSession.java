@@ -22,18 +22,16 @@ public class PlayerSession {
     private Gui currentGui;
     private List<DropperMap> votedDropperMaps;
 
+    private BukkitTask actionBarTask;
+
     private long stopwatchTotal;
     private long finalStopwatchTotal;
     private long stopwatchMap;
-
-    private BukkitTask detectPortal;
-    private BukkitTask actionBarTask;
 
     private int voteCount;
     private int currentMapCount;
     private int totalFails;
 
-    private boolean isPlayersVisible;
     private boolean isInvincible;
     private boolean canResetLocation;
     private boolean isSpectator;
@@ -44,7 +42,6 @@ public class PlayerSession {
         this.voteCount = Integer.parseInt(MessageConfigUtils.get("wait_lobby.map_vote_count"));
         this.currentMapCount = 1;
         this.totalFails = 0;
-        this.isPlayersVisible = true;
         this.isInvincible = false;
         this.canResetLocation = true;
         this.isSpectator = false;
@@ -86,10 +83,6 @@ public class PlayerSession {
     }
 
     public void stopSession() {
-        if(detectPortal != null) {
-            detectPortal.cancel();
-        }
-        detectPortal = null;
         if(actionBarTask != null) {
             actionBarTask.cancel();
         }
@@ -155,7 +148,6 @@ public class PlayerSession {
         currentMapCount = 1;
         currentDropperMap = null;
         totalFails = 0;
-        isPlayersVisible = true;
         isInvincible = false;
         canResetLocation = true;
         isSpectator = false;

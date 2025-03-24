@@ -10,17 +10,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class TeleportMapListenerGui implements Listener {
-    //TODO: fix index out of bound if we click outside the inventory
     @EventHandler
     public void onItemClick(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
+            int slot = event.getSlot();
             if(!DropperReloaded.getPlayersSessionManager().isPlaying(player)) return;
+            if(slot < 0 || slot > event.getInventory().getSize()) return;
             if(event.getInventory().getItem(event.getSlot()) == null) return;
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
             if(playerSession.getCurrentGui() instanceof TeleportMapGui) {
                 TeleportMapGui teleportMapGui = (TeleportMapGui) playerSession.getCurrentGui();
-                int slot = event.getSlot();
                 DropperMap dropperMap = (DropperMap) teleportMapGui.getObjectFromSlot().get(slot);
                 if(dropperMap != null) {
                     player.teleport(dropperMap.getRandomSpawn());

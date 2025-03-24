@@ -175,7 +175,7 @@ public class DropperMapsManager {
 
         if (mostVotedMaps.size() < limit) {
             List<DropperMap> dropperMapsDifficulty = getMapsFromDifficulty(dropperMapDifficulty);
-            dropperMapsDifficulty.removeAll(mostVotedMaps); // Enlever celles déjà sélectionnées
+            dropperMapsDifficulty.removeAll(mostVotedMaps);
 
             Random random = new Random();
             while (mostVotedMaps.size() < limit && !dropperMapsDifficulty.isEmpty()) {

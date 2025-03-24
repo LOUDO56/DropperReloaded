@@ -2,7 +2,6 @@ package fr.loudo.dropperReloaded.waitlobby;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 
 public class WaitLobbyConfiguration {
 
