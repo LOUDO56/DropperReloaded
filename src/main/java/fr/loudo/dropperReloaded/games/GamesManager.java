@@ -66,9 +66,9 @@ public class GamesManager {
         if(playerSession.getPlayerGame().hasStarted()) {
             playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
         }
+        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
         playerSession.reset();
         playerSession.getPlayerGame().removePlayer(player);
-        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));
         //TODO: Teleport to main lobby
