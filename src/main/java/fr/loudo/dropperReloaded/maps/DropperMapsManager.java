@@ -85,7 +85,6 @@ public class DropperMapsManager {
         return dropperMapList;
     }
 
-    //TODO: get map from players votes
     public List<DropperMap> getRandomMaps() {
 
         List<DropperMap> randomDropperMaps = new ArrayList<>();
@@ -133,13 +132,15 @@ public class DropperMapsManager {
         for(Player player : playerList) {
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
             for (DropperMap dropperMap : playerSession.getVotedMaps()) {
-               if(dropperMap.getDifficulty() == DropperMapDifficulty.EASY) {
-                   easyDropperMaps.add(dropperMap);
-               } else if(dropperMap.getDifficulty() == DropperMapDifficulty.MEDIUM) {
-                   medDropperMaps.add(dropperMap);
-               } else if(dropperMap.getDifficulty() == DropperMapDifficulty.HARD) {
-                   hardDropperMaps.add(dropperMap);
-               }
+                if(dropperMap.isEnabled()) {
+                   if(dropperMap.getDifficulty() == DropperMapDifficulty.EASY) {
+                       easyDropperMaps.add(dropperMap);
+                   } else if(dropperMap.getDifficulty() == DropperMapDifficulty.MEDIUM) {
+                       medDropperMaps.add(dropperMap);
+                   } else if(dropperMap.getDifficulty() == DropperMapDifficulty.HARD) {
+                       hardDropperMaps.add(dropperMap);
+                   }
+                }
             }
         }
 
@@ -205,6 +206,39 @@ public class DropperMapsManager {
 
         return finalDropperMapList;
     }
+
+    public boolean enoughMapsToPlay() {
+        FileConfiguration config = DropperReloaded.getInstance().getConfig();
+
+        int easyMapCount = config.getInt("games.easy_map_count");
+        int mediumMapCount = config.getInt("games.medium_map_count");
+        int hardMapCount = config.getInt("games.hard_map_count");
+
+        long finalCountEasy = getMapsFromDifficulty(DropperMapDifficulty.EASY)
+                .stream()
+                .filter(DropperMap::isEnabled)
+                .limit(easyMapCount)
+                .count();
+
+        long finalCountMed = getMapsFromDifficulty(DropperMapDifficulty.MEDIUM)
+                .stream()
+                .filter(DropperMap::isEnabled)
+                .limit(mediumMapCount)
+                .count();
+
+        long finalCountHard = getMapsFromDifficulty(DropperMapDifficulty.HARD)
+                .stream()
+                .filter(DropperMap::isEnabled)
+                .limit(hardMapCount)
+                .count();
+
+        return finalCountEasy == easyMapCount &&
+                finalCountMed == mediumMapCount &&
+                finalCountHard == hardMapCount;
+    }
+
+
+
 
     public void serialize() {
         fileInit();

@@ -52,10 +52,12 @@ public class MapVoteGui extends Gui {
 
         for (int i = (page - 1) * itemsPerPage; i < Math.min(dropperMaps.size(), page * itemsPerPage); i++) {
             DropperMap dropperMap = dropperMaps.get(i);
-            updateItemMap(slot, dropperMap);
-            slotItems.put(slot, dropperMap);
-            slot++;
-            if ((slot - 17) % 9 == 0) slot += 2;
+            if(dropperMap.isEnabled()) {
+                updateItemMap(slot, dropperMap);
+                slotItems.put(slot, dropperMap);
+                slot++;
+                if ((slot - 17) % 9 == 0) slot += 2;
+            }
         }
 
         Material barrier = Material.valueOf(config.getString("global.guis.items.close.item"));

@@ -5,6 +5,7 @@ import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,6 +24,14 @@ public class GamesManager {
     }
 
     public void joinGame(Player player) {
+        if(!DropperReloaded.getMapsManager().enoughMapsToPlay()) {
+            if(player.hasPermission("dropper-reloaded.admin")) {
+                player.sendMessage(ChatColor.RED + "There aren't enough maps to play with, respect the minimum number of enabled maps for each difficulty.");
+            } else {
+                player.sendMessage(ChatColor.RED + "Not enough maps, you can't play dropper for now.");
+            }
+            return;
+        }
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) {
             playerSession = new PlayerSession(player);

@@ -42,6 +42,9 @@ public class CommandMapActions {
             case "remlastspawn":
                 removeLastSpawn(value, player);
                 break;
+            case "list":
+                listMaps(player);
+                break;
             case "tp":
                 tpToMap(value, player);
                 break;
@@ -130,8 +133,26 @@ public class CommandMapActions {
         DropperMap dropperMap = MAPS_MANAGER.getFromName(mapName);
         if(dropperMap.removeLastSpawn()) {
             player.sendMessage(ChatColor.GREEN + "You removed the last spawn for " + ChatColor.YELLOW + dropperMap.getName() + ChatColor.GREEN + " (" + ChatColor.YELLOW + dropperMap.getSpawns().size() + ChatColor.GREEN + " in total)");
+            if(dropperMap.getSpawns().isEmpty()) {
+                dropperMap.setEnabled(false);
+                player.sendMessage(ChatColor.RED + "Your map is now disabled, add a spawn and enable it again to make it playable.");
+            }
         } else {
             player.sendMessage(ChatColor.RED + "There's currently no spawn added!");
+        }
+
+    }
+
+    private static void listMaps(Player player) {
+
+        List<DropperMap> mapList = DropperReloaded.getMapsManager().getMapsSortedDifficulty();
+
+        for(DropperMap dropperMap : mapList) {
+            String difficulty = DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDifficulty().name();
+            String status = dropperMap.isEnabled() ? ChatColor.GREEN + "ENABLED" : ChatColor.RED + "DISABLED";
+
+            player.sendMessage(dropperMap.getColoredName() + ChatColor.YELLOW + " - " + difficulty + ChatColor.YELLOW + " - " + status);
+
         }
 
     }
@@ -156,6 +177,11 @@ public class CommandMapActions {
 
         if(dropperMap.getSpawns().isEmpty()) {
             player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.RED + " have no spawn!");
+            return;
+        }
+
+        if(dropperMap.getDifficulty() == DropperMapDifficulty.EASY && dropperMap.getDoorLocations().isEmpty()) {
+            player.sendMessage(ChatColor.YELLOW + dropperMap.getName() + ChatColor.RED + " is an easy difficulty and has no door spawns!");
             return;
         }
 
