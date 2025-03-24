@@ -1,5 +1,6 @@
 global:
   website: www.yourserver.fr
+  pretty_json: false
   scoreboard_title: §a§lDropper
   guis:
     items:

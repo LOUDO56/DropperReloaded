@@ -237,15 +237,19 @@ public class DropperMapsManager {
                 finalCountHard == hardMapCount;
     }
 
-
-
-
     public void serialize() {
         fileInit();
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Location.class, new LocationSerializer())
-                .create();
+        Gson gson;
+        if(DropperReloaded.getInstance().getConfig().getBoolean("global.pretty_json")) {
+            gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .registerTypeAdapter(Location.class, new LocationSerializer())
+                    .create();
+        } else {
+            gson = new GsonBuilder()
+                    .registerTypeAdapter(Location.class, new LocationSerializer())
+                    .create();
+        }
         try {
             try(Writer writer = new BufferedWriter(new FileWriter(DROPPER_MAPS_FILE))) {
                 gson.toJson(dropperMapList, writer);
@@ -258,7 +262,6 @@ public class DropperMapsManager {
     public void deserialize() throws IOException {
         fileInit();
         Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
                 .registerTypeAdapter(Location.class, new LocationDeserializer())
                 .create();
         try(Reader reader = new BufferedReader(new FileReader(DROPPER_MAPS_FILE))) {
