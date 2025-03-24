@@ -20,7 +20,7 @@ games:
   hard_map_count: 1
   add_y_cord_on_spawns: true
   timer_before_drop: 5
-  timer_sound: BLOCK_NOTE_BLOCK_PLING
+  timer_sound: BLOCK_NOTE_BLOCK_HARP
   portal_enter_sound: ENTITY_FIREWORK_ROCKET_BLAST
   timer_message: §aThe doors opens in §e%timer% §aseconds!
   go_message: §a§lDROP!
