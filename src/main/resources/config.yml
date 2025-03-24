@@ -167,13 +167,13 @@ wait_lobby:
     map_vote:
       slot: 0
       material: NAME_TAG
-      name: "§lMap vote §r§7(Right-click)"
+      name: "§eMap vote §r§7(Right-click)"
       description:
         - "§7Vote your favourite map!"
     leave:
       slot: 8
       material: RED_BED
-      name: "§lLeave §r§7(Right-click)"
+      name: "§cLeave §r§7(Right-click)"
       description:
         - "§7Leave your current game."
   scoreboard:

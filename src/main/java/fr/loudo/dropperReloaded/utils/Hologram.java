@@ -55,8 +55,12 @@ public class Hologram {
         for(int i = 0; i < newLines.size(); i++) {
             if(i < armorStandList.size()) {
                 ArmorStand armorStand = armorStandList.get(i);
-                armorStand.setCustomName(reversedLines.get(i));
-                armorStand.teleport(new Location(location.getWorld(), location.getX(), currentY, location.getZ()));
+                if(armorStand.isDead()) {
+                    instantiateArmorStand(currentY, reversedLines.get(i));
+                } else {
+                    armorStand.setCustomName(reversedLines.get(i));
+                    armorStand.teleport(new Location(location.getWorld(), location.getX(), currentY, location.getZ()));
+                }
             } else {
                 instantiateArmorStand(currentY, reversedLines.get(i));
             }
