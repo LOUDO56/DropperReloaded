@@ -22,7 +22,7 @@ public class MapVoteListenerGui implements Listener {
             if(playerSession.getCurrentGui() instanceof MapVoteGui) {
                 MapVoteGui mapVoteGui = (MapVoteGui) playerSession.getCurrentGui();
                 int slot = event.getSlot();
-                DropperMap dropperMap = mapVoteGui.getSlotAndMaps().get(slot);
+                DropperMap dropperMap = (DropperMap) mapVoteGui.getObjectFromSlot().get(slot);
                 if(dropperMap != null) {
                     if(playerSession.getVotedMaps().contains(dropperMap)) {
                         playerSession.getVotedMaps().remove(dropperMap);
@@ -39,8 +39,8 @@ public class MapVoteListenerGui implements Listener {
                         message = message.replace("%map_name%", DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getName());
                         player.sendMessage(message);
                     }
-                    for(int slotGui : mapVoteGui.getSlotAndMaps().keySet()) {
-                        mapVoteGui.updateItemMap(slotGui, mapVoteGui.getSlotAndMaps().get(slotGui));
+                    for(int slotGui : mapVoteGui.getObjectFromSlot().keySet()) {
+                        mapVoteGui.updateItemMap(slotGui, (DropperMap) mapVoteGui.getObjectFromSlot().get(slotGui));
                     }
                     playerSession.getPlayerGame().getWaitLobby().getWaitLobbyScoreboard().updateMapCount(player);
                 }

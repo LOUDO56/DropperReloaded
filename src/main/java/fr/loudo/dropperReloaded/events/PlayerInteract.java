@@ -111,7 +111,7 @@ public class PlayerInteract implements Listener {
                 player.sendMessage(MessageConfigUtils.get("games.items.player_visibility_off.extra.players_shown"));
             }
 
-            if(!playerSession.canResetLocation()) {
+            if(Objects.equals(player.getItemInHand(), DropperItems.resetLocation.getItem()) && !playerSession.canResetLocation()) {
                 player.sendMessage(MessageConfigUtils.get("games.items.reset_location.extra.cant_reset_location"));
                 return;
             }

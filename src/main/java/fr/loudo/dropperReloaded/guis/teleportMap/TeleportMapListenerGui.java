@@ -21,7 +21,7 @@ public class TeleportMapListenerGui implements Listener {
             if(playerSession.getCurrentGui() instanceof TeleportMapGui) {
                 TeleportMapGui teleportMapGui = (TeleportMapGui) playerSession.getCurrentGui();
                 int slot = event.getSlot();
-                DropperMap dropperMap = teleportMapGui.getSlotAndDropperMaps().get(slot);
+                DropperMap dropperMap = (DropperMap) teleportMapGui.getObjectFromSlot().get(slot);
                 if(dropperMap != null) {
                     player.teleport(dropperMap.getRandomSpawn());
                     player.sendMessage(MessageConfigUtils.get("games.guis.teleporter_map.items.dropper_map.on_click.tped_to_map", "%map_name%", dropperMap.getName()));

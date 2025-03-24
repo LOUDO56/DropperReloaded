@@ -6,6 +6,7 @@ import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -60,6 +61,8 @@ public class GamesManager {
         //TODO: Teleport to main lobby
         //TODO: restore old items
         player.getInventory().clear();
+        player.closeInventory();
+        player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
 
         return true;

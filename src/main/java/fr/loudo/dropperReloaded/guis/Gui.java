@@ -7,12 +7,18 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class Gui {
+public abstract class Gui {
 
     private Inventory inventory;
     private Player player;
+    protected int page = 1;
+    protected int itemsPerPage = 24;
+    protected Material nextPageItem = Material.ARROW;
+    protected Material previousPageItem = Material.ARROW;
+    protected HashMap<Integer, Object> slotItems = new HashMap<>();
 
     public Gui(Player player, int size, String name) {
         this.inventory = Bukkit.createInventory(player, size, name);
@@ -21,10 +27,6 @@ public class Gui {
 
     public void open() {
         player.openInventory(inventory);
-    }
-
-    public void close() {
-        player.closeInventory();
     }
 
     public void addItem(Material material, int slot, String name, List<String> description) {
@@ -59,8 +61,6 @@ public class Gui {
         inventory.setItem(slot, item);
     }
 
-
-
     public ItemStack getItem(int slot) {
         return inventory.getItem(slot);
     }
@@ -68,4 +68,20 @@ public class Gui {
     public Inventory getInventory() {
         return inventory;
     }
+
+    public void nextPage() {
+        page++;
+        showCurrentPage();
+    }
+
+    public void previousPage() {
+        page--;
+        showCurrentPage();
+    }
+
+    public HashMap<Integer, Object> getObjectFromSlot() {
+        return slotItems;
+    }
+
+    public abstract void showCurrentPage();
 }

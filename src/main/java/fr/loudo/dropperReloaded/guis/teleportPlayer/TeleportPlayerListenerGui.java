@@ -20,7 +20,7 @@ public class TeleportPlayerListenerGui implements Listener {
             if(playerSession.getCurrentGui() instanceof TeleportPlayerGui) {
                 TeleportPlayerGui teleportPlayerGui = (TeleportPlayerGui) playerSession.getCurrentGui();
                 int slot = event.getSlot();
-                Player playerHead = teleportPlayerGui.getSlotAndPlayers().get(slot);
+                Player playerHead = (Player) teleportPlayerGui.getObjectFromSlot().get(slot);
                 if(playerHead != null) {
                     PlayerSession playerHeadSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(playerHead);
                     if(playerHeadSession != null && !playerHeadSession.isSpectator()) {

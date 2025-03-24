@@ -122,7 +122,8 @@ public class Game {
         inGameScoreboard = new InGameScoreboard(this);
         sendTitle(" ", " ", 0, 0, 0, null);
         for(Player player : playerList) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
+            player.closeInventory();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 1, false, false));
             inGameScoreboard.setup(player);
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
             playerSession.setCurrentMap(dropperMapList.get(0));
