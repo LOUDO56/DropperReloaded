@@ -77,6 +77,7 @@ public class DropperAdminCommand implements TabExecutor {
                     DropperItems.registerItems();
                     DropperReloaded.getJoinGameNPCManager().reloadHologramConfig();
                     DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
+                    DropperReloaded.getDatabase().initialize();
                     player.sendMessage(ChatColor.GREEN + "Config reloaded successfully!");
                     break;
                 default:

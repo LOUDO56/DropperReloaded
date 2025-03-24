@@ -75,7 +75,6 @@ public final class DropperReloaded extends JavaPlugin {
         dropperMapsManager = new DropperMapsManager();
         joinGameNPCManager = new JoinGameNPCManager();
         database = new Database(this, getConfig().getString("database.type"));
-        database.connect();
         database.initialize();
 
         //Configuration class
@@ -137,6 +136,10 @@ public final class DropperReloaded extends JavaPlugin {
 
     public static PlayersSessionManager getPlayersSessionManager() {
         return playersSessionManager;
+    }
+
+    public static Database getDatabase() {
+        return database;
     }
 
     public static boolean isIsProtocolLibPluginEnabled() {

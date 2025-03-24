@@ -63,8 +63,12 @@ public class GamesManager {
         if(!playersSessionManager.getPlayerSessionList().contains(playerSession)) return false;
 
         playersSessionManager.getPlayerSessionList().remove(playerSession);
+        if(playerSession.getPlayerGame().hasStarted()) {
+            playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
+        }
         playerSession.reset();
         playerSession.getPlayerGame().removePlayer(player);
+        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));
         //TODO: Teleport to main lobby

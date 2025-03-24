@@ -150,6 +150,9 @@ public class Game {
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
         sendDoorBlockGlobal();
+        for(Player player : playerList) {
+            DropperReloaded.getPlayersSessionManager().getPlayerSession(player).startSession();
+        }
         countdownGame = new BukkitRunnable() {
             @Override
             public void run() {
@@ -177,6 +180,10 @@ public class Game {
         sendWinTitleToPlayers();
 
         for(Player player : playerList) {
+            if(!playerFinished.contains(player)) {
+                PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+                playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
+            }
             addPlayerSpectator(player);
         }
         new BukkitRunnable() {
@@ -330,6 +337,7 @@ public class Game {
         if(playerSession == null) return;
         if(playerSession.isSpectator()) return;
         playerSession.setCanEnterPortal(false);
+        playerSession.getDropperStats().setTotalMapCompleted(playerSession.getDropperStats().getTotalMapCompleted() + 1);
         int currentMapCount = playerSession.getCurrentMapCount() + 1;
 
         playerSession.setCurrentMapCount(currentMapCount);
@@ -370,6 +378,11 @@ public class Game {
                 }
             }
 
+            if(playerSession.getFinalStopwatchTotal() < playerSession.getDropperStats().getBestTime() || playerSession.getDropperStats().getBestTime() == 0) {
+                DropperReloaded.getDatabase().setNewBestTime(player, playerSession.getFinalStopwatchTotal());
+                player.sendMessage(MessageConfigUtils.get("games.new_personal_best"));
+            }
+
             String mapFinishedTitle = MessageConfigUtils.get("games.map_finished_title");
             String mapFinishedSubtitle = MessageConfigUtils.get("games.map_finished_subtitle");
             mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerFinished.size() + 1));
@@ -379,6 +392,7 @@ public class Game {
 
             addPlayerSpectator(player);
             if(playerFinished.isEmpty()) {
+                playerSession.getDropperStats().setTotalWins(playerSession.getDropperStats().getTotalWins() + 1);
                 reduceTimer();
             }
             playerFinished.add(player);
@@ -440,7 +454,7 @@ public class Game {
     }
 
     private void startCountdownBeginning() {
-        countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20 + 40;
+        countdownStartTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20 + 60;
         int cooldownTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20;
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
 

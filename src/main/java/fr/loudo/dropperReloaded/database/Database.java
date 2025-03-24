@@ -2,13 +2,13 @@ package fr.loudo.dropperReloaded.database;
 
 import com.google.common.io.ByteStreams;
 import fr.loudo.dropperReloaded.DropperReloaded;
+import fr.loudo.dropperReloaded.stats.DropperStats;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
 
@@ -22,15 +22,16 @@ public class Database {
     }
 
     public void connect() {
+        FileConfiguration config = DropperReloaded.getInstance().getConfig();
         try {
-            if (type.equals("mysql")) {
-                String host = instance.getConfig().getString("database.host");
-                String port = instance.getConfig().getString("database.port");
-                String database = instance.getConfig().getString("database.name");
-                String username = instance.getConfig().getString("database.username");
-                String password = instance.getConfig().getString("database.password");
+            if (type.equals("mysql") || type.equals("postgresql")) {
+                String host = config.getString("database.host");
+                String port = config.getString("database.port");
+                String database = config.getString("database.name");
+                String username = config.getString("database.username");
+                String password = config.getString("database.password");
 
-                String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
+                String url = "jdbc:" + type + "://" + host + ":" + port + "/" + database + "?useSSL=false";
                 connection = DriverManager.getConnection(url, username, password);
             } else {
                 initDBFile();
@@ -44,11 +45,8 @@ public class Database {
         }
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public void initialize() {
+        connect();
         try(Statement statement = connection.createStatement()) {
             InputStream stream = getClass().getResourceAsStream("/database/init.sql");
             String sql = new String(ByteStreams.toByteArray(stream));
@@ -62,6 +60,107 @@ public class Database {
         } catch (Exception e) {
             instance.getLogger().severe("Couldn't load database: " + e);
         }
+    }
+
+    public DropperStats getPlayerStats(Player player) {
+
+        String sql = "SELECT * FROM dropper_player_stats WHERE uuid = ?";
+        if(!playerInDatabase(player)) {
+            insertPlayer(player);
+        }
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, player.getUniqueId().toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return new DropperStats(
+                        rs.getString("uuid"),
+                        rs.getString("username"),
+                        rs.getInt("best_time"),
+                        rs.getInt("total_fails"),
+                        rs.getInt("total_map_completed"),
+                        rs.getInt("total_wins"),
+                        rs.getInt("total_lost")
+                );
+            }
+        } catch(SQLException e) {
+            instance.getLogger().severe("Impossible to retrieve player " + player.getDisplayName() + " stats: " + e);
+        }
+
+        return new DropperStats(
+                player.getUniqueId().toString(),
+                player.getDisplayName(),
+                0,
+                0,
+                0,
+                0,
+                0
+        );
+
+    }
+
+    public void updatePlayerStats(Player player, DropperStats dropperStats) {
+        if(!playerInDatabase(player)) return;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE dropper_player_stats\n");
+        sql.append("SET username = ?,\n");
+        sql.append("total_fails = ?,\n");
+        sql.append("total_map_completed = ?,\n");
+        sql.append("total_wins = ?,\n");
+        sql.append("total_lost = ?\n");
+        sql.append("WHERE uuid = ?;");
+
+        try(PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            ps.setString(1, player.getDisplayName());
+            ps.setInt(2, dropperStats.getTotalFails());
+            ps.setInt(3, dropperStats.getTotalMapCompleted());
+            ps.setInt(4, dropperStats.getTotalWins());
+            ps.setInt(5, dropperStats.getTotalLost());
+            ps.setString(6, player.getUniqueId().toString());
+
+            ps.executeUpdate();
+        } catch(SQLException e) {
+            instance.getLogger().severe("Impossible to update player " + player.getDisplayName() + " stats: " + e);
+        }
+    }
+
+    public void setNewBestTime(Player player, long newBestTime) {
+        String sql = "UPDATE dropper_player_stats SET best_time = ? WHERE uuid = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, newBestTime);
+            ps.setString(2, player.getUniqueId().toString());
+            ps.executeUpdate();
+        } catch(SQLException e) {
+            instance.getLogger().severe("Impossible to update player " + player.getDisplayName() + " new best time: " + e);
+        }
+    }
+
+    public void insertPlayer(Player player) {
+        String sql = "INSERT INTO dropper_player_stats (uuid, username, best_time, total_fails, total_map_completed, total_wins, total_lost) VALUES (?, ?, 0, 0, 0, 0, 0)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, player.getUniqueId().toString());
+            ps.setString(2, player.getDisplayName());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            instance.getLogger().severe("Couldn't insert new player to database: " + e);
+        }
+    }
+
+    public boolean playerInDatabase(Player player) {
+        String sql = "SELECT * FROM dropper_player_stats WHERE uuid = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, player.getUniqueId().toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } catch(SQLException e) {
+            instance.getLogger().severe("Impossible to check if " + player.getDisplayName() + " exists in database: " + e);
+        }
+
+        return false;
     }
 
     private void initDBFile() {

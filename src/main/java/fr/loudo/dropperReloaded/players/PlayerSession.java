@@ -4,6 +4,7 @@ import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.games.Game;
 import fr.loudo.dropperReloaded.maps.DropperMap;
 import fr.loudo.dropperReloaded.guis.Gui;
+import fr.loudo.dropperReloaded.stats.DropperStats;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,6 +19,7 @@ public class PlayerSession {
     private Player player;
     private Game playerGame;
     private DropperMap currentDropperMap;
+    private DropperStats dropperStats;
 
     private Gui currentGui;
     private List<DropperMap> votedDropperMaps;
@@ -47,6 +49,7 @@ public class PlayerSession {
         this.isSpectator = false;
         this.canEnterPortal = false;
         this.votedDropperMaps = new ArrayList<>();
+        this.dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
     }
 
     public void startStopwatchTotal() {
@@ -66,6 +69,7 @@ public class PlayerSession {
         player.teleport(currentDropperMap.getRandomSpawn());
         player.damage(0.001);
         player.setHealth(20);
+        dropperStats.setTotalFails(dropperStats.getTotalFails() + 1);
     }
 
     public void addDeath(boolean silent) {
@@ -73,6 +77,7 @@ public class PlayerSession {
         playerGame.getInGameScoreboard().updateTotalFails(player);
         player.teleport(currentDropperMap.getRandomSpawn());
         player.setHealth(20);
+        dropperStats.setTotalFails(dropperStats.getTotalFails() + 1);
     }
 
     public void startSession() {
@@ -118,6 +123,10 @@ public class PlayerSession {
         this.finalStopwatchTotal = finalStopwatchTotal;
     }
 
+    public long getFinalStopwatchTotal() {
+        return finalStopwatchTotal;
+    }
+
     public String getFinalTimeStopwatchFormatted() {
         return new SimpleDateFormat("mm:ss:SSS").format(finalStopwatchTotal);
     }
@@ -154,6 +163,7 @@ public class PlayerSession {
         actionBarTask = null;
         canEnterPortal = false;
         votedDropperMaps = new ArrayList<>();
+        dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
     }
 
     public int getVoteCount() {
@@ -214,5 +224,9 @@ public class PlayerSession {
 
     public List<DropperMap> getVotedMaps() {
         return votedDropperMaps;
+    }
+
+    public DropperStats getDropperStats() {
+        return dropperStats;
     }
 }
