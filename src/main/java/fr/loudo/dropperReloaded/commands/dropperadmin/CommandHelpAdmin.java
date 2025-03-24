@@ -12,6 +12,7 @@ public class CommandHelpAdmin {
 
         helpMessage.append(prefixCmd).append("map create [name]").append(separator).append("Create a map.\n")
                 .append(prefixCmd).append("map delete [name]").append(separator).append("Delete a map.\n")
+                .append(prefixCmd).append("map rename [old_name] [new_name]").append(separator).append("Rename your map.\n")
                 .append(prefixCmd).append("map setdifficulty [name] {easy, medium, hard}").append(separator)
                 .append("Set the difficulty of the map to easy, medium or hard.\n")
                 .append(prefixCmd).append("map addspawn [name]").append(separator).append("Add a spawn to your map.\n")

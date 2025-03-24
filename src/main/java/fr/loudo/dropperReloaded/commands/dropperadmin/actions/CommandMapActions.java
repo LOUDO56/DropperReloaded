@@ -33,6 +33,9 @@ public class CommandMapActions {
             case "delete":
                 removeMap(value, player);
                 break;
+            case "rename":
+                renameMap(value, value2, player);
+                break;
             case "setdifficulty":
                 setDifficulty(value, value2, player);
                 break;
@@ -89,6 +92,14 @@ public class CommandMapActions {
         } else {
             player.sendMessage(MAP_DONT_EXIST);
         }
+    }
+
+    private static void renameMap(String oldName, String newName, Player player) {
+        if(!validateMapName(oldName, player)) return;
+
+        DropperMap dropperMap = MAPS_MANAGER.getFromName(oldName);
+        player.sendMessage(ChatColor.GREEN + "The map" + ChatColor.YELLOW + " " + dropperMap.getName() + ChatColor.GREEN + " has been successfully renamed to "  + ChatColor.YELLOW + newName + ChatColor.GREEN  + ".");
+        dropperMap.setName(newName);
     }
 
     private static void setDifficulty(String mapName, String difficulty, Player player) {
