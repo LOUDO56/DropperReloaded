@@ -20,7 +20,7 @@ games:
   hard_map_count: 1
   add_y_cord_on_spawns: true
   timer_before_drop: 5
-  timer_sound: BLOCK_NOTE_BLOCK_PLING #NOTE_PLING
+  timer_sound: BLOCK_NOTE_BLOCK_PLING
   portal_enter_sound: ENTITY_FIREWORK_ROCKET_BLAST
   timer_message: §aThe doors opens in §e%timer% §aseconds!
   go_message: §a§lDROP!
@@ -133,7 +133,7 @@ wait_lobby:
   join_message: §a%player% §ehas joined §a(§e%current_player%§a/§e%max_player%§a)!
   left_message: §a%player% §ehas left §a(§e%current_player%§a/§e%max_player%§a)!
   timer_message: §aThe game starts in §e%timer_seconds% §aseconds!
-  timer_sound: BLOCK_NOTE_BLOCK_HAT #NOTE_HAT
+  timer_sound: BLOCK_NOTE_BLOCK_HAT
   cancelled_title: "§cCANCELLED!"
   cancelled_subtitle: "§cNot enough players..."
   guis:

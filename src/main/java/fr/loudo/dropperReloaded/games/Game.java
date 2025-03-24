@@ -450,7 +450,7 @@ public class Game {
             public void run() {
                 sendDoorBlockGlobal();
                 if(countdownStartTimer == 0) {
-                playSoundToPlayers(sound, 1f, 1.2f);
+                playSoundToPlayers(sound, 1f, 2f);
                 sendMessageToPlayers(MessageConfigUtils.get("games.go_message"));
                 start();
                 this.cancel();

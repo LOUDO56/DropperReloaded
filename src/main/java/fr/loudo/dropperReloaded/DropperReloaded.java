@@ -42,8 +42,12 @@ public final class DropperReloaded extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        version = getServer().getBukkitVersion();
+        version = version.split("-")[0];
+
         //Configuration Init
         saveDefaultConfig();
+        checkNoteSoundStringVersion();
 
         isCitizenPluginEnabled = Bukkit.getPluginManager().isPluginEnabled("Citizens");
         if(!isCitizenPluginEnabled) {
@@ -75,9 +79,6 @@ public final class DropperReloaded extends JavaPlugin {
         //Items
         DropperItems.registerItems();
 
-        version = getServer().getBukkitVersion();
-        version = version.split("-")[0];
-
         if(getConfig().getInt("main_lobby.npc.id") > -1) {
             new BukkitRunnable() {
                 @Override
@@ -101,6 +102,17 @@ public final class DropperReloaded extends JavaPlugin {
         }
     }
 
+    private void checkNoteSoundStringVersion() {
+        if(!isNewerVersion()) {
+            if(getConfig().getString("games.timer_sound", "BLOCK_NOTE_BLOCK_HARP").equals("BLOCK_NOTE_BLOCK_HARP")) {
+                getConfig().set("games.timer_sound", "NOTE_HARP");
+            }
+            if(getConfig().getString("wait_lobby.timer_sound", "BLOCK_NOTE_BLOCK_HAT").equals("BLOCK_NOTE_BLOCK_HAT")) {
+                getConfig().set("wait_lobby.timer_sound", "NOTE_HAT");
+            }
+        }
+        saveConfig();
+    }
 
     public static DropperReloaded getInstance() {
         return instance;
