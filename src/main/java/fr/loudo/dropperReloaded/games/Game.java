@@ -48,7 +48,6 @@ public class Game {
 
     private BukkitTask countdownStart;
     private BukkitTask countdownGame;
-    private BukkitTask sendDoorBlockTask;
 
     public Game() {
         this.playerList = new ArrayList<>();

@@ -2,7 +2,6 @@ package fr.loudo.dropperReloaded.events;
 
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.commands.dropperadmin.DropperAdminCommand;
-import fr.loudo.dropperReloaded.games.Game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

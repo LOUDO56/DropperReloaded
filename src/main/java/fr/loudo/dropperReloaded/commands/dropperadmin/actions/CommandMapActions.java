@@ -63,7 +63,6 @@ public class CommandMapActions {
             case "setdoors":
                 setDoors(value, player);
                 break;
-            //TODO: List with a gui
             default:
                 player.sendMessage(CommandHelpAdmin.send());
                 break;

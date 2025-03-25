@@ -58,7 +58,7 @@ public class Hologram {
                 if(armorStand.isDead()) {
                     instantiateArmorStand(currentY, reversedLines.get(i));
                 } else {
-                    armorStand.setCustomName(reversedLines.get(i));
+                    update(reversedLines.get(i), i);
                     armorStand.teleport(new Location(location.getWorld(), location.getX(), currentY, location.getZ()));
                 }
             } else {
@@ -68,11 +68,10 @@ public class Hologram {
         }
     }
 
-    public boolean update(String newLine, int line) {
+    public void update(String newLine, int line) {
         ArmorStand armorStand = armorStandList.get(line);
-        if(armorStand == null) return false;
+        if(armorStand == null) return;
         armorStand.setCustomName(newLine);
-        return true;
     }
 
     public void setOffsetY(double offsetY) {
