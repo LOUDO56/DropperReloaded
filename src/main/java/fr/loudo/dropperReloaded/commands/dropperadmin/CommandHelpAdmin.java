@@ -10,7 +10,7 @@ public class CommandHelpAdmin {
 
         StringBuilder helpMessage = new StringBuilder();
 
-        helpMessage.append(prefixCmd).append("map create [name]").append(separator).append("Create a map.\n")
+        helpMessage.append(prefixCmd).append("map create [name]").append(separator).append("Create a map. (Use \"_\" to add a space)\n")
                 .append(prefixCmd).append("map delete [name]").append(separator).append("Delete a map.\n")
                 .append(prefixCmd).append("map rename [old_name] [new_name]").append(separator).append("Rename your map.\n")
                 .append(prefixCmd).append("map setdifficulty [name] {easy, medium, hard}").append(separator)
