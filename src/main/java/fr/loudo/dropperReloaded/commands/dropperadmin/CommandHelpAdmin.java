@@ -10,7 +10,7 @@ public class CommandHelpAdmin {
 
         StringBuilder helpMessage = new StringBuilder();
 
-        helpMessage.append(prefixCmd).append("map create [name]").append(separator).append("Create a map.\n")
+        helpMessage.append(prefixCmd).append("map create [name]").append(separator).append("Create a map. (Use \"_\" to add a space)\n")
                 .append(prefixCmd).append("map delete [name]").append(separator).append("Delete a map.\n")
                 .append(prefixCmd).append("map rename [old_name] [new_name]").append(separator).append("Rename your map.\n")
                 .append(prefixCmd).append("map setdifficulty [name] {easy, medium, hard}").append(separator)
@@ -27,7 +27,7 @@ public class CommandHelpAdmin {
                 .append(prefixCmd).append("map disable [name]").append(separator)
                 .append("Make your map closed for players.\n")
                 .append(prefixCmd).append("map list").append(separator)
-                .append("List your map on a gui.\n")
+                .append("List your map.\n")
                 .append(prefixCmd).append("waitlobby setmaxplayer [number]").append(separator)
                 .append("Set the maximum number of players for each game.\n")
                 .append(prefixCmd).append("waitlobby setminplayer [number]").append(separator)
@@ -38,10 +38,8 @@ public class CommandHelpAdmin {
                 .append("Create an NPC that lets you join a game. (Available if Citizens is installed.)\n")
                 .append(prefixCmd).append("mainlobby delnpc").append(separator)
                 .append("Remove the join game NPC.\n")
-                .append(prefixCmd).append("leaderboard add {win, time}").append(separator)
-                .append("Create a hologram leaderboard.\n")
-                .append(prefixCmd).append("leaderboard remove {win, time}").append(separator)
-                .append("Delete a hologram leaderboard.\n")
+                .append(prefixCmd).append("mainlobby setspawn").append(separator)
+                .append("Set the spawn of the main lobby.\n")
                 .append(prefixCmd).append("reload").append(separator)
                 .append("Reload the plugin configuration.");
 

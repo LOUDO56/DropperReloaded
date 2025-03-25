@@ -1,16 +1,12 @@
 package fr.loudo.dropperReloaded.games;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.DropperMap;
-import fr.loudo.dropperReloaded.maps.DropperMapDifficultyColorPrefix;
 import fr.loudo.dropperReloaded.players.PlayerSession;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
@@ -184,7 +180,7 @@ public class Game {
         for(Player player : playerList) {
             if(!playerFinished.contains(player)) {
                 PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
-                playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
+                playerSession.getDropperStats().setTotalLosses(playerSession.getDropperStats().getTotalLosses() + 1);
             }
             addPlayerSpectator(player);
         }

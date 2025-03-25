@@ -79,7 +79,7 @@ public class Database {
                         rs.getInt("total_fails"),
                         rs.getInt("total_map_completed"),
                         rs.getInt("total_wins"),
-                        rs.getInt("total_lost")
+                        rs.getInt("total_losses")
                 );
             }
         } catch(SQLException e) {
@@ -107,7 +107,7 @@ public class Database {
         sql.append("total_fails = ?,\n");
         sql.append("total_map_completed = ?,\n");
         sql.append("total_wins = ?,\n");
-        sql.append("total_lost = ?\n");
+        sql.append("total_losses = ?\n");
         sql.append("WHERE uuid = ?;");
 
         try(PreparedStatement ps = connection.prepareStatement(sql.toString())) {
@@ -115,7 +115,7 @@ public class Database {
             ps.setInt(2, dropperStats.getTotalFails());
             ps.setInt(3, dropperStats.getTotalMapCompleted());
             ps.setInt(4, dropperStats.getTotalWins());
-            ps.setInt(5, dropperStats.getTotalLost());
+            ps.setInt(5, dropperStats.getTotalLosses());
             ps.setString(6, player.getUniqueId().toString());
 
             ps.executeUpdate();
@@ -137,7 +137,7 @@ public class Database {
     }
 
     public void insertPlayer(Player player) {
-        String sql = "INSERT INTO dropper_player_stats (uuid, username, best_time, total_fails, total_map_completed, total_wins, total_lost) VALUES (?, ?, 0, 0, 0, 0, 0)";
+        String sql = "INSERT INTO dropper_player_stats (uuid, username, best_time, total_fails, total_map_completed, total_wins, total_losses) VALUES (?, ?, 0, 0, 0, 0, 0)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, player.getUniqueId().toString());

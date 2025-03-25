@@ -66,7 +66,7 @@ public class GamesManager {
 
         playerSession.setInvincible(true);
         if(playerSession.getPlayerGame().hasStarted()) {
-            playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
+            playerSession.getDropperStats().setTotalLosses(playerSession.getDropperStats().getTotalLosses() + 1);
         }
         Location mainLobbySpawn = DropperReloaded.getInstance().getConfig().getLocation("main_lobby.spawn");
         if(mainLobbySpawn != null) {
