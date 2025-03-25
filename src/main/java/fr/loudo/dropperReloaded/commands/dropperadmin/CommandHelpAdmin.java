@@ -27,7 +27,7 @@ public class CommandHelpAdmin {
                 .append(prefixCmd).append("map disable [name]").append(separator)
                 .append("Make your map closed for players.\n")
                 .append(prefixCmd).append("map list").append(separator)
-                .append("List your map on a gui.\n")
+                .append("List your map.\n")
                 .append(prefixCmd).append("waitlobby setmaxplayer [number]").append(separator)
                 .append("Set the maximum number of players for each game.\n")
                 .append(prefixCmd).append("waitlobby setminplayer [number]").append(separator)
