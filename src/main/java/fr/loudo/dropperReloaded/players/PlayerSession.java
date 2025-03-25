@@ -6,6 +6,7 @@ import fr.loudo.dropperReloaded.maps.DropperMap;
 import fr.loudo.dropperReloaded.guis.Gui;
 import fr.loudo.dropperReloaded.stats.DropperStats;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -20,6 +21,7 @@ public class PlayerSession {
     private Game playerGame;
     private DropperMap currentDropperMap;
     private DropperStats dropperStats;
+    private Location lastPlayerPos;
 
     private Gui currentGui;
     private List<DropperMap> votedDropperMaps;
@@ -50,6 +52,7 @@ public class PlayerSession {
         this.canEnterPortal = false;
         this.votedDropperMaps = new ArrayList<>();
         this.dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
+        this.lastPlayerPos = player.getLocation();
     }
 
     public void startStopwatchTotal() {
@@ -166,6 +169,10 @@ public class PlayerSession {
         canEnterPortal = false;
         votedDropperMaps = new ArrayList<>();
         dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
+    }
+
+    public Location getLastPlayerPos() {
+        return lastPlayerPos;
     }
 
     public int getVoteCount() {

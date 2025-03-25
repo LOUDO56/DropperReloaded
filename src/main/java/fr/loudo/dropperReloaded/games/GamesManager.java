@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -63,23 +64,31 @@ public class GamesManager {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(!playersSessionManager.getPlayerSessionList().contains(playerSession)) return false;
 
-        playersSessionManager.getPlayerSessionList().remove(playerSession);
+        playerSession.setInvincible(true);
         if(playerSession.getPlayerGame().hasStarted()) {
             playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
         }
-        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
-        playerSession.reset();
-        playerSession.getPlayerGame().removePlayer(player);
-        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        player.sendMessage(MessageConfigUtils.get("player.left_game"));
         Location mainLobbySpawn = DropperReloaded.getInstance().getConfig().getLocation("main_lobby.spawn");
         if(mainLobbySpawn != null) {
             player.teleport(mainLobbySpawn);
+        } else {
+            player.teleport(playerSession.getLastPlayerPos());
         }
+        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
+        playerSession.getPlayerGame().removePlayer(player);
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        player.sendMessage(MessageConfigUtils.get("player.left_game"));
         player.getInventory().clear();
         player.closeInventory();
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                playersSessionManager.getPlayerSessionList().remove(playerSession);
+                playerSession.reset();
+            }
+        }.runTaskLater(DropperReloaded.getInstance(), 5L);
 
         return true;
     }
