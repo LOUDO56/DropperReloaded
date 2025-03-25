@@ -108,6 +108,9 @@ public final class DropperReloaded extends JavaPlugin {
 
     private void checkNoteSoundStringVersion() {
         if(!isNewerVersion()) {
+            if(getConfig().getString("wait_lobby.items.leave.material", "RED_BED").equals("RED_BED")) {
+                getConfig().set("wait_lobby.items.leave.material", "BED");
+            }
             if(getConfig().getString("games.timer_sound", "BLOCK_NOTE_BLOCK_HARP").equals("BLOCK_NOTE_BLOCK_HARP")) {
                 getConfig().set("games.timer_sound", "NOTE_HARP");
             }
