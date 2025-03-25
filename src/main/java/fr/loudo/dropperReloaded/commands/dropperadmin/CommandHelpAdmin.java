@@ -38,10 +38,8 @@ public class CommandHelpAdmin {
                 .append("Create an NPC that lets you join a game. (Available if Citizens is installed.)\n")
                 .append(prefixCmd).append("mainlobby delnpc").append(separator)
                 .append("Remove the join game NPC.\n")
-                .append(prefixCmd).append("leaderboard add {win, time}").append(separator)
-                .append("Create a hologram leaderboard.\n")
-                .append(prefixCmd).append("leaderboard remove {win, time}").append(separator)
-                .append("Delete a hologram leaderboard.\n")
+                .append(prefixCmd).append("mainlobby setspawn").append(separator)
+                .append("Set the spawn of the main lobby.\n")
                 .append(prefixCmd).append("reload").append(separator)
                 .append("Reload the plugin configuration.");
 
