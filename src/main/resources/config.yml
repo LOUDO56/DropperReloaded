@@ -10,6 +10,7 @@ global:
   website: www.yourserver.fr
   pretty_json: false
   scoreboard_title: §a§lDropper
+  restore_items_on_leave: true
   guis:
     items:
       next_page:

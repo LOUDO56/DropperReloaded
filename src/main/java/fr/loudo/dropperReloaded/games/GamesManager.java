@@ -79,14 +79,17 @@ public class GamesManager {
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));
         player.getInventory().clear();
+        if(DropperReloaded.getInstance().getConfig().getBoolean("global.restore_items_on_leave")) {
+            playerSession.restoreOldItems();
+        }
         player.closeInventory();
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
+        playerSession.reset();
         new BukkitRunnable() {
             @Override
             public void run() {
                 playersSessionManager.getPlayerSessionList().remove(playerSession);
-                playerSession.reset();
+                DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
 

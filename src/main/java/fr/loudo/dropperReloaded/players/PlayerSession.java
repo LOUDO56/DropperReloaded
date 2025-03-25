@@ -7,12 +7,15 @@ import fr.loudo.dropperReloaded.guis.Gui;
 import fr.loudo.dropperReloaded.stats.DropperStats;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlayerSession {
@@ -22,6 +25,7 @@ public class PlayerSession {
     private DropperMap currentDropperMap;
     private DropperStats dropperStats;
     private Location lastPlayerPos;
+    private HashMap<Integer, ItemStack> lastPlayerInventory;
 
     private Gui currentGui;
     private List<DropperMap> votedDropperMaps;
@@ -53,6 +57,8 @@ public class PlayerSession {
         this.votedDropperMaps = new ArrayList<>();
         this.dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
         this.lastPlayerPos = player.getLocation();
+        this.lastPlayerInventory = new HashMap<>();
+        initLastPlayerInventory();
     }
 
     public void startStopwatchTotal() {
@@ -99,6 +105,24 @@ public class PlayerSession {
         actionBarTask = null;
         stopwatchTotal = 0;
         stopwatchMap = 0;
+    }
+
+    public void initLastPlayerInventory() {
+        for(int i = 0; i < player.getInventory().getSize(); i++) {
+            ItemStack itemStack = player.getInventory().getItem(i);
+            if(itemStack != null) {
+                lastPlayerInventory.put(i, itemStack);
+            }
+        }
+    }
+
+    public void restoreOldItems() {
+        for(int i = 0; i < player.getInventory().getSize(); i++) {
+            ItemStack itemStack = lastPlayerInventory.get(i);
+            if(itemStack != null) {
+                player.getInventory().setItem(i, itemStack);
+            }
+        }
     }
 
     public boolean canEnterPortal() {
