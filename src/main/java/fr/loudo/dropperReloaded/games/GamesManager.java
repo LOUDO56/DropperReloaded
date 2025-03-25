@@ -65,7 +65,7 @@ public class GamesManager {
 
         playersSessionManager.getPlayerSessionList().remove(playerSession);
         if(playerSession.getPlayerGame().hasStarted()) {
-            playerSession.getDropperStats().setTotalLost(playerSession.getDropperStats().getTotalLost() + 1);
+            playerSession.getDropperStats().setTotalLosses(playerSession.getDropperStats().getTotalLosses() + 1);
         }
         DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
         playerSession.reset();
