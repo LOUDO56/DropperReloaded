@@ -29,7 +29,7 @@ games:
   add_y_cord_on_spawns: true
   timer_before_drop: 5
   timer_sound: BLOCK_NOTE_BLOCK_HARP
-  portal_enter_sound: ENTITY_FIREWORK_ROCKET_BLAST
+  portal_enter_sound: ENTITY_PLAYER_LEVELUP
   timer_message: §aThe doors opens in §e%timer% §aseconds!
   go_message: §a§lDROP!
   timer_in_game: 600
@@ -42,11 +42,11 @@ games:
     - " "
   new_personal_best: "§aYou did a new personal best!"
   player_action_bar: "Map Time: §a%map_time% §f- Total Time: §a%total_time%"
-  map_finished_message: "§7You finished Map %map_count% (%map_name%§7) in §6%map_time%§7!"
-  finished_all_maps_message: "§aYou finished all maps in §6%map_time%§7!"
-  player_finished_all_maps: "§a%player% §7finished all maps in §6%time%§7!"
+  map_finished_message: "§aYou finished Map %map_count% (%map_name%§a) in §e%map_time%§7!"
+  finished_all_maps_message: "§aYou finished all maps in §e%map_time%§7!"
+  player_finished_all_maps: "§a%player% §7finished all maps in §e%time%§7!"
   map_finished_title: "§aMAPS COMPLETED!"
-  map_finished_subtitle: "§aYou finished §6#%place%§a!"
+  map_finished_subtitle: "§aYou finished §e#%place%§a!"
   game_finish_win: "§aYOU WIN!"
   game_finish_game_over: "§cGAME OVER!"
   game_finish_game_finished: "§cGAME FINISHED!"
@@ -97,17 +97,17 @@ games:
   scoreboard:
     map_not_completed_symbol: §c✘
     map_completed_symbol: §a✔
-    in_this_map_symbol: §6◀
+    in_this_map_symbol: §a◀
     lines:
       - '§7%date% §8#%game_id%'
       - '{space}'
-      - '§fTime Left: §a%time_left%'
+      - '§aTime Left: §e%time_left%'
       - '{space}'
-      - '§fCurrent Map: §7(§e%current_map_count%§7/§a%total_map_count%§7)'
+      - '§aCurrent Map: §e(§a%current_map_count%§e/§a%total_map_count%§a)'
       - ' %map_completed_symbol% %map_name% %in_this_map_symbol%'
       - '{space}'
-      - '§fTotal Time: §a%total_time%' # Only shows when the player finished.
-      - '§fTotal Fails: §c%total_fails%'
+      - '§aTotal Time: §e%total_time%' # Only shows when the player finished.
+      - '§aTotal Fails: §c%total_fails%'
       - '{space}'
       - '§e%website%'
   guis:
@@ -187,16 +187,16 @@ wait_lobby:
         - "§7Leave your current game."
   scoreboard:
     game_state:
-      waiting: §fWaiting...
-      starting: §fStarting in §a%timer%
+      waiting: §aWaiting...
+      starting: §aStarting in §e%timer%
     lines:
       - '§7%date% §8#%game_id%'
       - '{space}'
-      - '§fPlayers: §a%current_player%§f/§a%max_player%'
+      - '§aPlayers: §e%current_player%§a/§e%max_player%'
       - '{space}'
       - '{game_state}'
       - '{space}'
-      - '§fMap vote left: §a%player_map_vote_count%'
+      - '§aMap vote left: §e%player_map_vote_count%'
       - '{space}'
       - '§e%website%'
 
@@ -207,9 +207,8 @@ main_lobby:
       line_gap: 0.3
       offset_y: 0
       lines:
-        - "§e§lCLICK TO PLAY"
-        - "§bDropper"
-        - "§e%player_number_playing% Playing"
+        - "§a§lDropper"
+        - "§a%player_number_playing% §7Playing"
 
 player:
   left_game: §cYou left the game.

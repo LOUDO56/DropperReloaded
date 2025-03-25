@@ -29,10 +29,10 @@ public class WaitLobbyScoreboard {
 
     public WaitLobbyScoreboard(Game game) {
         this.game = game;
-        this.lines = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.lines");
     }
 
     public void setup(Player player) {
+        lines = DropperReloaded.getInstance().getConfig().getStringList("wait_lobby.scoreboard.lines");
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("dropperReloaded", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
