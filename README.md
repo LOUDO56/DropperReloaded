@@ -2,7 +2,7 @@
 
 DropperReloaded is a plugin that recreates the famous minigame "dropper". It's compatible from 1.8.8 to 1.21.4.
 
-# Extension
+# Extension (Optional)
 - [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/): To make title and action bar working for every version.
 - [Citizens2](https://www.spigotmc.org/resources/citizens.13811/): To be able to create a join game NPC.
 
@@ -47,4 +47,8 @@ DropperReloaded is a plugin that recreates the famous minigame "dropper". It's c
 - **`play`** : Join a game.
 - **`leave`** : Leave your current game.
 - **`stats`** : Show your stats.
+
+# Permission
+
+**`dropper-reloaded.admin`** : Permission to use "/dropperadmin"
 
