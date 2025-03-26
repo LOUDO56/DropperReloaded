@@ -5,6 +5,10 @@ DropperReloaded is a plugin that recreates the famous mini-game "dropper". It's 
 # Extension (Optional)
 - [Citizens2](https://www.spigotmc.org/resources/citizens.13811/): To be able to create a join game NPC.
 
+
+  ![2025-03-26_14 06 54](https://github.com/user-attachments/assets/77889e1c-7503-4fd2-9ad8-5d1a295fa7ef)
+
+
 # Features
 - Configurable
 - Easy to setup
