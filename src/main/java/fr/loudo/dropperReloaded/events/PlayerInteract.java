@@ -35,10 +35,8 @@ public class PlayerInteract implements Listener {
                         dropperWandPos.setPos1(event.getClickedBlock().getLocation());
                         player.sendMessage("Position 1 set.");
                     } else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                        if(!DropperReloaded.getVersion().startsWith("1.8")) {
-                            if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
-                                return;
-                            }
+                        if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
+                            return;
                         }
                         dropperWandPos.setPos2(event.getClickedBlock().getLocation());
                         player.sendMessage("Position 2 set.");
@@ -48,10 +46,8 @@ public class PlayerInteract implements Listener {
         }
 
         if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
-            if(!DropperReloaded.getVersion().startsWith("1.8")) {
-                if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
-                    return;
-                }
+            if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
+                return;
             }
 
             PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);

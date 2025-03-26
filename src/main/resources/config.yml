@@ -104,7 +104,7 @@ games:
       - '{space}'
       - '§aTime Left: §e%time_left%'
       - '{space}'
-      - '§aCurrent Map: §e(§a%current_map_count%§e/§a%total_map_count%§a)'
+      - '§aCurrent Map: §e(§a%current_map_count%§e/§a%total_map_count%§e)'
       - ' %map_completed_symbol% %map_name% %in_this_map_symbol%'
       - '{space}'
       - '§aTotal Time: §e%total_time%' # Only shows when the player finished.
