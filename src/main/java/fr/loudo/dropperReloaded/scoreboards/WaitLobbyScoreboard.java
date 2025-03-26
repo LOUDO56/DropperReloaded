@@ -61,7 +61,7 @@ public class WaitLobbyScoreboard {
             slot = slot.replace("%player_map_vote_count%", String.valueOf(playerSession.getVoteCount()));
             slot = slot.replace("%website%", MessageConfigUtils.get("global.website"));
             slot = slot.replace("{space}", spaceString);
-            Team team = scoreboard.registerNewTeam("dropperReloaded_waitlobby_line_" + i);
+            Team team = scoreboard.registerNewTeam("line_" + i);
             team.addEntry(ChatColor.values()[i].toString());
             team.setPrefix(slot);
             objective.getScore(ChatColor.values()[i].toString()).setScore(lines.size() - i);
@@ -78,7 +78,7 @@ public class WaitLobbyScoreboard {
         playerListTemplate = playerListTemplate.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
 
         for(Player player : game.getPlayerList()) {
-            Team teamPlayerList = player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + linePlayerList);
+            Team teamPlayerList = player.getScoreboard().getTeam("line_" + linePlayerList);
             teamPlayerList.setPrefix(playerListTemplate);
         }
     }
@@ -90,7 +90,7 @@ public class WaitLobbyScoreboard {
 
         for(Player player : game.getPlayerList()) {
             if(game.getGameStatus() != GameStatus.PLAYING) {
-                Team teamGameStatus = player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + lineGameStatus);
+                Team teamGameStatus = player.getScoreboard().getTeam("line_" + lineGameStatus);
                 teamGameStatus.setPrefix(statusMessage);
             }
         }
@@ -102,7 +102,7 @@ public class WaitLobbyScoreboard {
         int mapVoteCount = DropperReloaded.getInstance().getConfig().getInt("wait_lobby.map_vote_count") - playerSession.getVotedMaps().size();
         String mapCountSting = lines.get(lineMapCount).replace("%player_map_vote_count%", String.valueOf(mapVoteCount));
 
-        player.getScoreboard().getTeam("dropperReloaded_waitlobby_line_" + lineMapCount).setPrefix(mapCountSting);
+        player.getScoreboard().getTeam("line_" + lineMapCount).setPrefix(mapCountSting);
 
     }
 }

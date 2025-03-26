@@ -255,7 +255,6 @@ public class Game {
         PlayerSession playerSession = playersSessionManager.getPlayerSession(player);
         if(playerSession == null) return;
         if(playerSession.isSpectator()) return;
-        playerSession.setCanEnterPortal(false);
         playerSession.getDropperStats().setTotalMapCompleted(playerSession.getDropperStats().getTotalMapCompleted() + 1);
         int currentMapCount = playerSession.getCurrentMapCount() + 1;
 

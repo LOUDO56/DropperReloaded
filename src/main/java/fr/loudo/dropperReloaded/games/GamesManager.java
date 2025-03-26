@@ -68,7 +68,7 @@ public class GamesManager {
         if(playerSession.getPlayerGame().hasStarted()) {
             playerSession.getDropperStats().setTotalLosses(playerSession.getDropperStats().getTotalLosses() + 1);
         }
-        Location mainLobbySpawn = DropperReloaded.getInstance().getConfig().getLocation("main_lobby.spawn");
+        Location mainLobbySpawn = (Location) DropperReloaded.getInstance().getConfig().get("main_lobby.spawn");
         if(mainLobbySpawn != null) {
             player.teleport(mainLobbySpawn);
         } else {

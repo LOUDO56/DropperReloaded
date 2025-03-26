@@ -89,7 +89,7 @@ public class InGameScoreboard {
             } else {
                 line = line.replace("{space}", spaceString);
                 line = line.replace("%total_time%", playerSession.getFinalTimeStopwatchFormatted());
-                Team team = scoreboard.registerNewTeam("dropperReloaded_game_line_" + lineIndex);
+                Team team = scoreboard.registerNewTeam("line_" + lineIndex);
                 team.addEntry(ChatColor.values()[lineIndex].toString());
                 objective.getScore(ChatColor.values()[lineIndex].toString()).setScore(lineIndex);
                 team.setPrefix(formatLine(line));
@@ -105,7 +105,7 @@ public class InGameScoreboard {
         currentMapString = currentMapString
                 .replace("%current_map_count%", String.valueOf(playerSession.getCurrentMapCount()))
                 .replace("%total_map_count%", String.valueOf(game.getMapList().size()));
-        Team team = player.getScoreboard().registerNewTeam("dropperReloaded_game_currentMap");
+        Team team = player.getScoreboard().registerNewTeam("currentMap");
         team.addEntry(ChatColor.values()[currentMapLine].toString());
         team.setPrefix(currentMapString);
         player.getScoreboard().getObjective("dropperReloaded").getScore(ChatColor.values()[currentMapLine].toString()).setScore(currentMapLine);
@@ -114,7 +114,7 @@ public class InGameScoreboard {
     private void setupMapLines(Player player) {
         List<DropperMap> dropperMapList = game.getMapList();
         for (int i = 0; i < dropperMapList.size(); i++) {
-            Team team = player.getScoreboard().registerNewTeam("dropperReloaded_game_map_" + i);
+            Team team = player.getScoreboard().registerNewTeam("map_" + i);
             team.addEntry(ChatColor.values()[currentMapLine - i - 1].toString());
             player.getScoreboard().getObjective("dropperReloaded").getScore(ChatColor.values()[currentMapLine - i - 1].toString()).setScore(currentMapLine - i - 1);
         }
@@ -135,13 +135,13 @@ public class InGameScoreboard {
         currentMapString = currentMapString
                 .replace("%current_map_count%", String.valueOf(currentMapCount))
                 .replace("%total_map_count%", String.valueOf(game.getMapList().size()));
-        player.getScoreboard().getTeam("dropperReloaded_game_currentMap").setPrefix(currentMapString);
+        player.getScoreboard().getTeam("currentMap").setPrefix(currentMapString);
 
         List<DropperMap> dropperMapList = game.getMapList();
         int currentMapIndex = playerSession.getCurrentMapCount();
 
         for (int i = 0; i < dropperMapList.size(); i++) {
-            Team mapTeam = player.getScoreboard().getTeam("dropperReloaded_game_map_" + i);
+            Team mapTeam = player.getScoreboard().getTeam("map_" + i);
             DropperMap dropperMap = dropperMapList.get(i);
             String line = lines.get(configCurrentMapLineIndex + 1);
 
@@ -157,13 +157,13 @@ public class InGameScoreboard {
         String line = lines.get(configTotalFailsLineIndex);
         PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
         line = line.replace("%total_fails%", String.valueOf(playerSession.getTotalFails()));
-        player.getScoreboard().getTeam("dropperReloaded_game_line_" + lineTotalFails).setPrefix(formatLine(line));
+        player.getScoreboard().getTeam("line_" + lineTotalFails).setPrefix(formatLine(line));
     }
 
     public void updateTimeLeft() {
         String line = lines.get(configTimeLeftLineIndex);
         for(Player player : game.getPlayerList()) {
-            player.getScoreboard().getTeam("dropperReloaded_game_line_" + lineTimeLeftPlayer.get(player.getUniqueId())).setPrefix(formatLine(line));
+            player.getScoreboard().getTeam("line_" + lineTimeLeftPlayer.get(player.getUniqueId())).setPrefix(formatLine(line));
         }
     }
 }
