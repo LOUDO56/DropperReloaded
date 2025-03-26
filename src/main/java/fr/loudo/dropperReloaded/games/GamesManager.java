@@ -26,6 +26,14 @@ public class GamesManager {
     }
 
     public void joinGame(Player player) {
+        if(DropperReloaded.getInstance().getWaitLobbyConfiguration().getSpawn() == null) {
+            if(player.hasPermission("dropper-reloaded.admin")) {
+                player.sendMessage(ChatColor.RED + "Please, put the Wait Lobby spawn.");
+            } else {
+                player.sendMessage(ChatColor.RED + "Wait The lobby spawn is currently undefined, so please wait.");
+            }
+            return;
+        }
         if(!DropperReloaded.getInstance().getMapsManager().enoughMapsToPlay()) {
             if(player.hasPermission("dropper-reloaded.admin")) {
                 player.sendMessage(ChatColor.RED + "There aren't enough maps to play with, respect the minimum number of enabled maps for each difficulty.");
