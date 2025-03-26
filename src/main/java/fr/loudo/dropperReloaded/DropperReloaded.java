@@ -8,10 +8,14 @@ import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.DropperMapsManager;
 import fr.loudo.dropperReloaded.npc.JoinGameNPCManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
+import fr.loudo.dropperReloaded.utils.CheckVersion;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 public final class DropperReloaded extends JavaPlugin {
 
@@ -60,7 +64,15 @@ public final class DropperReloaded extends JavaPlugin {
         //Items
         DropperItems.registerItems();
 
-        if(getConfig().getInt("main_lobby.npc.id") > -1) {
+        if(getConfig().getBoolean("check-version", true)) {
+            try {
+                CheckVersion.verify();
+            } catch (IOException | ParseException e) {
+                getLogger().info("Couldn't check for a new update, passing.");
+            }
+        }
+
+        if(getConfig().getInt("main_lobby.npc.id", -1) > -1) {
             new BukkitRunnable() {
                 @Override
                 public void run() {

@@ -16,6 +16,7 @@ public class CommandHelpAdmin {
                 .append(prefixCmd).append("map setdifficulty [name] {easy, medium, hard}").append(separator)
                 .append("Set the difficulty of the map to easy, medium or hard.\n")
                 .append(prefixCmd).append("map addspawn [name]").append(separator).append("Add a spawn to your map.\n")
+                .append(prefixCmd).append("map tp [name]").append(separator).append("Teleport to a map.\n")
                 .append(prefixCmd).append("map remlastspawn [name]").append(separator)
                 .append("Remove the last added spawn of your map.\n")
                 .append(prefixCmd).append("map wand").append(separator)

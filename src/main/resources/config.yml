@@ -8,6 +8,7 @@ database:
 
 global:
   website: www.yourserver.fr
+  check-version: true
   pretty_json: false
   scoreboard_title: §a§lDropper
   restore_items_on_leave: true
