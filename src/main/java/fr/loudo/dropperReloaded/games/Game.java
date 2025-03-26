@@ -12,6 +12,8 @@ import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.scoreboards.InGameScoreboard;
 import fr.loudo.dropperReloaded.utils.MessageConfigUtils;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobby;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -110,7 +112,7 @@ public class Game {
         if(playerList.isEmpty()) {
             reset();
         }
-        sendTitle(" ", " ", 0, 0, 0, player);
+        player.sendTitle(" ", " ", 0, 0, 0);
         return true;
     }
 
@@ -119,7 +121,7 @@ public class Game {
         timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
         dropperMapList = DropperReloaded.getMapsManager().getMapsFromPlayersVote(playerList);
         inGameScoreboard = new InGameScoreboard(this);
-        sendTitle(" ", " ", 0, 0, 0, null);
+        sendTitle(" ", " ", 0, 0, 0);
         for(Player player : playerList) {
             player.closeInventory();
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 1, false, false));
@@ -199,12 +201,12 @@ public class Game {
     }
 
     private void sendWinTitleToPlayers() {
-        sendTitle(MessageConfigUtils.get("games.game_finish_game_finished"), "", 10, 80, 40, null);
+        sendTitle(MessageConfigUtils.get("games.game_finish_game_finished"), "", 10, 80, 40);
         for(int i = 0; i < playerFinished.size(); i++) {
             if(i == 0) {
-                sendTitle(MessageConfigUtils.get("games.game_finish_win"), " ", 10, 80, 40, playerFinished.get(i));
+                playerFinished.get(i).sendTitle(MessageConfigUtils.get("games.game_finish_win"), " ", 10, 80, 40);
             } else {
-                sendTitle(MessageConfigUtils.get("games.game_finish_game_over"), " ", 10, 80, 40, playerFinished.get(i));
+                playerFinished.get(i).sendTitle(MessageConfigUtils.get("games.game_finish_game_over"), " ", 10, 80, 40);
             }
         }
     }
@@ -245,88 +247,12 @@ public class Game {
     }
 
     public void sendActionBar(Player player, String message) {
-
-        if(!DropperReloaded.isIsProtocolLibPluginEnabled()) return;
-
-        String version = DropperReloaded.getVersion();
-        boolean is1_8Version = Stream.of("1.8", "1.9", "1.10", "1.11", "1.12").anyMatch(version::startsWith);
-        boolean is1_13Version = Stream.of("1.13", "1.14", "1.15", "1.16").anyMatch(version::startsWith);
-        boolean is1_17Version = Stream.of("1.17", "1.18", "1.19", "1.20", "1.21").anyMatch(version::startsWith);
-
-        PacketContainer actionBarPacket;
-        if(is1_8Version) {
-            actionBarPacket = new PacketContainer(PacketType.Play.Server.CHAT);
-            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
-            actionBarPacket.getBytes().write(0, (byte) 2);
-        } else if (is1_13Version) {
-            actionBarPacket = new PacketContainer(PacketType.Play.Server.TITLE);
-            actionBarPacket.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
-            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
-        } else if (is1_17Version) {
-            actionBarPacket = new PacketContainer(PacketType.Play.Server.SET_ACTION_BAR_TEXT);
-            actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText(message));
-        } else {
-            return;
-        }
-
-        DropperReloaded.getProtocolManager().sendServerPacket(player, actionBarPacket);
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
-    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut, @Nullable Player player) {
-        if(DropperReloaded.isIsProtocolLibPluginEnabled()) {
-            PacketContainer titleTimesPacket;
-            PacketContainer titlePacket;
-            PacketContainer subtitlePacket;
-
-            if(DropperReloaded.isNewerVersion()) {
-                titlePacket = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
-                titlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(title));
-
-                subtitlePacket = new PacketContainer(PacketType.Play.Server.SET_SUBTITLE_TEXT);
-                subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
-
-                titleTimesPacket = new PacketContainer(PacketType.Play.Server.SET_TITLES_ANIMATION);
-                titleTimesPacket.getIntegers()
-                        .write(0, fadeIn)
-                        .write(1, stay)
-                        .write(2, fadeOut);
-            } else {
-
-                titleTimesPacket = new PacketContainer(PacketType.Play.Server.TITLE);
-                titleTimesPacket.getTitleActions().write(0, EnumWrappers.TitleAction.TIMES);
-                titleTimesPacket.getIntegers()
-                        .write(0, fadeIn)
-                        .write(1, stay)
-                        .write(2, fadeOut);
-
-                titlePacket = new PacketContainer(PacketType.Play.Server.TITLE);
-                titlePacket.getTitleActions().write(0, EnumWrappers.TitleAction.TITLE);
-                titlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(title));
-
-                subtitlePacket = new PacketContainer(PacketType.Play.Server.TITLE);
-                subtitlePacket.getTitleActions().write(0, EnumWrappers.TitleAction.SUBTITLE);
-                subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
-
-            }
-            if(player == null) {
-                for(Player playerFromGame : playerList) {
-                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, titleTimesPacket);
-                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, titlePacket);
-                    DropperReloaded.getProtocolManager().sendServerPacket(playerFromGame, subtitlePacket);
-                }
-            } else {
-                DropperReloaded.getProtocolManager().sendServerPacket(player, titleTimesPacket);
-                DropperReloaded.getProtocolManager().sendServerPacket(player, titlePacket);
-                DropperReloaded.getProtocolManager().sendServerPacket(player, subtitlePacket);
-            }
-        } else {
-            if(player == null) {
-                for(Player playerFromGame : playerList) {
-                    playerFromGame.sendTitle(title, subtitle);
-                }
-            } else {
-                player.sendTitle(title, subtitle);
-            }
+    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for(Player playerFromGame : playerList) {
+            playerFromGame.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         }
     }
 
@@ -385,7 +311,7 @@ public class Game {
             String mapFinishedSubtitle = MessageConfigUtils.get("games.map_finished_subtitle");
             mapFinishedSubtitle = mapFinishedSubtitle.replace("%place%", String.valueOf(playerFinished.size() + 1));
 
-            sendTitle(mapFinishedTitle, mapFinishedSubtitle, 0, 2 * 20, 3 * 20, player);
+            player.sendTitle(mapFinishedTitle, mapFinishedSubtitle, 0, 2 * 20, 3 * 20);
             inGameScoreboard.setup(player);
 
             addPlayerSpectator(player);
@@ -456,7 +382,7 @@ public class Game {
         int cooldownTimer = DropperReloaded.getInstance().getConfig().getInt("games.timer_before_drop") * 20;
         Sound sound = Sound.valueOf(MessageConfigUtils.get("games.timer_sound"));
 
-        int doorY = dropperMapList.get(0).getDoorLocations().get(0).getBlockY();
+        int doorY = dropperMapList.get(0).getDoorLocations().get(0).getBlockY() + 1;
 
         countdownStart = new BukkitRunnable() {
             @Override

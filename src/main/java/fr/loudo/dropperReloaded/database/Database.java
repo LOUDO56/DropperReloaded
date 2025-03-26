@@ -35,12 +35,13 @@ public class Database {
                 connection = DriverManager.getConnection(url, username, password);
             } else {
                 initDBFile();
-                String url = "jdbc:sqlite:" + instance.getDataFolder() + "/dropper_database.db";
+                Class.forName("org.sqlite.JDBC");
+                String url = "jdbc:sqlite:" + new File(instance.getDataFolder(), "dropper_database.db").toPath();
                 connection = DriverManager.getConnection(url);
             }
 
             instance.getLogger().info("Database connected. TYPE: " + type);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             instance.getLogger().severe("Couldn't connect to database: " + e);
         }
     }
@@ -165,7 +166,7 @@ public class Database {
 
     private void initDBFile() {
         File dbFile = new File(instance.getDataFolder(), "dropper_database.db");
-        if(dbFile.exists()) {
+        if(!dbFile.exists()) {
             try {
                 dbFile.createNewFile();
             } catch (Exception e) {

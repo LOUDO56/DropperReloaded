@@ -73,7 +73,7 @@ public class WaitLobby {
                         sendStartMessage();
                     }
                     if(timer >= 1 && timer <= 5) {
-                        game.sendTitle(ChatColor.RED + String.valueOf(timer), "", 0, 30, 0, null);
+                        game.sendTitle(ChatColor.RED + String.valueOf(timer), "", 0, 30, 0);
                     }
                 }
                 if(timer >= 1) {
@@ -104,7 +104,7 @@ public class WaitLobby {
         countdownTask = null;
 
         game.setGameStatus(GameStatus.WAITING);
-        game.sendTitle(MessageConfigUtils.get("wait_lobby.cancelled_title"), MessageConfigUtils.get("wait_lobby.cancelled_subtitle"), 0, 40 ,20, null);
+        game.sendTitle(MessageConfigUtils.get("wait_lobby.cancelled_title"), MessageConfigUtils.get("wait_lobby.cancelled_subtitle"), 0, 40 ,20);
         waitLobbyScoreboard.updateGameStatus();
 
         return true;
