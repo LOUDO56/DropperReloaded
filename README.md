@@ -25,6 +25,7 @@ DropperReloaded is a plugin that recreates the famous mini-game "dropper". It's 
 - **`map rename [old_name] [new_name]`** : Rename your map.
 - **`map setdifficulty [name] {easy, medium, hard}`** : Set the difficulty of the map to easy, medium, or hard.
 - **`map addspawn [name]`** : Add a spawn to your map.
+- **`map tp [name]`** : Teleport to a map.
 - **`map remlastspawn [name]`** : Remove the last added spawn of your map.
 - **`map wand`** : Get a stick to set the doors.
 - **`map setdoors [name]`** : Set the doors of the map.
