@@ -1,9 +1,5 @@
 package fr.loudo.dropperReloaded.games;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fr.loudo.dropperReloaded.DropperReloaded;
 import fr.loudo.dropperReloaded.items.DropperItems;
 import fr.loudo.dropperReloaded.maps.DropperMap;
@@ -20,7 +16,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,7 +144,7 @@ public class Game {
                 gameStatus = GameStatus.PLAYING;
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
-        sendDoorBlockGlobal();
+        sendDoorBlock();
         for(Player player : playerList) {
             DropperReloaded.getPlayersSessionManager().getPlayerSession(player).startSession();
         }
@@ -387,7 +382,7 @@ public class Game {
         countdownStart = new BukkitRunnable() {
             @Override
             public void run() {
-                sendDoorBlockGlobal();
+                sendDoorBlock();
                 for(Player player : playerList) {
                     if(player.getLocation().getY() < doorY) {
                         player.teleport(dropperMapList.get(0).getRandomSpawn());
@@ -407,29 +402,7 @@ public class Game {
         }.runTaskTimer(DropperReloaded.getInstance(), 0L, 1L);
     }
 
-    private void sendDoorBlockGlobal() {
-        String versionMc = DropperReloaded.getVersion();
-        if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(versionMc::startsWith)) {
-            sendDoorBlockToPlayers1_8();
-        } else {
-            sendDoorBlockToPlayers1_12();
-        }
-    }
-
-    public void resetDoorBlock(Player player) {
-        List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
-        if (doorLocations == null) return;
-        for (Location location : doorLocations) {
-            if(Stream.of("1.8", "1.9", "1.10", "1.11").anyMatch(DropperReloaded.getVersion()::startsWith)) {
-                player.sendBlockChange(location, Material.AIR, (byte) 0);
-            } else {
-                player.sendBlockChange(location, Material.AIR.createBlockData());
-
-            }
-        }
-    }
-
-    public void sendDoorBlockToPlayers1_12() {
+    private void sendDoorBlock() {
         List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
         if (doorLocations == null) return;
         int syncTimer = countdownStartTimer + 20;
@@ -444,7 +417,6 @@ public class Game {
                     glassType = Material.LIME_STAINED_GLASS;
                 } else if(countdownStartTimer == 0) {
                     glassType = Material.AIR;
-
                 }
 
                 player.sendBlockChange(location, glassType.createBlockData());
@@ -453,27 +425,11 @@ public class Game {
         }
     }
 
-    public void sendDoorBlockToPlayers1_8() {
+    public void resetDoorBlock(Player player) {
         List<Location> doorLocations = dropperMapList.get(0).getDoorLocations();
-        if(doorLocations == null) return;
-        for(Player player : playerList) {
-            for(Location location : doorLocations) {
-                byte color = 0;
-                if(countdownStartTimer / 20 >= 5) {
-                    color = 6;
-                } else if(countdownStartTimer / 20 >= 3) {
-                    color = 4;
-                } else if(countdownStartTimer / 20 >= 1) {
-                    color = 5;
-                } else if(countdownStartTimer == 0) {
-                    color = 0;
-                }
-                if(countdownStartTimer / 20 > 0) {
-                    player.sendBlockChange(location, Material.GLASS, color);
-                } else {
-                    player.sendBlockChange(location, Material.AIR, (byte) 0);
-                }
-            }
+        if (doorLocations == null) return;
+        for (Location location : doorLocations) {
+            player.sendBlockChange(location, location.getBlock().getType().createBlockData());
         }
     }
 
