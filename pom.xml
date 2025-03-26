@@ -53,7 +53,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>your.package.bstats</shadedPattern>
+                                    <shadedPattern>fr.loudo</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

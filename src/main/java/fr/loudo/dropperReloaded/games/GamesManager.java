@@ -56,15 +56,17 @@ public class GamesManager {
 
     public Game getAvalaibleGame() {
         Game game = gameList.stream()
-                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING || currentGame.getGameStatus() == GameStatus.STARTING)
-                .max(Comparator.comparingInt((Game currentGame) -> currentGame.getPlayerList().size())
+                .filter(currentGame -> currentGame.getGameStatus() == GameStatus.WAITING
+                        || currentGame.getGameStatus() == GameStatus.STARTING)
+                .filter(currentGame -> currentGame.getPlayerList().size() < DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer())
+                .max(Comparator
+                        .comparingInt((Game currentGame) -> currentGame.getPlayerList().size())
                         .thenComparing(currentGame -> currentGame.getGameStatus() == GameStatus.STARTING ? 0 : 1))
                 .orElseGet(Game::new);
 
         if (!gameList.contains(game)) gameList.add(game);
 
         return game;
-
 
     }
 

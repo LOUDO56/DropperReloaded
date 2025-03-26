@@ -54,7 +54,7 @@ public class Game {
     }
 
     public boolean addPlayer(Player player) {
-        if(playerList.contains(player) && playerList.size() >= DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()) return false;
+        if(playerList.contains(player) || playerList.size() >= DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()) return false;
         PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         playerSession.reset();
         playerSession.setPlayerGame(this);
