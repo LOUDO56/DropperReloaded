@@ -1,9 +1,8 @@
 # DropperReloaded
 
-DropperReloaded is a plugin that recreates the famous minigame "dropper". It's compatible from 1.8.8 to 1.21.4.
+DropperReloaded is a plugin that recreates the famous mini-game "dropper". It's compatible from 1.13 to 1.21.4.
 
 # Extension (Optional)
-- [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/): To make title and action bar working for every version.
 - [Citizens2](https://www.spigotmc.org/resources/citizens.13811/): To be able to create a join game NPC.
 
 # Features
@@ -27,7 +26,7 @@ DropperReloaded is a plugin that recreates the famous minigame "dropper". It's c
 - **`map setdoors [name]`** : Set the doors of the map.
 - **`map enable [name]`** : Make your map playable.
 - **`map disable [name]`** : Make your map closed for players.
-- **`map list`** : List your map.
+- **`map list`** : List your maps.
 
 #### Wait Lobby
 - **`waitlobby setmaxplayer [number]`** : Set the maximum number of players for each game.
