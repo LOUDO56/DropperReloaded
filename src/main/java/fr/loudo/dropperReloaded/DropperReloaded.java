@@ -10,6 +10,7 @@ import fr.loudo.dropperReloaded.npc.JoinGameNPCManager;
 import fr.loudo.dropperReloaded.players.PlayersSessionManager;
 import fr.loudo.dropperReloaded.utils.CheckVersion;
 import fr.loudo.dropperReloaded.waitlobby.WaitLobbyConfiguration;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -84,6 +85,9 @@ public final class DropperReloaded extends JavaPlugin {
                 }
             }.runTaskLater(this, 20L);
         }
+
+        int pluginId = 25251;
+        new Metrics(this, pluginId);
 
     }
 

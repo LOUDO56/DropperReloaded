@@ -29,6 +29,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -37,7 +38,30 @@
                     <outputDirectory>${jar.outputDirectory}</outputDirectory>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>your.package.bstats</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -45,6 +69,7 @@
             </resource>
         </resources>
     </build>
+
 
     <repositories>
         <repository>
@@ -107,6 +132,12 @@
             <artifactId>spigot-api</artifactId>
             <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.1.0</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Database -->
         <dependency>
