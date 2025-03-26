@@ -30,20 +30,20 @@ public class CommandMainLobbyActions {
     }
 
     private static void spawnMainLobbyNpc(Player player) {
-        if(!DropperReloaded.isIsCitizenPluginEnabled()) {
+        if(!DropperReloaded.getInstance().isIsCitizenPluginEnabled()) {
             player.sendMessage(ChatColor.RED + "Plugin Citizens2 is required!");
             return;
         }
-        DropperReloaded.getJoinGameNPCManager().createJoinGameNPC(player);
+        DropperReloaded.getInstance().getJoinGameNPCManager().createJoinGameNPC(player);
         player.sendMessage(ChatColor.GREEN + "Join game NPC set with success!");
     }
 
     private static void removeMainLobbyNpc(Player player) {
-        if(!DropperReloaded.isIsCitizenPluginEnabled()) {
+        if(!DropperReloaded.getInstance().isIsCitizenPluginEnabled()) {
             player.sendMessage(ChatColor.RED + "Plugin Citizens2 is required!");
             return;
         }
-        if(DropperReloaded.getJoinGameNPCManager().deleteJoinGameNPC()) {
+        if(DropperReloaded.getInstance().getJoinGameNPCManager().deleteJoinGameNPC()) {
             player.sendMessage(ChatColor.GREEN + "Join game NPC deleted with success!");
         } else {
             player.sendMessage(ChatColor.RED + "Join game NPC does not exists!");

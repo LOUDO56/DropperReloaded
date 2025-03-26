@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for(Game game : DropperReloaded.getGamesManager().getGameList()) {
+        for(Game game : DropperReloaded.getInstance().getGamesManager().getGameList()) {
             for(Player playerFromGame : game.getPlayerList()) {
                 event.getPlayer().hidePlayer(playerFromGame);
                 playerFromGame.hidePlayer(event.getPlayer());

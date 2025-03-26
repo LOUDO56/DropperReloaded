@@ -14,8 +14,8 @@ public class PortalEnter implements Listener {
     public void onPlayerPortalEnter(EntityPortalEnterEvent event) {
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
-                PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
+                PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
                 if(!playerSession.canEnterPortal()) return;
                 playerSession.setCanEnterPortal(false);
                 new BukkitRunnable() {

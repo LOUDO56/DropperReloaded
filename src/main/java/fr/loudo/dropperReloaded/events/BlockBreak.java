@@ -10,7 +10,7 @@ public class BlockBreak implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+        if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
             event.setCancelled(true);
         }
     }

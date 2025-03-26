@@ -45,12 +45,12 @@ public class PlayerInteract implements Listener {
             }
         }
 
-        if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+        if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
             if(Objects.equals(event.getHand(), EquipmentSlot.OFF_HAND)) {
                 return;
             }
 
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
 
             if(Objects.equals(player.getItemInHand(), DropperItems.spectatorPlayerList.getItem())) {
                 TeleportPlayerGui teleportPlayerGui = new TeleportPlayerGui(player);
@@ -71,12 +71,12 @@ public class PlayerInteract implements Listener {
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.leaveBed.getItem())) {
-                DropperReloaded.getGamesManager().leaveGame(player);
+                DropperReloaded.getInstance().getGamesManager().leaveGame(player);
             }
 
             if(Objects.equals(player.getItemInHand(), DropperItems.playAgain.getItem())) {
                 playerSession.getPlayerGame().removePlayer(player);
-                Game newGame = DropperReloaded.getGamesManager().getAvalaibleGame();
+                Game newGame = DropperReloaded.getInstance().getGamesManager().getAvalaibleGame();
                 newGame.addPlayer(player);
             }
 

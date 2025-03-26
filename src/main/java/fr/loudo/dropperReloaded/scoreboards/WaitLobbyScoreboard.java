@@ -47,7 +47,7 @@ public class WaitLobbyScoreboard {
         statusMessage = statusMessage.replace("%timer%", currentTimerWaitLobby);
 
         String spaceString = " ";
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         for (int i = 0; i < lines.size(); i++) {
             String slot = lines.get(i);
             if(slot.contains("{game_state}")) lineGameStatus = i;
@@ -56,7 +56,7 @@ public class WaitLobbyScoreboard {
             slot = slot.replace("%game_id%", String.valueOf(game.getId()));
             slot = slot.replace("%date%", new SimpleDateFormat("dd/MM/yy").format(new Date()));
             slot = slot.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-            slot = slot.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+            slot = slot.replace("%max_player%", String.valueOf(DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()));
             slot = slot.replace("{game_state}", statusMessage);
             slot = slot.replace("%player_map_vote_count%", String.valueOf(playerSession.getVoteCount()));
             slot = slot.replace("%website%", MessageConfigUtils.get("global.website"));
@@ -75,7 +75,7 @@ public class WaitLobbyScoreboard {
 
         String playerListTemplate = lines.get(linePlayerList);
         playerListTemplate = playerListTemplate.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-        playerListTemplate = playerListTemplate.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+        playerListTemplate = playerListTemplate.replace("%max_player%", String.valueOf(DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()));
 
         for(Player player : game.getPlayerList()) {
             Team teamPlayerList = player.getScoreboard().getTeam("line_" + linePlayerList);
@@ -98,7 +98,7 @@ public class WaitLobbyScoreboard {
 
     public void updateMapCount(Player player) {
 
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         int mapVoteCount = DropperReloaded.getInstance().getConfig().getInt("wait_lobby.map_vote_count") - playerSession.getVotedMaps().size();
         String mapCountSting = lines.get(lineMapCount).replace("%player_map_vote_count%", String.valueOf(mapVoteCount));
 

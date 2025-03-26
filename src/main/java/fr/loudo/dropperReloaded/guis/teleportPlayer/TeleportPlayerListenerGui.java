@@ -14,15 +14,15 @@ public class TeleportPlayerListenerGui implements Listener {
         if(event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
             int slot = event.getSlot();
-            if(!DropperReloaded.getPlayersSessionManager().isPlaying(player)) return;
+            if(!DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) return;
             if(slot < 0 || slot > event.getInventory().getSize()) return;
             if(event.getInventory().getItem(event.getSlot()) == null) return;
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             if(playerSession.getCurrentGui() instanceof TeleportPlayerGui) {
                 TeleportPlayerGui teleportPlayerGui = (TeleportPlayerGui) playerSession.getCurrentGui();
                 Player playerHead = (Player) teleportPlayerGui.getObjectFromSlot().get(slot);
                 if(playerHead != null) {
-                    PlayerSession playerHeadSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(playerHead);
+                    PlayerSession playerHeadSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(playerHead);
                     if(playerHeadSession != null && !playerHeadSession.isSpectator()) {
                         player.teleport(playerHead.getLocation());
                         player.sendMessage(MessageConfigUtils.get("games.guis.teleporter_player.items.player_head.on_click.tped_to_player", "%player_name%", playerHead.getDisplayName()));

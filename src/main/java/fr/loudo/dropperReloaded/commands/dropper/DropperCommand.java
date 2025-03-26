@@ -26,15 +26,15 @@ public class DropperCommand implements TabExecutor {
 
             switch (args[0]) {
                 case "play":
-                    DropperReloaded.getGamesManager().joinGame(player);
+                    DropperReloaded.getInstance().getGamesManager().joinGame(player);
                     break;
                 case "leave":
-                    if(!DropperReloaded.getGamesManager().leaveGame(player)) {
+                    if(!DropperReloaded.getInstance().getGamesManager().leaveGame(player)) {
                         player.sendMessage(MessageConfigUtils.get("player.not_in_a_game"));
                     }
                     break;
                 case "stats":
-                    DropperStats dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
+                    DropperStats dropperStats = DropperReloaded.getInstance().getDatabase().getPlayerStats(player);
                     if(dropperStats != null) {
                         player.sendMessage(dropperStats.toString());
                     } else {

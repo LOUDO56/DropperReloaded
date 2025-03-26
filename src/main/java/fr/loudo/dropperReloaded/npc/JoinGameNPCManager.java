@@ -79,7 +79,7 @@ public class JoinGameNPCManager {
     private List<String> getHologramLinesJoinGame() {
         List<String> hologramLines = DropperReloaded.getInstance().getConfig().getStringList("main_lobby.npc.hologram.lines");
         for (int i = 0; i < hologramLines.size(); i++) {
-            hologramLines.set(i, hologramLines.get(i).replace("%player_number_playing%", String.valueOf(DropperReloaded.getPlayersSessionManager().getPlayerSessionList().size())));
+            hologramLines.set(i, hologramLines.get(i).replace("%player_number_playing%", String.valueOf(DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSessionList().size())));
         }
         return hologramLines;
     }

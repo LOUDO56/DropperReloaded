@@ -16,22 +16,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 public final class DropperReloaded extends JavaPlugin {
 
     private static DropperReloaded instance;
-    private static boolean isCitizenPluginEnabled;
+    private boolean isCitizenPluginEnabled;
 
-    private static GamesManager gamesManager;
-    private static DropperMapsManager dropperMapsManager;
-    private static WaitLobbyConfiguration waitLobbyConfiguration;
-    private static PlayersSessionManager playersSessionManager;
-    private static JoinGameNPCManager joinGameNPCManager;
-    private static Database database;
+    private GamesManager gamesManager;
+    private DropperMapsManager dropperMapsManager;
+    private WaitLobbyConfiguration waitLobbyConfiguration;
+    private PlayersSessionManager playersSessionManager;
+    private JoinGameNPCManager joinGameNPCManager;
+    private Database database;
 
-    private static String version;
 
     @Override
     public void onEnable() {
 
-        version = getServer().getBukkitVersion();
-        version = version.split("-")[0];
 
         //Configuration Init
         saveDefaultConfig();
@@ -90,35 +87,32 @@ public final class DropperReloaded extends JavaPlugin {
         return instance;
     }
 
-    public static GamesManager getGamesManager() {
+    public GamesManager getGamesManager() {
         return gamesManager;
     }
 
-    public static DropperMapsManager getMapsManager() {
+    public DropperMapsManager getMapsManager() {
         return dropperMapsManager;
     }
 
-    public static WaitLobbyConfiguration getWaitLobbyConfiguration() {
+    public WaitLobbyConfiguration getWaitLobbyConfiguration() {
         return waitLobbyConfiguration;
     }
 
-    public static PlayersSessionManager getPlayersSessionManager() {
+    public PlayersSessionManager getPlayersSessionManager() {
         return playersSessionManager;
     }
 
-    public static Database getDatabase() {
+    public Database getDatabase() {
         return database;
     }
 
-    public static boolean isIsCitizenPluginEnabled() {
+    public boolean isIsCitizenPluginEnabled() {
         return isCitizenPluginEnabled;
     }
 
-    public static JoinGameNPCManager getJoinGameNPCManager() {
+    public JoinGameNPCManager getJoinGameNPCManager() {
         return joinGameNPCManager;
     }
 
-    public static String getVersion() {
-        return version;
-    }
 }

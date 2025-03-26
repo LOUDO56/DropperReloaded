@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CommandMapActions {
 
-    private static final DropperMapsManager MAPS_MANAGER = DropperReloaded.getMapsManager();
+    private static final DropperMapsManager MAPS_MANAGER = DropperReloaded.getInstance().getMapsManager();
     private static final String PUT_A_NAME_MESSAGE = ChatColor.RED + "You need to put a name!";
     private static final String MAP_DONT_EXIST = ChatColor.RED + "This map doesn't exist.";
 
@@ -155,7 +155,7 @@ public class CommandMapActions {
 
     private static void listMaps(Player player) {
 
-        List<DropperMap> mapList = DropperReloaded.getMapsManager().getMapsSortedDifficulty();
+        List<DropperMap> mapList = DropperReloaded.getInstance().getMapsManager().getMapsSortedDifficulty();
 
         for(DropperMap dropperMap : mapList) {
             String difficulty = DropperMapDifficultyColorPrefix.get(dropperMap.getDifficulty()) + dropperMap.getDifficulty().name();
@@ -170,7 +170,7 @@ public class CommandMapActions {
     private static void tpToMap(String mapName, Player player) {
         if(!validateMapName(mapName, player)) return;
 
-        DropperMap dropperMap = DropperReloaded.getMapsManager().getFromName(mapName);
+        DropperMap dropperMap = DropperReloaded.getInstance().getMapsManager().getFromName(mapName);
         player.teleport(dropperMap.getRandomSpawn());
         player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.YELLOW + dropperMap.getColoredName());
 
@@ -258,7 +258,7 @@ public class CommandMapActions {
         }
 
         DropperWandPos dropperWandPos = DropperAdminCommand.getWAND_POS_HASH_MAP().get(player);
-        DropperMap dropperMap = DropperReloaded.getMapsManager().getFromName(mapName);
+        DropperMap dropperMap = DropperReloaded.getInstance().getMapsManager().getFromName(mapName);
         List<Location> blockLocs = new ArrayList<>();
 
         int minX = (int) Math.min(dropperWandPos.getPos1().getX(), dropperWandPos.getPos2().getX());

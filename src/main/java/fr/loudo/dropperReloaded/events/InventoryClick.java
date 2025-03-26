@@ -11,7 +11,7 @@ public class InventoryClick implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
-            if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+            if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
                 event.setCancelled(true);
             }
         }

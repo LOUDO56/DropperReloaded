@@ -12,8 +12,8 @@ public class PlayerLeave implements Listener {
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         DropperAdminCommand.getWAND_POS_HASH_MAP().remove(player);
-        if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
-            DropperReloaded.getGamesManager().leaveGame(player);
+        if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
+            DropperReloaded.getInstance().getGamesManager().leaveGame(player);
         }
     }
 }

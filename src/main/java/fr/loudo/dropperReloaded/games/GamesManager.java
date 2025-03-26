@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GamesManager {
 
-    private final PlayersSessionManager playersSessionManager = DropperReloaded.getPlayersSessionManager();
+    private final PlayersSessionManager playersSessionManager = DropperReloaded.getInstance().getPlayersSessionManager();
 
     private List<Game> gameList;
 
@@ -26,7 +26,7 @@ public class GamesManager {
     }
 
     public void joinGame(Player player) {
-        if(!DropperReloaded.getMapsManager().enoughMapsToPlay()) {
+        if(!DropperReloaded.getInstance().getMapsManager().enoughMapsToPlay()) {
             if(player.hasPermission("dropper-reloaded.admin")) {
                 player.sendMessage(ChatColor.RED + "There aren't enough maps to play with, respect the minimum number of enabled maps for each difficulty.");
             } else {
@@ -43,7 +43,7 @@ public class GamesManager {
         playersSessionManager.getPlayerSessionList().add(playerSession);
         Game game = getAvalaibleGame();
         game.addPlayer(player);
-        DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
+        DropperReloaded.getInstance().getJoinGameNPCManager().updateNPCHologram();
     }
 
     public Game getAvalaibleGame() {
@@ -74,7 +74,7 @@ public class GamesManager {
         } else {
             player.teleport(playerSession.getLastPlayerPos());
         }
-        DropperReloaded.getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
+        DropperReloaded.getInstance().getDatabase().updatePlayerStats(player, playerSession.getDropperStats());
         playerSession.getPlayerGame().removePlayer(player);
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         player.sendMessage(MessageConfigUtils.get("player.left_game"));
@@ -89,7 +89,7 @@ public class GamesManager {
             @Override
             public void run() {
                 playersSessionManager.getPlayerSessionList().remove(playerSession);
-                DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
+                DropperReloaded.getInstance().getJoinGameNPCManager().updateNPCHologram();
             }
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
 

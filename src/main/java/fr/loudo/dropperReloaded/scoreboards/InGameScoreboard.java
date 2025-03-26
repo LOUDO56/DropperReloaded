@@ -55,7 +55,7 @@ public class InGameScoreboard {
         String spaceString = " ";
         player.setScoreboard(scoreboard);
 
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
 
         int lineIndex;
         if(playerSession.hasFinishedGame()) {
@@ -100,7 +100,7 @@ public class InGameScoreboard {
     }
 
     private void setupCurrentMapLine(Player player) {
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         String currentMapString = lines.get(configCurrentMapLineIndex);
         currentMapString = currentMapString
                 .replace("%current_map_count%", String.valueOf(playerSession.getCurrentMapCount()))
@@ -128,7 +128,7 @@ public class InGameScoreboard {
     }
 
     public void updateCurrentMapPlayer(Player player) {
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
 
         String currentMapString = lines.get(configCurrentMapLineIndex);
         int currentMapCount = Math.min(playerSession.getCurrentMapCount(), playerSession.getPlayerGame().getMapList().size());
@@ -155,7 +155,7 @@ public class InGameScoreboard {
 
     public void updateTotalFails(Player player) {
         String line = lines.get(configTotalFailsLineIndex);
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         line = line.replace("%total_fails%", String.valueOf(playerSession.getTotalFails()));
         player.getScoreboard().getTeam("line_" + lineTotalFails).setPrefix(formatLine(line));
     }

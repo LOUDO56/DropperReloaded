@@ -55,7 +55,7 @@ public class PlayerSession {
         this.isSpectator = false;
         this.canEnterPortal = false;
         this.votedDropperMaps = new ArrayList<>();
-        this.dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
+        this.dropperStats = DropperReloaded.getInstance().getDatabase().getPlayerStats(player);
         this.lastPlayerPos = player.getLocation();
         this.lastPlayerInventory = new HashMap<>();
         initLastPlayerInventory();
@@ -192,7 +192,7 @@ public class PlayerSession {
         actionBarTask = null;
         canEnterPortal = false;
         votedDropperMaps = new ArrayList<>();
-        dropperStats = DropperReloaded.getDatabase().getPlayerStats(player);
+        dropperStats = DropperReloaded.getInstance().getDatabase().getPlayerStats(player);
     }
 
     public Location getLastPlayerPos() {

@@ -130,7 +130,7 @@ public class DropperMapsManager {
         int hardMapCount = config.getInt("games.hard_map_count");
 
         for(Player player : playerList) {
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             for (DropperMap dropperMap : playerSession.getVotedMaps()) {
                 if(dropperMap.isEnabled()) {
                    if(dropperMap.getDifficulty() == DropperMapDifficulty.EASY) {

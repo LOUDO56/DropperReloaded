@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 public class Game {
 
-    private final PlayersSessionManager playersSessionManager = DropperReloaded.getPlayersSessionManager();
+    private final PlayersSessionManager playersSessionManager = DropperReloaded.getInstance().getPlayersSessionManager();
 
     private int id;
     private int timeLeft;
@@ -49,18 +49,18 @@ public class Game {
         this.playerFinished = new ArrayList<>();
         this.gameStatus = GameStatus.WAITING;
         this.waitLobby = new WaitLobby(this);
-        this.id = DropperReloaded.getGamesManager().getGameList().size();
+        this.id = DropperReloaded.getInstance().getGamesManager().getGameList().size();
         this.inGameScoreboard = new InGameScoreboard(this);
     }
 
     public boolean addPlayer(Player player) {
-        if(playerList.contains(player) && playerList.size() >= DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()) return false;
-        PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        if(playerList.contains(player) && playerList.size() >= DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()) return false;
+        PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         playerSession.reset();
         playerSession.setPlayerGame(this);
         playerList.add(player);
         if(!hasStarted()) {
-            player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
+            player.teleport(DropperReloaded.getInstance().getWaitLobbyConfiguration().getSpawn());
             waitLobby.getWaitLobbyScoreboard().setup(player);
             waitLobby.playerJoinedMessage(player.getDisplayName());
             new BukkitRunnable() {
@@ -94,7 +94,7 @@ public class Game {
             resetDoorBlock(player);
         }
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if(!DropperReloaded.getPlayersSessionManager().isPlaying(onlinePlayer)) {
+            if(!DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(onlinePlayer)) {
                 player.showPlayer(onlinePlayer);
                 onlinePlayer.showPlayer(player);
             }
@@ -114,14 +114,14 @@ public class Game {
     public void setup() {
         gameStatus = GameStatus.DOOR_COUNTDOWN;
         timeLeft = Integer.parseInt(MessageConfigUtils.get("games.timer_in_game"));
-        dropperMapList = DropperReloaded.getMapsManager().getMapsFromPlayersVote(playerList);
+        dropperMapList = DropperReloaded.getInstance().getMapsManager().getMapsFromPlayersVote(playerList);
         inGameScoreboard = new InGameScoreboard(this);
         sendTitle(" ", " ", 0, 0, 0);
         for(Player player : playerList) {
             player.closeInventory();
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 1, false, false));
             inGameScoreboard.setup(player);
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             playerSession.setCurrentMap(dropperMapList.get(0));
             player.teleport(dropperMapList.get(0).getRandomSpawn());
             player.getInventory().clear();
@@ -146,7 +146,7 @@ public class Game {
         }.runTaskLater(DropperReloaded.getInstance(), 5L);
         sendDoorBlock();
         for(Player player : playerList) {
-            DropperReloaded.getPlayersSessionManager().getPlayerSession(player).startSession();
+            DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player).startSession();
         }
         countdownGame = new BukkitRunnable() {
             @Override
@@ -176,7 +176,7 @@ public class Game {
 
         for(Player player : playerList) {
             if(!playerFinished.contains(player)) {
-                PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+                PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
                 playerSession.getDropperStats().setTotalLosses(playerSession.getDropperStats().getTotalLosses() + 1);
             }
             addPlayerSpectator(player);
@@ -187,7 +187,7 @@ public class Game {
                 if(hasEnded()) {
                     List<Player> copyList = new ArrayList<>(playerList);
                     for (Player player : copyList) {
-                        DropperReloaded.getGamesManager().leaveGame(player);
+                        DropperReloaded.getInstance().getGamesManager().leaveGame(player);
                     }
                     reset();
                 }
@@ -208,7 +208,7 @@ public class Game {
 
     public void reset() {
         for(Player player : playerList) {
-            DropperReloaded.getGamesManager().leaveGame(player);
+            DropperReloaded.getInstance().getGamesManager().leaveGame(player);
         }
         if(countdownStart != null) {
             countdownStart.cancel();
@@ -297,7 +297,7 @@ public class Game {
             }
 
             if(playerSession.getFinalStopwatchTotal() < playerSession.getDropperStats().getBestTime() || playerSession.getDropperStats().getBestTime() == 0) {
-                DropperReloaded.getDatabase().setNewBestTime(player, playerSession.getFinalStopwatchTotal());
+                DropperReloaded.getInstance().getDatabase().setNewBestTime(player, playerSession.getFinalStopwatchTotal());
                 player.sendMessage(MessageConfigUtils.get("games.new_personal_best"));
             }
 

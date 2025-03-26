@@ -15,8 +15,8 @@ public class PlayerKick implements Listener {
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             if(playerSession.getPlayerGame().getGameStatus() == GameStatus.DOOR_COUNTDOWN) {
                 if(event.getReason().contains("Flying")) {
                     Logger logger = (Logger) LogManager.getRootLogger();

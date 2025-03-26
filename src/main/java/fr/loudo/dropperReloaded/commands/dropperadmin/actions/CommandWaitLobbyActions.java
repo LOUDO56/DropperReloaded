@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class CommandWaitLobbyActions {
 
-    private static final WaitLobbyConfiguration WAIT_LOBBY_CONFIGURATION = DropperReloaded.getWaitLobbyConfiguration();
+    private static final WaitLobbyConfiguration WAIT_LOBBY_CONFIGURATION = DropperReloaded.getInstance().getWaitLobbyConfiguration();
     private static final String PROVIDE_NUMBER = ChatColor.RED + "Please, provide a number!";
 
     public static void execute(String action, String value, Player player) {

@@ -13,17 +13,17 @@ public class PlayerHurt implements Listener {
     public void onPlayerHurt(EntityDamageEvent event) {
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+            if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
                 if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                     event.setCancelled(true);
                     return;
                 }
-                PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+                PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
                 if(playerSession.getPlayerGame().getGameStatus() != GameStatus.PLAYING || playerSession.isInvincible() || playerSession.isSpectator()) {
                     event.setCancelled(true);
                     if(playerSession.getPlayerGame().getGameStatus() == GameStatus.STARTING || playerSession.getPlayerGame().getGameStatus() == GameStatus.WAITING) {
                         if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                            player.teleport(DropperReloaded.getWaitLobbyConfiguration().getSpawn());
+                            player.teleport(DropperReloaded.getInstance().getWaitLobbyConfiguration().getSpawn());
                         }
                     }
                 } else {

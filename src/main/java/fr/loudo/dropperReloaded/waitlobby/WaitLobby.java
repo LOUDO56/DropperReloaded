@@ -35,10 +35,10 @@ public class WaitLobby {
         String joinMessage = MessageConfigUtils.get("wait_lobby.join_message");
         joinMessage = joinMessage.replace("%player%", username);
         joinMessage = joinMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-        joinMessage = joinMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+        joinMessage = joinMessage.replace("%max_player%", String.valueOf(DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(joinMessage);
         waitLobbyScoreboard.updatePlayerList();
-        if(game.getPlayerList().size() == DropperReloaded.getWaitLobbyConfiguration().getMinPlayer()) {
+        if(game.getPlayerList().size() == DropperReloaded.getInstance().getWaitLobbyConfiguration().getMinPlayer()) {
             startCountdown();
         }
     }
@@ -47,10 +47,10 @@ public class WaitLobby {
         String leftMessage = MessageConfigUtils.get("wait_lobby.left_message");
         leftMessage = leftMessage.replace("%player%", username);
         leftMessage = leftMessage.replace("%current_player%", String.valueOf(game.getPlayerList().size()));
-        leftMessage = leftMessage.replace("%max_player%", String.valueOf(DropperReloaded.getWaitLobbyConfiguration().getMaxPlayer()));
+        leftMessage = leftMessage.replace("%max_player%", String.valueOf(DropperReloaded.getInstance().getWaitLobbyConfiguration().getMaxPlayer()));
         game.sendMessageToPlayers(leftMessage);
         waitLobbyScoreboard.updatePlayerList();
-        if(game.getPlayerList().size() < DropperReloaded.getWaitLobbyConfiguration().getMinPlayer()) {
+        if(game.getPlayerList().size() < DropperReloaded.getInstance().getWaitLobbyConfiguration().getMinPlayer()) {
             stopCountdown();
         }
     }

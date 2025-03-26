@@ -12,7 +12,7 @@ public class FoodLevelChange implements Listener {
     public void onFoodLevelChangeEvent(FoodLevelChangeEvent event) {
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+            if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
                 event.setCancelled(true);
             }
         }

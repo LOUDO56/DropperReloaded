@@ -27,7 +27,7 @@ public class MapVoteGui extends Gui {
     public MapVoteGui(Player player) {
         super(player, 9 * 6, DropperReloaded.getInstance().getConfig().getString(CONFIG_STRING + "name"));
         this.slotItems = new HashMap<>();
-        this.playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        this.playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         this.playerSession.setCurrentGui(this);
         loadConfigItems();
     }
@@ -45,7 +45,7 @@ public class MapVoteGui extends Gui {
     public void showCurrentPage() {
         getInventory().clear();
         slotItems.clear();
-        List<DropperMap> dropperMaps = DropperReloaded.getMapsManager().getMapsSortedDifficulty();
+        List<DropperMap> dropperMaps = DropperReloaded.getInstance().getMapsManager().getMapsSortedDifficulty();
         int slot = 10;
         int totalPages = (int) Math.ceil((double) dropperMaps.size() / itemsPerPage);
         FileConfiguration config = DropperReloaded.getInstance().getConfig();

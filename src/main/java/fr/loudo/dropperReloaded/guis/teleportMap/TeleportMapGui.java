@@ -23,7 +23,7 @@ public class TeleportMapGui extends Gui {
     public TeleportMapGui(Player player) {
         super(player, 9 * 6, DropperReloaded.getInstance().getConfig().getString(CONFIG_STRING + "name"));
         this.slotItems = new HashMap<>();
-        this.playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        this.playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         this.playerSession.setCurrentGui(this);
         loadConfigItems();
     }

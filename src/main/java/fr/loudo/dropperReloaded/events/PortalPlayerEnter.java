@@ -10,7 +10,7 @@ public class PortalPlayerEnter implements Listener {
     @EventHandler
     public void onPlayerPortalEnter(PlayerPortalEvent event) {
         Player player = event.getPlayer();
-        if(DropperReloaded.getPlayersSessionManager().isPlaying(player)) {
+        if(DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) {
             event.setCancelled(true);
         }
     }

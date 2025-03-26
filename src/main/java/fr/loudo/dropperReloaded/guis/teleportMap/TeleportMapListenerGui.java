@@ -15,10 +15,10 @@ public class TeleportMapListenerGui implements Listener {
         if(event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
             int slot = event.getSlot();
-            if(!DropperReloaded.getPlayersSessionManager().isPlaying(player)) return;
+            if(!DropperReloaded.getInstance().getPlayersSessionManager().isPlaying(player)) return;
             if(slot < 0 || slot > event.getInventory().getSize()) return;
             if(event.getInventory().getItem(event.getSlot()) == null) return;
-            PlayerSession playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             if(playerSession.getCurrentGui() instanceof TeleportMapGui) {
                 TeleportMapGui teleportMapGui = (TeleportMapGui) playerSession.getCurrentGui();
                 DropperMap dropperMap = (DropperMap) teleportMapGui.getObjectFromSlot().get(slot);

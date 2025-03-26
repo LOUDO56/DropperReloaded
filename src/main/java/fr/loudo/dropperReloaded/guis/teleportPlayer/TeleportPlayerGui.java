@@ -21,7 +21,7 @@ public class TeleportPlayerGui extends Gui {
 
     public TeleportPlayerGui(Player player) {
         super(player, 9 * 6, DropperReloaded.getInstance().getConfig().getString(CONFIG_STRING + "name"));
-        this.playerSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+        this.playerSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
         this.playerSession.setCurrentGui(this);
         loadConfigItems();
     }
@@ -43,7 +43,7 @@ public class TeleportPlayerGui extends Gui {
 
         for(int i = (page - 1) * itemsPerPage; i < Math.min(playerList.size(), page * itemsPerPage); i++) {
             Player player = playerList.get(i);
-            PlayerSession playerHeadSession = DropperReloaded.getPlayersSessionManager().getPlayerSession(player);
+            PlayerSession playerHeadSession = DropperReloaded.getInstance().getPlayersSessionManager().getPlayerSession(player);
             if (!playerHeadSession.isSpectator() && !player.getDisplayName().equals(playerSession.getPlayer().getDisplayName())) {
                 ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta itemMeta = (SkullMeta) playerHead.getItemMeta();

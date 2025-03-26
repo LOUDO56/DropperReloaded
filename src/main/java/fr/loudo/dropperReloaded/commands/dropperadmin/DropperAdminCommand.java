@@ -75,9 +75,9 @@ public class DropperAdminCommand implements TabExecutor {
                     DropperReloaded.getInstance().saveDefaultConfig();
                     DropperReloaded.getInstance().reloadConfig();
                     DropperItems.registerItems();
-                    DropperReloaded.getJoinGameNPCManager().reloadHologramConfig();
-                    DropperReloaded.getJoinGameNPCManager().updateNPCHologram();
-                    DropperReloaded.getDatabase().initialize();
+                    DropperReloaded.getInstance().getJoinGameNPCManager().reloadHologramConfig();
+                    DropperReloaded.getInstance().getJoinGameNPCManager().updateNPCHologram();
+                    DropperReloaded.getInstance().getDatabase().initialize();
                     player.sendMessage(ChatColor.GREEN + "Config reloaded successfully!");
                     break;
                 default:
@@ -112,7 +112,7 @@ public class DropperAdminCommand implements TabExecutor {
                 && !args[0].equalsIgnoreCase("mainlobby")
                 && !args[0].equalsIgnoreCase("leaderboard")
         ) {
-            return DropperReloaded.getMapsManager().getListMapName();
+            return DropperReloaded.getInstance().getMapsManager().getListMapName();
         }
 
         if(args.length == 4 && args[1].equalsIgnoreCase("setdifficulty")) {

@@ -17,7 +17,7 @@ public class NPCHit implements Listener {
             Player player = (Player) event.getDamager();
             NPC npc = CitizensAPI.getNPCRegistry().getNPC(entity);
             if(DropperReloaded.getInstance().getConfig().getInt("main_lobby.npc.id") == npc.getId()) {
-                DropperReloaded.getGamesManager().joinGame(player);
+                DropperReloaded.getInstance().getGamesManager().joinGame(player);
             }
         }
     }
