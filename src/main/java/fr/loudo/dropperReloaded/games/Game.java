@@ -189,6 +189,13 @@ public class Game {
                     for (Player player : copyList) {
                         DropperReloaded.getInstance().getGamesManager().leaveGame(player);
                     }
+                    for (Player player : copyList) {
+                        if (!player.isOnline()) continue;
+                        for (Player other : copyList) {
+                            if (player.equals(other) || !other.isOnline()) continue;
+                            player.showPlayer(other);
+                        }
+                    }
                     reset();
                 }
             }

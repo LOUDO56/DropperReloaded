@@ -101,7 +101,7 @@ public class MapVoteGui extends Gui {
             description.addAll(config.getStringList(CONFIG_STRING + "items.map.extra.no_remaining_vote"));
         } else if (votedDropperMaps.contains(dropperMap)) {
             description.addAll(config.getStringList(CONFIG_STRING + "items.map.extra.voted"));
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 2);
+            item.addUnsafeEnchantment(Enchantment.FORTUNE, 2);
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             item.setItemMeta(itemMeta);
